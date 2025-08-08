@@ -116,19 +116,6 @@ const SearchBar = () => {
     }
   }
 
-  const getSelectedItem = () => {
-    let currentIndex = 0
-    for (const category of filteredItems || []) {
-      for (const item of category?.items || []) {
-        if (currentIndex === selectedIndex) {
-          return item
-        }
-        currentIndex++
-      }
-    }
-    return null
-  }
-
   return (
     <div className="relative w-full max-w-md" ref={searchRef}>
       <div className="relative">
@@ -140,10 +127,10 @@ const SearchBar = () => {
           value={query}
           onChange={handleInputChange}
           onFocus={handleFocus}
-          className="pl-10 pr-10"
+          className="pl-10 pr-10 h-9 sm:h-10 text-sm rounded-full"
         />
         <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center space-x-1">
-          <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
+          <kbd className="hidden sm:inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
             <span className="text-xs">⌘</span>K
           </kbd>
         </div>
@@ -151,12 +138,12 @@ const SearchBar = () => {
 
       {/* Search Results Dropdown */}
       {isOpen && filteredItems && filteredItems.length > 0 && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-card border border-border rounded-lg shadow-lg max-h-96 overflow-y-auto z-50">
+        <div className="absolute top-full left-0 right-0 mt-2 bg-card border border-border rounded-lg shadow-lg max-h-[60vh] sm:max-h-[70vh] overflow-y-auto z-50">
           {filteredItems.map((category, categoryIndex) => (
             <div key={categoryIndex}>
               {category.items && category.items.length > 0 && (
                 <>
-                  <div className="px-4 py-2 text-xs font-semibold text-muted-foreground bg-muted/50">
+                  <div className="px-3 sm:px-4 py-2 text-xs font-semibold text-muted-foreground bg-muted/50 sticky top-0">
                     {category.category}
                   </div>
                   {category.items.map((item, itemIndex) => {
@@ -169,7 +156,7 @@ const SearchBar = () => {
                     return (
                       <div
                         key={itemIndex}
-                        className={`px-4 py-2 cursor-pointer hover:bg-muted ${
+                        className={`px-3 sm:px-4 py-2.5 sm:py-3 cursor-pointer hover:bg-muted transition-colors ${
                           isSelected ? 'bg-muted' : ''
                         }`}
                         onClick={() => {
@@ -180,10 +167,10 @@ const SearchBar = () => {
                         }}
                       >
                         <div className="flex items-center space-x-3">
-                          <Icon className="h-4 w-4 text-muted-foreground" />
-                          <div className="flex-1">
-                            <div className="text-sm font-medium">{item.title}</div>
-                            <div className="text-xs text-muted-foreground">{item.description}</div>
+                          <Icon className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                          <div className="flex-1 min-w-0">
+                            <div className="text-sm font-medium truncate">{item.title}</div>
+                            <div className="text-xs text-muted-foreground truncate">{item.description}</div>
                           </div>
                         </div>
                       </div>
@@ -199,4 +186,4 @@ const SearchBar = () => {
   )
 }
 
-export default SearchBar 
+export default SearchBar

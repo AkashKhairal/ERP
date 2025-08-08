@@ -72,19 +72,19 @@ const Login = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="max-w-md w-full space-y-8 p-8">
+    <div className="min-h-screen flex items-center justify-center bg-background px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-6 sm:space-y-8">
         <div className="text-center">
           <div className="mx-auto h-12 w-12 bg-primary rounded-lg flex items-center justify-center mb-4">
             <span className="text-primary-foreground font-bold text-lg">CB</span>
           </div>
-          <h2 className="text-3xl font-bold text-foreground">Welcome to CreatorBase</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold text-foreground">Welcome to CreatorBase</h2>
           <p className="mt-2 text-sm text-muted-foreground">
             Sign in to your account to continue
           </p>
         </div>
         
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
+        <form className="mt-6 sm:mt-8 space-y-4 sm:space-y-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="space-y-4">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
@@ -105,7 +105,7 @@ const Login = () => {
                       message: 'Invalid email address'
                     }
                   })}
-                  className={`pl-10 ${errors.email ? 'border-red-300' : ''}`}
+                  className={`pl-10 h-10 sm:h-11 ${errors.email ? 'border-red-300' : ''}`}
                   placeholder="Enter your email"
                 />
               </div>
@@ -133,7 +133,7 @@ const Login = () => {
                       message: 'Password must be at least 6 characters'
                     }
                   })}
-                  className={`pl-10 pr-10 ${errors.password ? 'border-red-300' : ''}`}
+                  className={`pl-10 pr-10 h-10 sm:h-11 ${errors.password ? 'border-red-300' : ''}`}
                   placeholder="Enter your password"
                 />
                 <button
@@ -154,7 +154,7 @@ const Login = () => {
             </div>
           </div>
 
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
             <div className="flex items-center">
               <input
                 id="remember-me"
@@ -178,7 +178,7 @@ const Login = () => {
             <Button
               type="submit"
               disabled={isSubmitting || loading}
-              className="w-full"
+              className="w-full h-10 sm:h-11"
             >
               {isSubmitting || loading ? (
                 <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
@@ -198,17 +198,19 @@ const Login = () => {
               </div>
             </div>
 
-            <div className="mt-6">
-              <GoogleLogin
-                onSuccess={handleGoogleSuccess}
-                onError={() => handleGoogleError('Google sign-in failed')}
-                useOneTap
-                theme="outline"
-                size="large"
-                text="signin_with"
-                shape="rectangular"
-                width="400"
-              />
+            <div className="mt-6 flex justify-center">
+              <div className="w-full max-w-sm">
+                <GoogleLogin
+                  onSuccess={handleGoogleSuccess}
+                  onError={() => handleGoogleError('Google sign-in failed')}
+                  useOneTap
+                  theme="outline"
+                  size="large"
+                  text="signin_with"
+                  shape="rectangular"
+                  width="100%"
+                />
+              </div>
             </div>
           </div>
 

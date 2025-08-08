@@ -98,159 +98,140 @@ const Dashboard = () => {
     },
     {
       action: 'Task assigned',
-      description: 'Content review assigned to Alex',
+      description: 'Review marketing materials',
       time: '2 days ago',
       type: 'task'
     },
     {
-      action: 'Revenue milestone',
-      description: 'Monthly revenue target achieved',
+      action: 'Meeting scheduled',
+      description: 'Weekly team standup',
       time: '3 days ago',
-      type: 'finance'
+      type: 'meeting'
     }
   ]
 
   return (
-    <div className="space-y-6">
-      {/* Welcome Section */}
-      <div className="flex justify-between items-center">
+    <div className="space-y-6 sm:space-y-8">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">
-            Welcome back, {user?.firstName || 'User'}!
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
+            Welcome back, {user?.firstName || 'User'}! 👋
           </h1>
-          <p className="text-gray-600 mt-1">
-            Here's what's happening with your team today.
+          <p className="text-muted-foreground mt-1 sm:mt-2">
+            Here's what's happening with your projects today.
           </p>
         </div>
-        <Button>
-          <Plus className="mr-2 h-4 w-4" />
-          Quick Action
-        </Button>
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
+          <Button variant="outline" size="sm" className="w-full sm:w-auto h-10">
+            <Plus className="mr-2 h-4 w-4" />
+            New Project
+          </Button>
+          <Button size="sm" className="w-full sm:w-auto h-10">
+            <ArrowUp className="mr-2 h-4 w-4" />
+            View Reports
+          </Button>
+        </div>
       </div>
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <Card>
+      {/* Key Metrics */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        <Card className="w-full">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Users</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.totalUsers}</div>
-            <p className="text-xs text-muted-foreground">
-              <ArrowUp className="inline h-3 w-3 text-green-500" />
+            <p className="text-xs text-muted-foreground flex items-center mt-1">
+              <ArrowUp className="mr-1 h-3 w-3 text-green-500" />
               +12% from last month
             </p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="w-full">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Active Projects</CardTitle>
             <FolderOpen className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.activeProjects}</div>
-            <p className="text-xs text-muted-foreground">
-              <ArrowUp className="inline h-3 w-3 text-green-500" />
+            <p className="text-xs text-muted-foreground flex items-center mt-1">
+              <ArrowUp className="mr-1 h-3 w-3 text-green-500" />
               +3 new this week
             </p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="w-full">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Pending Tasks</CardTitle>
             <CheckSquare className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.pendingTasks}</div>
-            <p className="text-xs text-muted-foreground">
-              <ArrowDown className="inline h-3 w-3 text-red-500" />
+            <p className="text-xs text-muted-foreground flex items-center mt-1">
+              <ArrowDown className="mr-1 h-3 w-3 text-red-500" />
               -5 completed today
             </p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="w-full">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Monthly Revenue</CardTitle>
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">${stats.monthlyRevenue.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">
-              <ArrowUp className="inline h-3 w-3 text-green-500" />
+            <div className="text-2xl font-bold">₹{stats.monthlyRevenue.toLocaleString()}</div>
+            <p className="text-xs text-muted-foreground flex items-center mt-1">
+              <ArrowUp className="mr-1 h-3 w-3 text-green-500" />
               +8% from last month
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Team Productivity</CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.teamProductivity}%</div>
-            <p className="text-xs text-muted-foreground">
-              <ArrowUp className="inline h-3 w-3 text-green-500" />
-              +5% from last week
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Content Views</CardTitle>
-            <Eye className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.contentViews.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">
-              <ArrowUp className="inline h-3 w-3 text-green-500" />
-              +15% from last week
             </p>
           </CardContent>
         </Card>
       </div>
 
       {/* Quick Actions */}
-      <div>
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">Quick Actions</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="space-y-4 sm:space-y-6">
+        <h2 className="text-lg sm:text-xl font-semibold text-foreground">Quick Actions</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {quickActions.map((action, index) => (
-            <Card key={index} className="hover:shadow-lg transition-shadow cursor-pointer">
-              <CardContent className="p-6">
-                <div className={`w-12 h-12 ${action.bgColor} rounded-lg flex items-center justify-center mb-4`}>
-                  <action.icon className={`h-6 w-6 ${action.color}`} />
+            <Card key={index} className="w-full hover:shadow-lg transition-shadow cursor-pointer">
+              <CardContent className="p-4 sm:p-6">
+                <div className={`w-10 h-10 sm:w-12 sm:h-12 ${action.bgColor} rounded-lg flex items-center justify-center mb-3 sm:mb-4`}>
+                  <action.icon className={`h-5 w-5 sm:h-6 sm:w-6 ${action.color}`} />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">{action.title}</h3>
-                <p className="text-sm text-gray-600">{action.description}</p>
+                <h3 className="font-semibold text-foreground mb-1 sm:mb-2 text-sm sm:text-base">{action.title}</h3>
+                <p className="text-xs sm:text-sm text-muted-foreground">{action.description}</p>
               </CardContent>
             </Card>
           ))}
         </div>
       </div>
 
-      {/* Recent Activities */}
+      {/* Recent Activities and Team Performance */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card>
+        {/* Recent Activities */}
+        <Card className="w-full">
           <CardHeader>
-            <CardTitle>Recent Activities</CardTitle>
-            <CardDescription>
-              Latest updates from your team
-            </CardDescription>
+            <CardTitle className="text-lg sm:text-xl">Recent Activities</CardTitle>
+            <CardDescription>Latest updates and activities</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
+            <div className="space-y-4 sm:space-y-6">
               {recentActivities.map((activity, index) => (
-                <div key={index} className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
-                  <div className="flex-1">
-                    <p className="text-sm font-medium text-gray-900">{activity.action}</p>
-                    <p className="text-sm text-gray-600">{activity.description}</p>
-                    <p className="text-xs text-gray-500">{activity.time}</p>
+                <div key={index} className="flex items-start space-x-3 sm:space-x-4">
+                  <div className="flex-shrink-0">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 bg-primary rounded-full flex items-center justify-center">
+                      <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-primary-foreground" />
+                    </div>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm sm:text-base font-medium text-foreground">{activity.action}</p>
+                    <p className="text-sm text-muted-foreground mt-0.5">{activity.description}</p>
+                    <p className="text-xs text-muted-foreground mt-1">{activity.time}</p>
                   </div>
                 </div>
               ))}
@@ -258,30 +239,62 @@ const Dashboard = () => {
           </CardContent>
         </Card>
 
-        <Card>
+        {/* Team Performance */}
+        <Card className="w-full">
           <CardHeader>
-            <CardTitle>Team Overview</CardTitle>
-            <CardDescription>
-              Current team status and performance
-            </CardDescription>
+            <CardTitle className="text-lg sm:text-xl">Team Performance</CardTitle>
+            <CardDescription>Current team metrics</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              <div className="flex justify-between items-center">
-                <span className="text-sm font-medium">Online Members</span>
-                <Badge variant="secondary">18/24</Badge>
+            <div className="space-y-6">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm sm:text-base">Productivity</span>
+                  <Badge variant="secondary" className="text-xs sm:text-sm px-2 py-1">
+                    {stats.teamProductivity}%
+                  </Badge>
+                </div>
+                <div className="w-full bg-muted rounded-full h-2 sm:h-3">
+                  <div 
+                    className="bg-primary h-2 sm:h-3 rounded-full transition-all duration-300" 
+                    style={{ width: `${stats.teamProductivity}%` }}
+                  ></div>
+                </div>
               </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm font-medium">Active Projects</span>
-                <Badge variant="secondary">8</Badge>
+              
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm sm:text-base">Content Views</span>
+                  <Badge variant="secondary" className="text-xs sm:text-sm px-2 py-1">
+                    {stats.contentViews.toLocaleString()}
+                  </Badge>
+                </div>
+                <div className="w-full bg-muted rounded-full h-2 sm:h-3">
+                  <div 
+                    className="bg-green-500 h-2 sm:h-3 rounded-full transition-all duration-300" 
+                    style={{ width: `${Math.min((stats.contentViews / 200000) * 100, 100)}%` }}
+                  ></div>
+                </div>
               </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm font-medium">Tasks Due Today</span>
-                <Badge variant="destructive">5</Badge>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm font-medium">Meetings Today</span>
-                <Badge variant="secondary">3</Badge>
+
+              {/* Additional Performance Metrics */}
+              <div className="grid grid-cols-2 gap-4 sm:gap-6 mt-6">
+                <div className="space-y-1">
+                  <p className="text-sm text-muted-foreground">Team Members</p>
+                  <p className="text-lg sm:text-xl font-semibold">24</p>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-sm text-muted-foreground">Active Now</p>
+                  <p className="text-lg sm:text-xl font-semibold">18</p>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-sm text-muted-foreground">Tasks Due</p>
+                  <p className="text-lg sm:text-xl font-semibold">12</p>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-sm text-muted-foreground">Completion Rate</p>
+                  <p className="text-lg sm:text-xl font-semibold">92%</p>
+                </div>
               </div>
             </div>
           </CardContent>
@@ -291,4 +304,4 @@ const Dashboard = () => {
   )
 }
 
-export default Dashboard 
+export default Dashboard
