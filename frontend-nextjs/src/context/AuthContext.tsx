@@ -233,14 +233,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       dispatch({ type: 'AUTH_START' })
       const response = await authService.googleSignIn(token)
-      const { user, accessToken } = response.data.data
+      const { user, token: jwtToken, googleInfo } = response.data.data
       
       if (typeof window !== 'undefined') {
-        localStorage.setItem('token', accessToken)
+        localStorage.setItem('token', jwtToken)
+        // Store Google info if available
+        if (googleInfo) {
+          localStorage.setItem('googleInfo', JSON.stringify(googleInfo))
+        }
       }
       dispatch({
         type: 'AUTH_SUCCESS',
-        payload: { user, token: accessToken }
+        payload: { user, token: jwtToken }
       })
       
       toast.success('Google sign-in successful!')

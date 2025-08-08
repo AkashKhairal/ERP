@@ -205,7 +205,7 @@ const Login = () => {
                 size="large"
                 text="signin_with"
                 shape="rectangular"
-                width="100%"
+                width="400"
               />
             </div>
           </div>
