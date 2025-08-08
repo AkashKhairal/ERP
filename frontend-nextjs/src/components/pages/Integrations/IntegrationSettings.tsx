@@ -1,20 +1,6 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { 
-  Settings, 
-  Save, 
-  RefreshCw, 
-  Key, 
-  Shield, 
-  Clock, 
-  AlertCircle,
-  CheckCircle,
-  XCircle,
-  Loader2,
-  Database,
-  Info
-} from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -24,7 +10,22 @@ import { Badge } from '@/components/ui/badge'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
-import integrationService, { type Integration } from '@/services/integrationService'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { 
+  Shield, 
+  RefreshCw, 
+  Bell, 
+  Settings, 
+  Database, 
+  Loader2,
+  AlertTriangle,
+  CheckCircle,
+  Clock,
+  Save,
+  Info
+} from 'lucide-react'
+import { integrationService, Integration, SyncResponse, ApiResponse } from '@/services/integrationService'
+import { useAuth } from '@/context/AuthContext'
 
 interface IntegrationSettingsProps {
   integration: Integration
@@ -57,7 +58,7 @@ const IntegrationSettings = ({ integration, onClose, onUpdate }: IntegrationSett
   const handleSave = async () => {
     try {
       setSaving(true)
-      const response = await integrationService.updateIntegrationSettings(integration._id || '', settings)
+      const response: ApiResponse = await integrationService.updateIntegrationSettings(integration._id || '', settings)
       
       if (response.success) {
         // Update local integration
@@ -84,7 +85,7 @@ const IntegrationSettings = ({ integration, onClose, onUpdate }: IntegrationSett
   const handleTestConnection = async () => {
     try {
       setLoading(true)
-      const response = await integrationService.syncIntegration(integration._id || '')
+      const response: SyncResponse = await integrationService.syncIntegration(integration._id || '')
       
       if (response.success) {
         alert('Connection test successful!')

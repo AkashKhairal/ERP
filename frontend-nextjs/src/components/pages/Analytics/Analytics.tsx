@@ -512,8 +512,8 @@ const Analytics = () => {
               <MultiLineChartComponent 
                 data={multiLineData} 
                 lines={[
-                  { dataKey: 'revenue', name: 'Revenue' },
-                  { dataKey: 'expenses', name: 'Expenses' }
+                  { dataKey: 'revenue', name: 'Revenue', color: 'hsl(var(--primary))' },
+                  { dataKey: 'expenses', name: 'Expenses', color: 'hsl(var(--destructive))' }
                 ]}
                 height={300}
               />

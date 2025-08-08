@@ -392,7 +392,7 @@ export const taskService = {
           project: 'project1',
           status: 'done',
           priority: 'medium',
-          type: 'documentation',
+          type: 'content',
           assignedTo: 'user5',
           assignedBy: 'user1',
           dueDate: '2024-01-31',
@@ -431,7 +431,7 @@ export const taskService = {
         { type: 'deployment', count: 1 },
         { type: 'feature', count: 1 },
         { type: 'improvement', count: 1 },
-        { type: 'documentation', count: 1 }
+        { type: 'content', count: 1 }
       ]
     }
   }

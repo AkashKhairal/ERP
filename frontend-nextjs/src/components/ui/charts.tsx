@@ -19,6 +19,60 @@ import {
   Legend,
 } from 'recharts'
 
+// TypeScript interfaces
+interface LineData {
+  dataKey: string
+  name: string
+  color?: string
+}
+
+interface BarData {
+  dataKey: string
+  name: string
+  color?: string
+}
+
+interface MultiLineChartProps {
+  data: any[]
+  lines: LineData[]
+  height?: number
+}
+
+interface StackedBarChartProps {
+  data: any[]
+  bars: BarData[]
+  height?: number
+}
+
+interface LineChartProps {
+  data: any[]
+  color?: string
+  height?: number
+  dataKey?: string
+  strokeWidth?: number
+}
+
+interface BarChartProps {
+  data: any[]
+  color?: string
+  height?: number
+  dataKey?: string
+}
+
+interface AreaChartProps {
+  data: any[]
+  color?: string
+  height?: number
+  dataKey?: string
+}
+
+interface PieChartProps {
+  data: any[]
+  height?: number
+  dataKey?: string
+  nameKey?: string
+}
+
 // Line Chart Component
 export function LineChartComponent({ 
   data, 
@@ -26,7 +80,7 @@ export function LineChartComponent({
   height = 200,
   dataKey = "value",
   strokeWidth = 2 
-}) {
+}: LineChartProps) {
   return (
     <ResponsiveContainer width="100%" height={height}>
       <LineChart data={data}>
@@ -71,7 +125,7 @@ export function BarChartComponent({
   color = "hsl(var(--primary))", 
   height = 200,
   dataKey = "value" 
-}) {
+}: BarChartProps) {
   return (
     <ResponsiveContainer width="100%" height={height}>
       <BarChart data={data}>
@@ -110,7 +164,7 @@ export function AreaChartComponent({
   color = "hsl(var(--primary))", 
   height = 200,
   dataKey = "value" 
-}) {
+}: AreaChartProps) {
   return (
     <ResponsiveContainer width="100%" height={height}>
       <AreaChart data={data}>
@@ -161,14 +215,14 @@ export function PieChartComponent({
   height = 200,
   dataKey = "value",
   nameKey = "name"
-}) {
+}: PieChartProps) {
   const COLORS = [
     'hsl(var(--primary))',
     'hsl(var(--secondary))',
     'hsl(var(--accent))',
     'hsl(var(--destructive))',
     'hsl(var(--muted))',
-    'hsl(var(--popover))'
+    'hsl(var(--border))'
   ]
 
   return (
@@ -181,9 +235,9 @@ export function PieChartComponent({
           labelLine={false}
           label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
           outerRadius={80}
-          fill="hsl(var(--primary))"
+          fill="#8884d8"
           dataKey={dataKey}
-          name={nameKey}
+          nameKey={nameKey}
         >
           {data.map((entry, index) => (
             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -198,7 +252,6 @@ export function PieChartComponent({
             color: 'hsl(var(--foreground))'
           }}
         />
-        <Legend />
       </PieChart>
     </ResponsiveContainer>
   )
@@ -209,7 +262,7 @@ export function MultiLineChartComponent({
   data, 
   lines = [], 
   height = 200 
-}) {
+}: MultiLineChartProps) {
   const COLORS = [
     'hsl(var(--primary))',
     'hsl(var(--secondary))',
@@ -265,7 +318,7 @@ export function StackedBarChartComponent({
   data, 
   bars = [], 
   height = 200 
-}) {
+}: StackedBarChartProps) {
   const COLORS = [
     'hsl(var(--primary))',
     'hsl(var(--secondary))',

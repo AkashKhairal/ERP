@@ -94,7 +94,7 @@ export const sprintService = {
       
       const response = await api.get(`?${params.toString()}`)
       return { success: true, data: response.data }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error fetching sprints:', error)
       return { success: false, error: error.response?.data?.message || 'Failed to fetch sprints' }
     }
@@ -105,7 +105,7 @@ export const sprintService = {
     try {
       const response = await api.get(`/${id}`)
       return { success: true, data: response.data }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error fetching sprint:', error)
       return { success: false, error: error.response?.data?.message || 'Failed to fetch sprint' }
     }
@@ -116,7 +116,7 @@ export const sprintService = {
     try {
       const response = await api.post('/', sprintData)
       return { success: true, data: response.data }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error creating sprint:', error)
       return { success: false, error: error.response?.data?.message || 'Failed to create sprint' }
     }
@@ -127,7 +127,7 @@ export const sprintService = {
     try {
       const response = await api.put(`/${id}`, sprintData)
       return { success: true, data: response.data }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error updating sprint:', error)
       return { success: false, error: error.response?.data?.message || 'Failed to update sprint' }
     }
@@ -138,7 +138,7 @@ export const sprintService = {
     try {
       const response = await api.delete(`/${id}`)
       return { success: true, data: response.data }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error deleting sprint:', error)
       return { success: false, error: error.response?.data?.message || 'Failed to delete sprint' }
     }
@@ -149,7 +149,7 @@ export const sprintService = {
     try {
       const response = await api.get('/stats')
       return { success: true, data: response.data }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error fetching sprint stats:', error)
       return { success: false, error: error.response?.data?.message || 'Failed to fetch sprint stats' }
     }
@@ -160,7 +160,7 @@ export const sprintService = {
     try {
       const response = await api.post(`/${sprintId}/tasks`, taskData)
       return { success: true, data: response.data }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error adding task to sprint:', error)
       return { success: false, error: error.response?.data?.message || 'Failed to add task to sprint' }
     }
@@ -171,7 +171,7 @@ export const sprintService = {
     try {
       const response = await api.put(`/${sprintId}/tasks/${taskId}`, taskData)
       return { success: true, data: response.data }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error updating task in sprint:', error)
       return { success: false, error: error.response?.data?.message || 'Failed to update task in sprint' }
     }
@@ -182,7 +182,7 @@ export const sprintService = {
     try {
       const response = await api.delete(`/${sprintId}/tasks/${taskId}`)
       return { success: true, data: response.data }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error removing task from sprint:', error)
       return { success: false, error: error.response?.data?.message || 'Failed to remove task from sprint' }
     }
@@ -193,9 +193,20 @@ export const sprintService = {
     try {
       const response = await api.post(`/${sprintId}/members`, memberData)
       return { success: true, data: response.data }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error adding member to sprint:', error)
       return { success: false, error: error.response?.data?.message || 'Failed to add member to sprint' }
+    }
+  },
+
+  // Update member in sprint
+  async updateMemberInSprint(sprintId: string, memberId: string, memberData: Partial<SprintMember>) {
+    try {
+      const response = await api.put(`/${sprintId}/members/${memberId}`, memberData)
+      return { success: true, data: response.data }
+    } catch (error: any) {
+      console.error('Error updating member in sprint:', error)
+      return { success: false, error: error.response?.data?.message || 'Failed to update member in sprint' }
     }
   },
 
@@ -204,7 +215,7 @@ export const sprintService = {
     try {
       const response = await api.delete(`/${sprintId}/members/${memberId}`)
       return { success: true, data: response.data }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error removing member from sprint:', error)
       return { success: false, error: error.response?.data?.message || 'Failed to remove member from sprint' }
     }

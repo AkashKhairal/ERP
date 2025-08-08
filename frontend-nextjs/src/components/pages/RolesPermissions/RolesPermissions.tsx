@@ -126,7 +126,23 @@ const RolesPermissions = () => {
   const handleCreateRole = async () => {
     try {
       setLoading(true)
-      const response = await roleService.createRole(roleForm)
+      
+      // Convert permissions object to array format
+      const permissionsArray = Object.entries(roleForm.permissions)
+        .filter(([module, actions]) => actions.length > 0)
+        .map(([module, actions]) => ({
+          module,
+          actions: Array.from(actions)
+        }))
+
+      const roleData = {
+        name: roleForm.name,
+        description: roleForm.description,
+        permissions: permissionsArray,
+        isDefault: roleForm.isDefault
+      }
+
+      const response = await roleService.createRole(roleData)
       if (response.success) {
         setIsCreateDialogOpen(false)
         resetRoleForm()
@@ -146,7 +162,23 @@ const RolesPermissions = () => {
     
     try {
       setLoading(true)
-      const response = await roleService.updateRole(selectedRole._id, roleForm)
+      
+      // Convert permissions object to array format
+      const permissionsArray = Object.entries(roleForm.permissions)
+        .filter(([module, actions]) => actions.length > 0)
+        .map(([module, actions]) => ({
+          module,
+          actions: Array.from(actions)
+        }))
+
+      const roleData = {
+        name: roleForm.name,
+        description: roleForm.description,
+        permissions: permissionsArray,
+        isDefault: roleForm.isDefault
+      }
+
+      const response = await roleService.updateRole(selectedRole._id, roleData)
       if (response.success) {
         setIsEditDialogOpen(false)
         resetRoleForm()

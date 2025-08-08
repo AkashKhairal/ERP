@@ -1,9 +1,6 @@
 {
+  "/page": "app/page.js",
+  "/login/page": "app/login/page.js",
   "/app/dashboard/page": "app/app/dashboard/page.js",
-  "/app/users/page": "app/app/users/page.js",
-  "/app/teams/page": "app/app/teams/page.js",
-  "/app/integrations/page": "app/app/integrations/page.js",
-  "/app/hr/page": "app/app/hr/page.js",
-  "/app/projects/page": "app/app/projects/page.js",
-  "/app/tasks/page": "app/app/tasks/page.js"
+  "/app/projects/page": "app/app/projects/page.js"
 }

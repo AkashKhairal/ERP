@@ -131,14 +131,33 @@ const SprintPlanning = () => {
   }
 
   const handleCreateSprint = async () => {
-    if (!sprintForm.name || !sprintForm.startDate || !sprintForm.endDate) {
+    if (!sprintForm.name || !sprintForm.description || !sprintForm.startDate || !sprintForm.endDate) {
       alert('Please fill in all required fields')
       return
     }
 
     try {
       setLoading(true)
-      const response = await sprintService.createSprint(sprintForm)
+      
+      // Calculate total story points from tasks
+      const totalStoryPoints = sprintForm.tasks.reduce((sum, task) => sum + (task.storyPoints || 0), 0)
+      const completedStoryPoints = sprintForm.tasks.reduce((sum, task) => sum + (task.status === 'done' ? (task.storyPoints || 0) : 0), 0)
+      
+      const sprintData = {
+        name: sprintForm.name,
+        description: sprintForm.description,
+        startDate: sprintForm.startDate,
+        endDate: sprintForm.endDate,
+        status: sprintForm.status,
+        team: sprintForm.team,
+        tasks: sprintForm.tasks,
+        totalStoryPoints,
+        completedStoryPoints,
+        velocity: completedStoryPoints,
+        burndownData: []
+      }
+
+      const response = await sprintService.createSprint(sprintData)
       
       if (response.success) {
         setIsCreateDialogOpen(false)
@@ -162,7 +181,26 @@ const SprintPlanning = () => {
 
     try {
       setLoading(true)
-      const response = await sprintService.updateSprint(selectedSprint._id, sprintForm)
+      
+      // Calculate total story points from tasks
+      const totalStoryPoints = sprintForm.tasks.reduce((sum, task) => sum + (task.storyPoints || 0), 0)
+      const completedStoryPoints = sprintForm.tasks.reduce((sum, task) => sum + (task.status === 'done' ? (task.storyPoints || 0) : 0), 0)
+      
+      const sprintData = {
+        name: sprintForm.name,
+        description: sprintForm.description,
+        startDate: sprintForm.startDate,
+        endDate: sprintForm.endDate,
+        status: sprintForm.status,
+        team: sprintForm.team,
+        tasks: sprintForm.tasks,
+        totalStoryPoints,
+        completedStoryPoints,
+        velocity: completedStoryPoints,
+        burndownData: selectedSprint.burndownData || []
+      }
+
+      const response = await sprintService.updateSprint(selectedSprint._id, sprintData)
       
       if (response.success) {
         setIsEditDialogOpen(false)

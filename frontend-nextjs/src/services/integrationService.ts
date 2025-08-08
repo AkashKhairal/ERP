@@ -73,6 +73,23 @@ export interface SyncResult {
   timestamp: string
 }
 
+export interface SyncResponse {
+  success: boolean
+  data?: {
+    syncedAt: string
+    itemsSynced: number
+    status: string
+    youtubeData?: YouTubeData
+  }
+  error?: string
+}
+
+export interface ApiResponse<T = any> {
+  success: boolean
+  data?: T
+  error?: string
+}
+
 export interface YouTubeData {
   videos?: any[]
   playlists?: any[]
@@ -129,7 +146,7 @@ export const integrationService = {
   },
 
   // Sync integration
-  async syncIntegration(integrationId: string) {
+  async syncIntegration(integrationId: string): Promise<SyncResponse> {
     try {
       // Check if integration is connected first
       const integrations = this.getAvailableIntegrations()
@@ -145,7 +162,7 @@ export const integrationService = {
       }
 
       // For other integrations, simulate sync
-      const mockSyncData = {
+      const mockSyncData: SyncResponse = {
         success: true,
         data: {
           syncedAt: new Date().toISOString(),
@@ -163,7 +180,7 @@ export const integrationService = {
   },
 
   // Sync YouTube data using real API
-  async syncYouTubeData(): Promise<{ success: boolean; data?: any; error?: string }> {
+  async syncYouTubeData(): Promise<SyncResponse> {
     try {
       const tokens = this.getStoredTokens('youtube')
       if (!tokens?.accessToken) {
@@ -275,7 +292,7 @@ export const integrationService = {
   },
 
   // Update integration settings
-  async updateIntegrationSettings(integrationId: string, settings: any) {
+  async updateIntegrationSettings(integrationId: string, settings: any): Promise<ApiResponse> {
     try {
       const response = await api.put(`/${integrationId}/settings`, settings)
       return { success: true, data: response.data }
