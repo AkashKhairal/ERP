@@ -125,7 +125,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   // Check if user is authenticated on app load
   const checkAuth = useCallback(async () => {
-    if (typeof window === 'undefined' || authCheckPerformed.current || isInitialized.current) return
+    // Don't run on server-side
+    if (typeof window === 'undefined') {
+      dispatch({ type: 'AUTH_FAILURE', payload: null })
+      return
+    }
+    
+    if (authCheckPerformed.current || isInitialized.current) return
     
     authCheckPerformed.current = true
     isInitialized.current = true
@@ -181,7 +187,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const { user, token } = response.data.data
       
       console.log('Login - storing token:', !!token)
-      localStorage.setItem('token', token)
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('token', token)
+      }
       dispatch({
         type: 'AUTH_SUCCESS',
         payload: { user, token }
@@ -203,7 +211,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const response = await authService.register(userData)
       const { user, token } = response.data.data
       
-      localStorage.setItem('token', token)
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('token', token)
+      }
       dispatch({
         type: 'AUTH_SUCCESS',
         payload: { user, token }
@@ -225,7 +235,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const response = await authService.googleSignIn(token)
       const { user, accessToken } = response.data.data
       
-      localStorage.setItem('token', accessToken)
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('token', accessToken)
+      }
       dispatch({
         type: 'AUTH_SUCCESS',
         payload: { user, token: accessToken }
@@ -247,7 +259,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } catch (error) {
       console.error('Logout error:', error)
     } finally {
-      localStorage.removeItem('token')
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('token')
+      }
       dispatch({ type: 'LOGOUT' })
       router.push('/')
       toast.success('Logged out successfully')
