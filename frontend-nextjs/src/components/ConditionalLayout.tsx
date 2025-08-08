@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import Layout from '@/components/Layout/Layout'
 import ProtectedRoute from '@/components/Auth/ProtectedRoute'
@@ -11,19 +11,36 @@ interface ConditionalLayoutProps {
 
 const ConditionalLayout = ({ children }: ConditionalLayoutProps) => {
   const pathname = usePathname()
+  const [isClient, setIsClient] = useState(false)
+  
+  // Ensure we're on the client side
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
   
   // Define public routes that don't need authentication or layout
   const publicRoutes = ['/', '/login', '/register']
   
   // Check if current route is public
-  const isPublicRoute = publicRoutes.includes(pathname)
+  const currentPath = pathname || ''
+  const isPublicRoute = publicRoutes.includes(currentPath)
+  
+  // During SSR or before client hydration, render children directly
+  if (!isClient) {
+    console.log('ConditionalLayout - SSR mode, rendering children directly')
+    return <>{children}</>
+  }
+  
+  console.log('ConditionalLayout - pathname:', currentPath, 'isPublicRoute:', isPublicRoute)
   
   if (isPublicRoute) {
     // For public routes, render children directly without ProtectedRoute or Layout
+    console.log('ConditionalLayout - rendering public route:', currentPath)
     return <>{children}</>
   }
   
   // For protected routes, apply ProtectedRoute and Layout
+  console.log('ConditionalLayout - rendering protected route:', currentPath)
   return (
     <ProtectedRoute>
       <Layout>
