@@ -34,25 +34,15 @@
     --accent-foreground: 222.2 47.4% 11.2%;
     --accent-muted: 210 40% 90%;
     
-    /* Light Mode - Destructive Colors */
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --destructive-muted: 0 84.2% 90%;
-    
-    /* Light Mode - Success Colors */
+    /* Light Mode - Status Colors */
     --success: 142 72% 29%;
     --success-foreground: 210 40% 98%;
-    --success-muted: 142 72% 90%;
-    
-    /* Light Mode - Warning Colors */
     --warning: 38 92% 50%;
     --warning-foreground: 48 96% 89%;
-    --warning-muted: 38 92% 90%;
-    
-    /* Light Mode - Info Colors */
+    --error: 0 84.2% 60.2%;
+    --error-foreground: 210 40% 98%;
     --info: 199 89% 48%;
     --info-foreground: 210 40% 98%;
-    --info-muted: 199 89% 90%;
     
     /* Light Mode - Border and Ring Colors */
     --border: 214.3 31.8% 91.4%;
@@ -100,25 +90,15 @@
     --accent-foreground: 210 40% 98%;
     --accent-muted: 217.2 32.6% 12%;
     
-    /* Dark Mode - Destructive Colors */
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --destructive-muted: 0 62.8% 20%;
-    
-    /* Dark Mode - Success Colors */
+    /* Dark Mode - Status Colors */
     --success: 142 72% 29%;
     --success-foreground: 210 40% 98%;
-    --success-muted: 142 72% 20%;
-    
-    /* Dark Mode - Warning Colors */
-    --warning: 38 92% 40%;
+    --warning: 38 92% 50%;
     --warning-foreground: 48 96% 89%;
-    --warning-muted: 38 92% 20%;
-    
-    /* Dark Mode - Info Colors */
-    --info: 199 89% 38%;
+    --error: 0 84.2% 60.2%;
+    --error-foreground: 210 40% 98%;
+    --info: 199 89% 48%;
     --info-foreground: 210 40% 98%;
-    --info-muted: 199 89% 20%;
     
     /* Dark Mode - Border and Ring Colors */
     --border: 217.2 32.6% 17.5%;
@@ -142,60 +122,36 @@
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
-
-  /* Dark mode specific styles */
-  .dark {
-    /* Improved contrast for text */
-    --text-primary: 210 40% 98%;
-    --text-secondary: 215 20.2% 75.1%;
-    --text-muted: 215 20.2% 65.1%;
-    
-    /* Subtle background variations */
-    --bg-subtle: 222.2 84% 5.9%;
-    --bg-hover: 222.2 84% 7.9%;
-    --bg-active: 222.2 84% 8.9%;
-    
-    /* Card and surface variations */
-    --surface-1: 222.2 84% 6.9%;
-    --surface-2: 222.2 84% 7.9%;
-    --surface-3: 222.2 84% 8.9%;
-    
-    /* Border variations */
-    --border-subtle: 217.2 32.6% 20%;
-    --border-hover: 217.2 32.6% 25%;
-    --border-active: 217.2 32.6% 30%;
-  }
 }
 
 @layer components {
   /* Dark mode specific component styles */
   .dark .card {
-    @apply bg-[color:var(--surface-1)] border-[color:var(--border-subtle)] shadow-lg;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.4);
+    @apply bg-card border-border shadow-lg;
   }
   
   .dark .card:hover {
-    @apply bg-[color:var(--surface-2)] border-[color:var(--border-hover)];
+    @apply bg-muted border-muted;
   }
   
   .dark .sidebar {
-    @apply bg-[color:var(--surface-2)] border-r border-[color:var(--border-subtle)];
+    @apply bg-card border-r border-border;
   }
   
   .dark .nav-item {
-    @apply text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] hover:bg-[color:var(--bg-hover)];
+    @apply text-muted-foreground hover:text-foreground hover:bg-muted;
   }
   
   .dark .nav-item.active {
-    @apply bg-[color:var(--bg-active)] text-[color:var(--text-primary)];
+    @apply bg-muted text-foreground;
   }
   
   .dark .input {
-    @apply bg-[color:var(--surface-1)] border-[color:var(--border-subtle)] text-[color:var(--text-primary)];
+    @apply bg-card border-border text-foreground;
   }
   
   .dark .input:focus {
-    @apply border-[color:var(--border-active)] ring-[color:var(--ring)];
+    @apply border-ring ring-ring;
   }
   
   .dark .button-primary {
@@ -207,58 +163,58 @@
   }
   
   .dark .dropdown {
-    @apply bg-[color:var(--surface-2)] border-[color:var(--border-subtle)] shadow-lg;
+    @apply bg-card border-border shadow-lg;
   }
   
   .dark .dropdown-item {
-    @apply text-[color:var(--text-secondary)] hover:bg-[color:var(--bg-hover)] hover:text-[color:var(--text-primary)];
+    @apply text-muted-foreground hover:bg-muted hover:text-foreground;
   }
   
   .dark .table {
-    @apply bg-[color:var(--surface-1)];
+    @apply bg-card;
   }
   
   .dark .table th {
-    @apply bg-[color:var(--surface-2)] text-[color:var(--text-secondary)];
+    @apply bg-muted text-muted-foreground;
   }
   
   .dark .table td {
-    @apply border-[color:var(--border-subtle)] text-[color:var(--text-primary)];
+    @apply border-border text-foreground;
   }
   
   .dark .table tr:hover {
-    @apply bg-[color:var(--bg-hover)];
+    @apply bg-muted;
   }
   
   /* Status indicators */
   .dark .status-success {
-    @apply bg-success/20 text-success border-success/30;
+    @apply bg-[hsl(var(--success)_/_0.2)] text-[hsl(var(--success))] border-[hsl(var(--success)_/_0.3)];
   }
   
   .dark .status-warning {
-    @apply bg-warning/20 text-warning border-warning/30;
+    @apply bg-[hsl(var(--warning)_/_0.2)] text-[hsl(var(--warning))] border-[hsl(var(--warning)_/_0.3)];
   }
   
   .dark .status-error {
-    @apply bg-destructive/20 text-destructive border-destructive/30;
+    @apply bg-[hsl(var(--error)_/_0.2)] text-[hsl(var(--error))] border-[hsl(var(--error)_/_0.3)];
   }
   
   .dark .status-info {
-    @apply bg-info/20 text-info border-info/30;
+    @apply bg-[hsl(var(--info)_/_0.2)] text-[hsl(var(--info))] border-[hsl(var(--info)_/_0.3)];
   }
   
   /* Charts and data visualization */
   .dark .chart-grid {
-    @apply stroke-[color:var(--border-subtle)];
+    @apply stroke-border;
   }
   
   .dark .chart-text {
-    @apply fill-[color:var(--text-secondary)];
+    @apply fill-muted-foreground;
   }
   
   /* Form elements */
   .dark .checkbox {
-    @apply border-[color:var(--border-subtle)] bg-[color:var(--surface-1)];
+    @apply border-border bg-card;
   }
   
   .dark .checkbox:checked {
@@ -266,7 +222,7 @@
   }
   
   .dark .radio {
-    @apply border-[color:var(--border-subtle)] bg-[color:var(--surface-1)];
+    @apply border-border bg-card;
   }
   
   .dark .radio:checked {
@@ -274,7 +230,7 @@
   }
   
   .dark .select {
-    @apply bg-[color:var(--surface-1)] border-[color:var(--border-subtle)] text-[color:var(--text-primary)];
+    @apply bg-card border-border text-foreground;
   }
   
   /* Scrollbars */
@@ -284,21 +240,20 @@
   }
   
   .dark ::-webkit-scrollbar-track {
-    @apply bg-[color:var(--surface-1)];
+    @apply bg-card;
   }
   
   .dark ::-webkit-scrollbar-thumb {
-    @apply bg-[color:var(--border-subtle)] rounded-full;
+    @apply bg-border rounded-full;
   }
   
   .dark ::-webkit-scrollbar-thumb:hover {
-    @apply bg-[color:var(--border-hover)];
+    @apply bg-muted;
   }
 }
 
-/* Existing mobile-first utilities */
+/* Mobile-first utilities */
 @layer components {
-  /* Mobile-first responsive utilities */
   .container-mobile {
     @apply px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl;
   }
@@ -314,8 +269,4 @@
   .input-mobile {
     @apply h-10 sm:h-11 px-3 sm:px-4 text-sm border border-input bg-background rounded-md focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2;
   }
-  
-  /* Rest of the existing mobile utilities... */
 }
-
-/* Rest of your existing CSS... */
