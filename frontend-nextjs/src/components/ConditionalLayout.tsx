@@ -27,20 +27,15 @@ const ConditionalLayout = ({ children }: ConditionalLayoutProps) => {
   
   // During SSR or before client hydration, render children directly
   if (!isClient) {
-    console.log('ConditionalLayout - SSR mode, rendering children directly')
     return <>{children}</>
   }
   
-  console.log('ConditionalLayout - pathname:', currentPath, 'isPublicRoute:', isPublicRoute)
-  
+  // For public routes, render children directly without ProtectedRoute or Layout
   if (isPublicRoute) {
-    // For public routes, render children directly without ProtectedRoute or Layout
-    console.log('ConditionalLayout - rendering public route:', currentPath)
     return <>{children}</>
   }
   
   // For protected routes, apply ProtectedRoute and Layout
-  console.log('ConditionalLayout - rendering protected route:', currentPath)
   return (
     <ProtectedRoute>
       <Layout>
