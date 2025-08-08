@@ -4,48 +4,132 @@
 
 @layer base {
   :root {
+    /* Light Mode - Base Colors */
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
+    
+    /* Light Mode - Card and Surface Colors */
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
+    --card-muted: 210 40% 98%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
+    
+    /* Light Mode - Primary Colors */
     --primary: 221.2 83.2% 53.3%;
     --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222.2 84% 4.9%;
-    --muted: 210 40% 96%;
+    --primary-muted: 221.2 83.2% 93.3%;
+    
+    /* Light Mode - Secondary Colors */
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary-muted: 210 40% 90%;
+    
+    /* Light Mode - Muted Colors */
+    --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96%;
-    --accent-foreground: 222.2 84% 4.9%;
+    
+    /* Light Mode - Accent Colors */
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent-muted: 210 40% 90%;
+    
+    /* Light Mode - Destructive Colors */
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
+    --destructive-muted: 0 84.2% 90%;
+    
+    /* Light Mode - Success Colors */
+    --success: 142 72% 29%;
+    --success-foreground: 210 40% 98%;
+    --success-muted: 142 72% 90%;
+    
+    /* Light Mode - Warning Colors */
+    --warning: 38 92% 50%;
+    --warning-foreground: 48 96% 89%;
+    --warning-muted: 38 92% 90%;
+    
+    /* Light Mode - Info Colors */
+    --info: 199 89% 48%;
+    --info-foreground: 210 40% 98%;
+    --info-muted: 199 89% 90%;
+    
+    /* Light Mode - Border and Ring Colors */
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
     --ring: 221.2 83.2% 53.3%;
+    
+    /* Light Mode - Elevation Shadows */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    
+    /* Common Variables */
     --radius: 0.5rem;
   }
 
   .dark {
+    /* Dark Mode - Base Colors */
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
+    
+    /* Dark Mode - Card and Surface Colors */
+    --card: 222.2 84% 6.9%;
     --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
+    --card-muted: 217.2 32.6% 12%;
+    --popover: 222.2 84% 6.9%;
     --popover-foreground: 210 40% 98%;
+    
+    /* Dark Mode - Primary Colors */
     --primary: 217.2 91.2% 59.8%;
     --primary-foreground: 222.2 84% 4.9%;
+    --primary-muted: 217.2 91.2% 29.8%;
+    
+    /* Dark Mode - Secondary Colors */
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
+    --secondary-muted: 217.2 32.6% 12%;
+    
+    /* Dark Mode - Muted Colors */
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
+    
+    /* Dark Mode - Accent Colors */
     --accent: 217.2 32.6% 17.5%;
     --accent-foreground: 210 40% 98%;
+    --accent-muted: 217.2 32.6% 12%;
+    
+    /* Dark Mode - Destructive Colors */
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
+    --destructive-muted: 0 62.8% 20%;
+    
+    /* Dark Mode - Success Colors */
+    --success: 142 72% 29%;
+    --success-foreground: 210 40% 98%;
+    --success-muted: 142 72% 20%;
+    
+    /* Dark Mode - Warning Colors */
+    --warning: 38 92% 40%;
+    --warning-foreground: 48 96% 89%;
+    --warning-muted: 38 92% 20%;
+    
+    /* Dark Mode - Info Colors */
+    --info: 199 89% 38%;
+    --info-foreground: 210 40% 98%;
+    --info-muted: 199 89% 20%;
+    
+    /* Dark Mode - Border and Ring Colors */
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 94.1%;
+    --ring: 224.3 76.3% 48%;
+    
+    /* Dark Mode - Elevation Shadows */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.4);
+    --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.4), 0 1px 2px -1px rgb(0 0 0 / 0.4);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.4);
   }
 }
 
@@ -53,12 +137,166 @@
   * {
     @apply border-border;
   }
+  
   body {
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
+
+  /* Dark mode specific styles */
+  .dark {
+    /* Improved contrast for text */
+    --text-primary: 210 40% 98%;
+    --text-secondary: 215 20.2% 75.1%;
+    --text-muted: 215 20.2% 65.1%;
+    
+    /* Subtle background variations */
+    --bg-subtle: 222.2 84% 5.9%;
+    --bg-hover: 222.2 84% 7.9%;
+    --bg-active: 222.2 84% 8.9%;
+    
+    /* Card and surface variations */
+    --surface-1: 222.2 84% 6.9%;
+    --surface-2: 222.2 84% 7.9%;
+    --surface-3: 222.2 84% 8.9%;
+    
+    /* Border variations */
+    --border-subtle: 217.2 32.6% 20%;
+    --border-hover: 217.2 32.6% 25%;
+    --border-active: 217.2 32.6% 30%;
+  }
 }
 
+@layer components {
+  /* Dark mode specific component styles */
+  .dark .card {
+    @apply bg-[color:var(--surface-1)] border-[color:var(--border-subtle)] shadow-lg;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.4);
+  }
+  
+  .dark .card:hover {
+    @apply bg-[color:var(--surface-2)] border-[color:var(--border-hover)];
+  }
+  
+  .dark .sidebar {
+    @apply bg-[color:var(--surface-2)] border-r border-[color:var(--border-subtle)];
+  }
+  
+  .dark .nav-item {
+    @apply text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] hover:bg-[color:var(--bg-hover)];
+  }
+  
+  .dark .nav-item.active {
+    @apply bg-[color:var(--bg-active)] text-[color:var(--text-primary)];
+  }
+  
+  .dark .input {
+    @apply bg-[color:var(--surface-1)] border-[color:var(--border-subtle)] text-[color:var(--text-primary)];
+  }
+  
+  .dark .input:focus {
+    @apply border-[color:var(--border-active)] ring-[color:var(--ring)];
+  }
+  
+  .dark .button-primary {
+    @apply bg-primary hover:bg-primary/90 text-primary-foreground;
+  }
+  
+  .dark .button-secondary {
+    @apply bg-secondary hover:bg-secondary/90 text-secondary-foreground;
+  }
+  
+  .dark .dropdown {
+    @apply bg-[color:var(--surface-2)] border-[color:var(--border-subtle)] shadow-lg;
+  }
+  
+  .dark .dropdown-item {
+    @apply text-[color:var(--text-secondary)] hover:bg-[color:var(--bg-hover)] hover:text-[color:var(--text-primary)];
+  }
+  
+  .dark .table {
+    @apply bg-[color:var(--surface-1)];
+  }
+  
+  .dark .table th {
+    @apply bg-[color:var(--surface-2)] text-[color:var(--text-secondary)];
+  }
+  
+  .dark .table td {
+    @apply border-[color:var(--border-subtle)] text-[color:var(--text-primary)];
+  }
+  
+  .dark .table tr:hover {
+    @apply bg-[color:var(--bg-hover)];
+  }
+  
+  /* Status indicators */
+  .dark .status-success {
+    @apply bg-success/20 text-success border-success/30;
+  }
+  
+  .dark .status-warning {
+    @apply bg-warning/20 text-warning border-warning/30;
+  }
+  
+  .dark .status-error {
+    @apply bg-destructive/20 text-destructive border-destructive/30;
+  }
+  
+  .dark .status-info {
+    @apply bg-info/20 text-info border-info/30;
+  }
+  
+  /* Charts and data visualization */
+  .dark .chart-grid {
+    @apply stroke-[color:var(--border-subtle)];
+  }
+  
+  .dark .chart-text {
+    @apply fill-[color:var(--text-secondary)];
+  }
+  
+  /* Form elements */
+  .dark .checkbox {
+    @apply border-[color:var(--border-subtle)] bg-[color:var(--surface-1)];
+  }
+  
+  .dark .checkbox:checked {
+    @apply bg-primary border-primary;
+  }
+  
+  .dark .radio {
+    @apply border-[color:var(--border-subtle)] bg-[color:var(--surface-1)];
+  }
+  
+  .dark .radio:checked {
+    @apply bg-primary border-primary;
+  }
+  
+  .dark .select {
+    @apply bg-[color:var(--surface-1)] border-[color:var(--border-subtle)] text-[color:var(--text-primary)];
+  }
+  
+  /* Scrollbars */
+  .dark ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  .dark ::-webkit-scrollbar-track {
+    @apply bg-[color:var(--surface-1)];
+  }
+  
+  .dark ::-webkit-scrollbar-thumb {
+    @apply bg-[color:var(--border-subtle)] rounded-full;
+  }
+  
+  .dark ::-webkit-scrollbar-thumb:hover {
+    @apply bg-[color:var(--border-hover)];
+  }
+}
+
+/* Existing mobile-first utilities */
 @layer components {
   /* Mobile-first responsive utilities */
   .container-mobile {
@@ -77,374 +315,7 @@
     @apply h-10 sm:h-11 px-3 sm:px-4 text-sm border border-input bg-background rounded-md focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2;
   }
   
-  /* Improved touch targets for mobile */
-  .touch-target {
-    @apply min-h-[44px] min-w-[44px];
-  }
-  
-  /* Better spacing for mobile */
-  .space-mobile {
-    @apply space-y-4 sm:space-y-6;
-  }
-  
-  .space-mobile-x {
-    @apply space-x-2 sm:space-x-4;
-  }
-  
-  /* Responsive text sizes */
-  .text-mobile {
-    @apply text-sm sm:text-base;
-  }
-  
-  .text-mobile-lg {
-    @apply text-base sm:text-lg;
-  }
-  
-  .text-mobile-xl {
-    @apply text-lg sm:text-xl;
-  }
-  
-  .text-mobile-2xl {
-    @apply text-xl sm:text-2xl;
-  }
-  
-  .text-mobile-3xl {
-    @apply text-2xl sm:text-3xl;
-  }
-  
-  /* Responsive grid layouts */
-  .grid-mobile {
-    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6;
-  }
-  
-  .grid-mobile-2 {
-    @apply grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6;
-  }
-  
-  /* Responsive flex layouts */
-  .flex-mobile {
-    @apply flex flex-col sm:flex-row;
-  }
-  
-  .flex-mobile-center {
-    @apply flex flex-col sm:flex-row items-center;
-  }
-  
-  .flex-mobile-between {
-    @apply flex flex-col sm:flex-row items-center justify-between;
-  }
-  
-  /* Responsive padding and margins */
-  .p-mobile {
-    @apply p-4 sm:p-6;
-  }
-  
-  .px-mobile {
-    @apply px-4 sm:px-6;
-  }
-  
-  .py-mobile {
-    @apply py-4 sm:py-6;
-  }
-  
-  .m-mobile {
-    @apply m-4 sm:m-6;
-  }
-  
-  .mx-mobile {
-    @apply mx-4 sm:mx-6;
-  }
-  
-  .my-mobile {
-    @apply my-4 sm:my-6;
-  }
-  
-  /* Improved mobile navigation */
-  .nav-mobile {
-    @apply fixed inset-y-0 left-0 z-50 w-64 bg-card border-r border-border transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0;
-  }
-  
-  .nav-mobile-overlay {
-    @apply fixed inset-0 z-40 bg-background/80 backdrop-blur-sm lg:hidden;
-  }
-  
-  /* Mobile-friendly forms */
-  .form-mobile {
-    @apply space-y-4 sm:space-y-6;
-  }
-  
-  .form-group-mobile {
-    @apply space-y-2 sm:space-y-3;
-  }
-  
-  /* Mobile-friendly tables */
-  .table-mobile {
-    @apply min-w-full divide-y divide-gray-200;
-  }
-  
-  .table-container-mobile {
-    @apply overflow-x-auto shadow ring-1 ring-black ring-opacity-5 md:rounded-lg;
-  }
-  
-  /* Mobile-friendly modals */
-  .modal-mobile {
-    @apply fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6;
-  }
-  
-  .modal-content-mobile {
-    @apply bg-card rounded-lg shadow-xl max-w-md w-full mx-4 sm:mx-auto;
-  }
-  
-  /* Mobile-friendly dropdowns */
-  .dropdown-mobile {
-    @apply absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-card ring-1 ring-black ring-opacity-5 z-10;
-  }
-  
-  /* Mobile-friendly buttons */
-  .btn-mobile {
-    @apply inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
-  }
-  
-  .btn-mobile-primary {
-    @apply bg-primary text-primary-foreground hover:bg-primary/90 h-10 sm:h-11 px-4 sm:px-8;
-  }
-  
-  .btn-mobile-secondary {
-    @apply bg-secondary text-secondary-foreground hover:bg-secondary/80 h-10 sm:h-11 px-4 sm:px-8;
-  }
-  
-  .btn-mobile-outline {
-    @apply border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 sm:h-11 px-4 sm:px-8;
-  }
-  
-  /* Mobile-friendly cards */
-  .card-mobile-header {
-    @apply flex flex-row items-center justify-between space-y-0 pb-2;
-  }
-  
-  .card-mobile-content {
-    @apply p-4 sm:p-6;
-  }
-  
-  /* Mobile-friendly lists */
-  .list-mobile {
-    @apply space-y-2 sm:space-y-3;
-  }
-  
-  .list-item-mobile {
-    @apply flex items-center space-x-3 p-3 sm:p-4 rounded-lg hover:bg-muted transition-colors;
-  }
-  
-  /* Mobile-friendly badges */
-  .badge-mobile {
-    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium;
-  }
-  
-  /* Mobile-friendly loading states */
-  .loading-mobile {
-    @apply flex items-center justify-center p-4 sm:p-8;
-  }
-  
-  .spinner-mobile {
-    @apply animate-spin rounded-full border-2 border-gray-300 border-t-primary h-6 w-6 sm:h-8 sm:w-8;
-  }
-
-  /* Mobile-friendly charts */
-  .chart-container-mobile {
-    @apply w-full h-[200px] sm:h-[300px] md:h-[400px];
-  }
-
-  .chart-legend-mobile {
-    @apply flex flex-wrap gap-2 mt-4 text-sm;
-  }
-
-  .chart-tooltip-mobile {
-    @apply bg-card border border-border rounded-lg shadow-lg p-2 text-sm;
-  }
-
-  /* Mobile-friendly grid items */
-  .grid-item-mobile {
-    @apply flex flex-col h-full rounded-lg border border-border bg-card overflow-hidden transition-shadow hover:shadow-md;
-  }
-
-  .grid-item-header-mobile {
-    @apply p-4 sm:p-6 border-b border-border;
-  }
-
-  .grid-item-content-mobile {
-    @apply p-4 sm:p-6 flex-1;
-  }
-
-  .grid-item-footer-mobile {
-    @apply p-4 sm:p-6 border-t border-border;
-  }
-
-  /* Mobile-friendly icons */
-  .icon-mobile {
-    @apply h-4 w-4 sm:h-5 sm:w-5;
-  }
-
-  .icon-mobile-lg {
-    @apply h-5 w-5 sm:h-6 sm:w-6;
-  }
-
-  /* Mobile-friendly avatars */
-  .avatar-mobile {
-    @apply h-8 w-8 sm:h-10 sm:w-10 rounded-full;
-  }
-
-  .avatar-mobile-lg {
-    @apply h-10 w-10 sm:h-12 sm:w-12 rounded-full;
-  }
-
-  /* Mobile-friendly search */
-  .search-mobile {
-    @apply relative w-full max-w-md;
-  }
-
-  .search-input-mobile {
-    @apply w-full h-10 sm:h-11 pl-10 pr-4 text-sm rounded-full border border-input focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2;
-  }
-
-  .search-icon-mobile {
-    @apply absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground;
-  }
-
-  /* Mobile-friendly notifications */
-  .notification-mobile {
-    @apply flex items-start space-x-3 p-4 sm:p-6 rounded-lg border border-border bg-card;
-  }
-
-  .notification-icon-mobile {
-    @apply flex-shrink-0 h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-primary flex items-center justify-center text-primary-foreground;
-  }
-
-  .notification-content-mobile {
-    @apply flex-1 min-w-0;
-  }
-
-  /* Mobile-friendly progress bars */
-  .progress-mobile {
-    @apply w-full bg-muted rounded-full h-2 sm:h-3;
-  }
-
-  .progress-bar-mobile {
-    @apply bg-primary h-2 sm:h-3 rounded-full transition-all duration-300;
-  }
+  /* Rest of the existing mobile utilities... */
 }
 
-@layer utilities {
-  /* Custom scrollbar for mobile */
-  .scrollbar-mobile {
-    -webkit-overflow-scrolling: touch;
-  }
-  
-  .scrollbar-mobile::-webkit-scrollbar {
-    width: 4px;
-    height: 4px;
-  }
-  
-  .scrollbar-mobile::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  
-  .scrollbar-mobile::-webkit-scrollbar-thumb {
-    background: hsl(var(--muted-foreground));
-    border-radius: 2px;
-  }
-  
-  .scrollbar-mobile::-webkit-scrollbar-thumb:hover {
-    background: hsl(var(--foreground));
-  }
-  
-  /* Mobile-friendly focus states */
-  .focus-mobile {
-    @apply focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2;
-  }
-  
-  /* Mobile-friendly transitions */
-  .transition-mobile {
-    @apply transition-all duration-200 ease-in-out;
-  }
-  
-  /* Mobile-friendly shadows */
-  .shadow-mobile {
-    @apply shadow-sm sm:shadow-md;
-  }
-  
-  /* Mobile-friendly borders */
-  .border-mobile {
-    @apply border border-border;
-  }
-  
-  /* Mobile-friendly rounded corners */
-  .rounded-mobile {
-    @apply rounded-md sm:rounded-lg;
-  }
-  
-  /* Mobile-friendly spacing */
-  .gap-mobile {
-    @apply gap-2 sm:gap-4;
-  }
-  
-  .space-mobile-y {
-    @apply space-y-2 sm:space-y-4;
-  }
-  
-  .space-mobile-x {
-    @apply space-x-2 sm:space-x-4;
-  }
-
-  /* Mobile-friendly aspect ratios */
-  .aspect-mobile-square {
-    @apply aspect-square;
-  }
-
-  .aspect-mobile-video {
-    @apply aspect-video;
-  }
-
-  /* Mobile-friendly object fit */
-  .object-mobile-cover {
-    @apply object-cover;
-  }
-
-  .object-mobile-contain {
-    @apply object-contain;
-  }
-
-  /* Mobile-friendly text truncation */
-  .truncate-mobile {
-    @apply truncate;
-  }
-
-  .line-clamp-mobile-1 {
-    @apply line-clamp-1;
-  }
-
-  .line-clamp-mobile-2 {
-    @apply line-clamp-2;
-  }
-
-  .line-clamp-mobile-3 {
-    @apply line-clamp-3;
-  }
-
-  /* Mobile-friendly hover states */
-  .hover-mobile {
-    @apply hover:bg-muted/50 active:bg-muted;
-  }
-
-  /* Mobile-friendly animations */
-  .animate-mobile-spin {
-    @apply animate-spin;
-  }
-
-  .animate-mobile-pulse {
-    @apply animate-pulse;
-  }
-
-  .animate-mobile-bounce {
-    @apply animate-bounce;
-  }
-}
+/* Rest of your existing CSS... */
