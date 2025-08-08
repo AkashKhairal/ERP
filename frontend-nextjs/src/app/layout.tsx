@@ -5,6 +5,7 @@ import { Toaster } from 'react-hot-toast'
 import './globals.css'
 import type { Metadata } from 'next'
 import ConditionalLayout from '@/components/ConditionalLayout'
+import { GoogleOAuthProvider } from '@react-oauth/google'
 
 export const dynamic = 'force-dynamic'
 
@@ -21,22 +22,24 @@ export default function AppLayout({
   return (
     <html lang="en">
       <body>
-        <AuthProvider>
-          <Toaster 
-            position="top-right"
-            toastOptions={{
-              duration: 4000,
-              style: {
-                background: 'hsl(var(--background))',
-                color: 'hsl(var(--foreground))',
-                border: '1px solid hsl(var(--border))',
-              },
-            }}
-          />
-          <ConditionalLayout>
-            {children}
-          </ConditionalLayout>
-        </AuthProvider>
+        <GoogleOAuthProvider clientId="852792982943-iadr4llqoiigtpkqc2blcfq25q00plv6.apps.googleusercontent.com">
+          <AuthProvider>
+            <Toaster 
+              position="top-right"
+              toastOptions={{
+                duration: 4000,
+                style: {
+                  background: 'hsl(var(--background))',
+                  color: 'hsl(var(--foreground))',
+                  border: '1px solid hsl(var(--border))',
+                },
+              }}
+            />
+            <ConditionalLayout>
+              {children}
+            </ConditionalLayout>
+          </AuthProvider>
+        </GoogleOAuthProvider>
       </body>
     </html>
   )
