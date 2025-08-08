@@ -124,28 +124,28 @@ const ProjectDashboard = () => {
       title: 'Create New Project',
       description: 'Start a new project',
       icon: <Plus className="h-6 w-6" />,
-      action: () => router.push('/app/projects/create'),
+      action: () => router.push('/projects/create'),
       color: 'bg-blue-500 hover:bg-blue-600'
     },
     {
       title: 'View All Projects',
       description: 'See all projects',
       icon: <FolderOpen className="h-6 w-6" />,
-      action: () => router.push('/app/projects'),
+      action: () => router.push('/projects'),
       color: 'bg-green-500 hover:bg-green-600'
     },
     {
       title: 'Active Projects',
       description: 'Manage active projects',
       icon: <Play className="h-6 w-6" />,
-      action: () => router.push('/app/projects?status=active'),
+      action: () => router.push('/projects?status=active'),
       color: 'bg-purple-500 hover:bg-purple-600'
     },
     {
       title: 'Project Analytics',
       description: 'View project analytics',
       icon: <TrendingUp className="h-6 w-6" />,
-      action: () => router.push('/app/analytics'),
+      action: () => router.push('/analytics'),
       color: 'bg-orange-500 hover:bg-orange-600'
     }
   ]
@@ -171,7 +171,7 @@ const ProjectDashboard = () => {
             Overview of your projects and key metrics
           </p>
         </div>
-        <Button onClick={() => router.push('/app/projects/create')}>
+        <Button onClick={() => router.push('/projects/create')}>
           <Plus className="h-4 w-4 mr-2" />
           New Project
         </Button>
@@ -258,7 +258,7 @@ const ProjectDashboard = () => {
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle>Recent Projects</CardTitle>
-            <Button variant="outline" onClick={() => router.push('/app/projects')}>
+            <Button variant="outline" onClick={() => router.push('/projects')}>
               View All
             </Button>
           </div>
@@ -298,7 +298,7 @@ const ProjectDashboard = () => {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => router.push(`/app/projects/${project._id}`)}
+                      onClick={() => router.push(`/projects/${project._id}`)}
                     >
                       View
                     </Button>
@@ -363,7 +363,7 @@ const ProjectDashboard = () => {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => router.push(`/app/projects/${project._id}`)}
+                      onClick={() => router.push(`/projects/${project._id}`)}
                     >
                       View
                     </Button>

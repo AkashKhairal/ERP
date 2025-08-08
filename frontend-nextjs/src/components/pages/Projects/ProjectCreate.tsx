@@ -95,7 +95,7 @@ const ProjectCreate = () => {
       
       if (response.success) {
         logActivity('Project Created', `Created project: ${projectForm.name}`)
-        router.push('/app/projects')
+        router.push('/projects')
       } else {
         alert(response.error || 'Failed to create project')
       }
@@ -108,7 +108,7 @@ const ProjectCreate = () => {
   }
 
   const handleCancel = () => {
-    router.push('/app/projects')
+    router.push('/projects')
   }
 
   return (

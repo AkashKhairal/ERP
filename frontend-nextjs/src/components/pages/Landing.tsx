@@ -255,7 +255,7 @@ const Landing = () => {
             <div className="flex items-center space-x-4">
               {isAuthenticated ? (
                 <div className="flex items-center space-x-4">
-                  <Link href="/app/dashboard">
+                  <Link href="/dashboard">
                     <Button>Go to Dashboard</Button>
                   </Link>
                   {/* User Profile */}
@@ -333,7 +333,7 @@ const Landing = () => {
                     <p className="text-sm font-medium text-gray-900">{user.firstName} {user.lastName}</p>
                     <p className="text-xs text-gray-500">{user.email}</p>
                   </div>
-                  <Link href="/app/dashboard">
+                  <Link href="/dashboard">
                     <Button size="sm">Dashboard</Button>
                   </Link>
                 </div>

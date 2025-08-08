@@ -76,18 +76,18 @@ const Layout = ({ children }: LayoutProps) => {
   }, [])
 
   const navigation = [
-    { name: 'Dashboard', href: '/app/dashboard', icon: Home },
-    { name: 'HR Management', href: '/app/hr', icon: Users },
-    { name: 'Users', href: '/app/users', icon: Users },
-    { name: 'Teams', href: '/app/teams', icon: Users },
-    { name: 'Projects', href: '/app/projects', icon: FolderOpen },
-    { name: 'Tasks', href: '/app/tasks', icon: CheckSquare },
-    { name: 'Sprints', href: '/app/sprints', icon: Calendar },
-    { name: 'Finance', href: '/app/finance', icon: DollarSign },
-    { name: 'Analytics', href: '/app/analytics', icon: BarChart3 },
-    { name: 'Content', href: '/app/content', icon: FileText },
-    { name: 'Integrations', href: '/app/integrations', icon: Settings },
-    { name: 'Roles & Permissions', href: '/app/roles-permissions', icon: Key },
+    { name: 'Dashboard', href: '/dashboard', icon: Home },
+    { name: 'HR Management', href: '/hr', icon: Users },
+    { name: 'Users', href: '/users', icon: Users },
+    { name: 'Teams', href: '/teams', icon: Users },
+    { name: 'Projects', href: '/projects', icon: FolderOpen },
+    { name: 'Tasks', href: '/tasks', icon: CheckSquare },
+    { name: 'Sprints', href: '/sprints', icon: Calendar },
+    { name: 'Finance', href: '/finance', icon: DollarSign },
+    { name: 'Analytics', href: '/analytics', icon: BarChart3 },
+    { name: 'Content', href: '/content', icon: FileText },
+    { name: 'Integrations', href: '/integrations', icon: Settings },
+    { name: 'Roles & Permissions', href: '/roles-permissions', icon: Key },
   ]
 
   const handleLogout = () => {

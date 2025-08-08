@@ -141,7 +141,7 @@ const Integrations = () => {
         // Generate YouTube OAuth URL
         const authUrl = new URL('https://accounts.google.com/o/oauth2/v2/auth')
         authUrl.searchParams.append('client_id', process.env.NEXT_PUBLIC_YOUTUBE_CLIENT_ID || 'demo-client-id')
-        authUrl.searchParams.append('redirect_uri', `${window.location.origin}/app/integrations/callback/youtube`)
+        authUrl.searchParams.append('redirect_uri', `${window.location.origin}/integrations/callback/youtube`)
         authUrl.searchParams.append('response_type', 'code')
         authUrl.searchParams.append('scope', 'https://www.googleapis.com/auth/youtube.readonly https://www.googleapis.com/auth/youtube.force-ssl')
         authUrl.searchParams.append('access_type', 'offline')

@@ -109,12 +109,12 @@ const ProjectDetails = ({ projectId }: ProjectDetailsProps) => {
             progress: sampleProject.progress
           })
         } else {
-          router.push('/app/projects')
+          router.push('/projects')
         }
       }
     } catch (error) {
       console.error('Error loading project:', error)
-      router.push('/app/projects')
+      router.push('/projects')
     } finally {
       setLoading(false)
     }
@@ -152,7 +152,7 @@ const ProjectDetails = ({ projectId }: ProjectDetailsProps) => {
       if (response.success) {
         setIsDeleteDialogOpen(false)
         logActivity('Project Deleted', `Deleted project: ${project.name}`)
-        router.push('/app/projects')
+        router.push('/projects')
       } else {
         alert(response.error || 'Failed to delete project')
       }
@@ -248,7 +248,7 @@ const ProjectDetails = ({ projectId }: ProjectDetailsProps) => {
         <p className="text-muted-foreground">
           The project you're looking for doesn't exist.
         </p>
-        <Button onClick={() => router.push('/app/projects')} className="mt-4">
+        <Button onClick={() => router.push('/projects')} className="mt-4">
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Projects
         </Button>
@@ -261,7 +261,7 @@ const ProjectDetails = ({ projectId }: ProjectDetailsProps) => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
-          <Button variant="outline" onClick={() => router.push('/app/projects')}>
+          <Button variant="outline" onClick={() => router.push('/projects')}>
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back
           </Button>

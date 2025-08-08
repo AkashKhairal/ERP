@@ -53,7 +53,7 @@ const Dashboard = () => {
       title: 'Add Employee',
       description: 'Onboard a new team member',
       icon: Users,
-      href: '/app/hr/employees/create',
+      href: '/hr/employees/create',
       color: 'text-blue-600',
       bgColor: 'bg-blue-50'
     },
@@ -61,7 +61,7 @@ const Dashboard = () => {
       title: 'Create Project',
       description: 'Start a new project',
       icon: FolderOpen,
-      href: '/app/projects/create',
+      href: '/projects/create',
       color: 'text-green-600',
       bgColor: 'bg-green-50'
     },
@@ -69,7 +69,7 @@ const Dashboard = () => {
       title: 'New Task',
       description: 'Create a new task',
       icon: CheckSquare,
-      href: '/app/tasks/create',
+      href: '/tasks/create',
       color: 'text-purple-600',
       bgColor: 'bg-purple-50'
     },
@@ -77,7 +77,7 @@ const Dashboard = () => {
       title: 'Schedule Meeting',
       description: 'Book a team meeting',
       icon: Calendar,
-      href: '/app/calendar',
+      href: '/calendar',
       color: 'text-orange-600',
       bgColor: 'bg-orange-50'
     }

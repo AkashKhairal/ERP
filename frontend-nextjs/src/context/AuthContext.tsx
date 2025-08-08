@@ -188,7 +188,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       })
       
       toast.success('Login successful!')
-      router.push('/app/dashboard')
+      router.push('/dashboard')
     } catch (error: any) {
       const message = error.response?.data?.message || 'Login failed'
       dispatch({ type: 'AUTH_FAILURE', payload: message })
@@ -210,7 +210,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       })
       
       toast.success('Registration successful!')
-      router.push('/app/dashboard')
+      router.push('/dashboard')
     } catch (error: any) {
       const message = error.response?.data?.message || 'Registration failed'
       dispatch({ type: 'AUTH_FAILURE', payload: message })
@@ -232,7 +232,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       })
       
       toast.success('Google sign-in successful!')
-      router.push('/app/dashboard')
+      router.push('/dashboard')
     } catch (error: any) {
       const message = error.response?.data?.message || 'Google sign-in failed'
       dispatch({ type: 'AUTH_FAILURE', payload: message })

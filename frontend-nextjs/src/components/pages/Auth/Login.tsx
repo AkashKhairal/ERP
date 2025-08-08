@@ -65,7 +65,7 @@ const Login = () => {
   }
 
   if (isAuthenticated) {
-    router.push('/app/dashboard')
+    router.push('/dashboard')
     return null
   }
 
