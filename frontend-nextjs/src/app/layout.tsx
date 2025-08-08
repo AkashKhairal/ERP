@@ -1,6 +1,7 @@
 import Layout from '@/components/Layout/Layout'
 import ProtectedRoute from '@/components/Auth/ProtectedRoute'
 import { AuthProvider } from '@/context/AuthContext'
+import { ThemeProvider } from '@/context/ThemeContext'
 import { Toaster } from 'react-hot-toast'
 import './globals.css'
 import type { Metadata } from 'next'
@@ -25,22 +26,24 @@ export default function AppLayout({
     <html lang="en">
       <body>
         <GoogleOAuthProvider clientId={googleClientId}>
-          <AuthProvider>
-            <Toaster 
-              position="top-right"
-              toastOptions={{
-                duration: 4000,
-                style: {
-                  background: 'hsl(var(--background))',
-                  color: 'hsl(var(--foreground))',
-                  border: '1px solid hsl(var(--border))',
-                },
-              }}
-            />
-            <ConditionalLayout>
-              {children}
-            </ConditionalLayout>
-          </AuthProvider>
+          <ThemeProvider>
+            <AuthProvider>
+              <Toaster 
+                position="top-right"
+                toastOptions={{
+                  duration: 4000,
+                  style: {
+                    background: 'hsl(var(--background))',
+                    color: 'hsl(var(--foreground))',
+                    border: '1px solid hsl(var(--border))',
+                  },
+                }}
+              />
+              <ConditionalLayout>
+                {children}
+              </ConditionalLayout>
+            </AuthProvider>
+          </ThemeProvider>
         </GoogleOAuthProvider>
       </body>
     </html>
