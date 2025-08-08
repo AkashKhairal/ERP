@@ -1,0 +1,387 @@
+I want to build a modular ERP for managing my YouTube channel and SaaS development team.
+
+Tech Stack: MERN (MongoDB, Express.js, React.js, Node.js)
+
+Modules:
+1. Team & HR Management
+2. Project & Task Management
+3. Finance & Budgeting
+4. Analytics & Reporting
+5. Content & Course Ops
+6. User Roles & Permissions
+7. Integrations (YouTube, Slack, Stripe, Notion)
+8. Bonus: AI Assistant using GPT-4, Calendar Sync, OKR
+
+Create folder structure for frontend and backend. Start by building User Authentication and Role-Based Access Control. Then guide me module by module.
+
+Use REST API and JWT-based login. UI can be minimal for now.
+
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+You are helping me build a Team & HR Management module inside an ERP system for a tech + content creation startup. The team includes software engineers, designers, editors, marketers, and HR. I want to build the following features in this module:
+
+1. **Employee Profiles**
+   - Add, edit, delete employee
+   - Fields: Full Name, Email, Phone, Role, Department, Reporting Manager, Date of Joining, PAN/Aadhar, Resume (file), LinkedIn, Skills, Profile Picture, Status (Active/Exited), Work Type (Full-time/Freelancer/Intern)
+   - Show in table with filters (e.g., department, status)
+
+2. **Attendance Tracking**
+   - Daily check-in/check-out (manual or auto-timestamp via login)
+   - Calculate total hours/day
+   - View weekly/monthly attendance log per employee
+   - Mark absenteeism/leaves (linked to leave management)
+
+3. **Leave Management**
+   - Request leave: Type (Sick, Casual, Annual, Unpaid), Dates, Reason
+   - Auto-calculate leave balance (based on role or policy)
+   - Approve/Reject flow with manager + HR
+   - Statuses: Pending, Approved, Rejected
+
+4. **Payroll Overview**
+   - Set salary for each employee
+   - View monthly salary breakdown (base, bonus, deduction, total)
+   - Export monthly payroll as CSV
+   - Add optional remarks per employee for bonus or penalty
+   - Optional: Integrate with RazorpayX/Zoho Payroll later
+
+5. **Onboarding Workflow**
+   - Add onboarding checklist per new employee
+   - Auto-reminders for document upload, welcome email, intro call
+   - Mark steps as completed/incomplete by HR
+
+6. **Offboarding**
+   - Record resignation/termination date
+   - Mark tasks like asset return, final payment, exit interview
+   - Archive employee profile post exit
+
+7. **Organization Structure View**
+   - Auto-generate reporting hierarchy (tree view) from reporting manager fields
+   - Searchable by name/role
+
+8. **Team Directory**
+   - Public view of active team: Name, Role, Email, LinkedIn
+   - Optional filters by department
+
+9. **Activity Logs (Audit Trail)**
+   - Track major actions: new joiners, leaves requested, payroll updated, profile edited
+   - Show who made the change and when
+
+10. **User Roles & Access**
+   - Define HR Admin, Manager, and Employee roles
+   - HR Admin: Full control
+   - Manager: Can approve leaves, view team data
+   - Employee: Can view/edit own profile, request leaves
+
+
+
+Keep the architecture scalable and modular. Add comments where needed. Also suggest additional best practices or optimizations wherever relevant.
+
+
+
+---------------------------------------------------------------------------------------------------------------------
+
+You are helping me build a Project & Task Management module inside an ERP system for a tech + content-based startup. My team includes software developers, designers, video editors, content writers, marketers, and sales agents. I want this module to handle day-to-day task planning and project execution. Build the following features:
+
+1. **Project Management**
+   - Create, edit, archive projects
+   - Fields: Project Name, Type (SaaS/Product/YouTube/Freelance), Description, Start Date, End Date, Assigned Team Members, Priority (High/Medium/Low), Client Name (optional), Status (Not Started/In Progress/On Hold/Completed)
+   - Tag projects by department (Tech, Content, Marketing, Sales)
+   - View all projects in list and Kanban format
+
+2. **Task Management**
+   - Create tasks within a project
+   - Fields: Title, Description, Assigned To, Start Date, Due Date, Priority, Status (To Do/In Progress/Blocked/Done), Subtasks, File Attachments
+   - Add comments under tasks for team discussion
+   - Enable tagging (e.g., #backend, #bugfix, #thumbnail)
+
+3. **Task Recurrence**
+   - Option to set recurring tasks (e.g., weekly content calendar, daily reporting)
+   - Define recurrence type: Daily, Weekly, Monthly
+
+4. **Time Tracking**
+   - Option for users to log time against tasks
+   - View total time spent per task/project per user
+   - Auto-generate productivity reports per week
+
+5. **Kanban View**
+   - Drag-and-drop board for task statuses
+   - Columns: To Do, In Progress, Review, Done
+   - Color code based on priority or department
+
+6. **Calendar View**
+   - Monthly calendar that shows deadlines, task due dates
+   - Sync with Google Calendar (optional integration)
+
+7. **Project Dashboard**
+   - Summary widgets: Total Tasks, Completed, Overdue, Time Spent
+   - Filter by project, assignee, department
+
+8. **Notifications & Reminders**
+   - In-app and email notifications for upcoming deadlines, task assignment, overdue tasks
+   - Daily summary email (optional toggle)
+
+9. **Activity Log**
+   - Track who created/edited/completed a task or project
+   - Audit trail for accountability
+
+10. **Permissions & Roles**
+   - Project Manager: Full access to their project
+   - Team Member: Can edit only their tasks
+   - Admin: Can view/edit all projects and tasks
+
+11. **Optional Integrations (Future)**
+   - GitHub/GitLab link for developer tasks
+   - Slack or Discord notifications
+   - YouTube Studio API to auto-track video project status
+
+
+Focus on clean code, reusability, and modularity. Add inline comments for clarity.
+
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+
+You are helping me build the Finance & Budgeting module inside an ERP system tailored for a startup that includes software, content creation, and YouTube monetization. I need this module to handle income tracking, expense monitoring, team payroll, profit/loss, and budgeting.
+
+Build the following features:
+
+1. **Expense Management**
+   - Add, edit, categorize monthly expenses
+   - Fields: Expense Name, Category (Salary, Marketing, SaaS Tools, Freelancers, Rent, Misc.), Amount, Date, Paid By (Cash/UPI/Card), Notes, Receipt Upload (file)
+   - Filter by date, category, amount range
+   - Auto-categorize recurring monthly expenses
+
+2. **Revenue Tracking**
+   - Add income sources: YouTube AdSense, Paid Courses, Client Projects, Sponsorships, Affiliate Income, etc.
+   - Fields: Source, Amount, Date, Payment Method, Linked Project/Campaign, Notes
+   - View weekly/monthly/yearly income breakdown
+
+3. **Profit & Loss Dashboard**
+   - Auto-calculate monthly profit = Total Income – Total Expenses
+   - Show trend over time (bar chart/line graph)
+   - Highlight % change from last month
+   - KPI widgets: Gross Revenue, Total Expense, Net Profit, Burn Rate
+
+4. **Budgeting**
+   - Set monthly/quarterly/yearly budget goals per category (e.g., Tools = ₹10K/month)
+   - Show actual vs budgeted expenses
+   - Alert if overspending in any category
+   - Track available budget (remaining amount)
+
+5. **Salary/Payroll Tracker**
+   - Import salary data from HR module
+   - View salary due, paid, or pending per employee
+   - Track bonus or deduction per employee
+   - Export monthly payroll sheet
+   - Option to link RazorpayX or Zoho Payroll later
+
+6. **Invoice Generator**
+   - Create and send invoices to clients
+   - Fields: Client Name, Services, Amount, Tax, Due Date, Payment Status
+   - Auto-generate invoice PDF
+   - Mark invoice as Paid/Unpaid
+   - Add your company branding and logo
+
+7. **Cash Flow Calendar**
+   - Visual calendar showing incoming and outgoing money
+   - Highlight high-expense or high-revenue days
+   - Monthly summary view
+
+8. **Taxes & Compliance Tracker**
+   - Record GST paid/collected (if applicable)
+   - Track TDS deducted on salary or freelance payments
+   - Maintain document archive: Form 16, GST returns, expense receipts
+
+9. **Reports Export**
+   - Export P&L, income report, expense report as Excel/CSV/PDF
+   - Auto-generate monthly finance summary for co-founders
+
+10. **Access Control**
+   - Finance Admin: Full access
+   - HR Manager: View salary and payroll only
+   - Viewer Role: Read-only access to dashboards
+
+
+
+Focus on clean architecture, DRY code, and reusability. Comment where needed.
+
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+
+You are helping me build an Analytics & Reporting module for my ERP system. The system supports a startup that builds software products, manages a YouTube/content arm, runs courses, and handles multiple teams (dev, design, marketing, etc.). This module should present powerful dashboards, reports, charts, and summaries across all other modules.
+
+Please build the following features:
+
+---
+
+1. **Overview Dashboard (Executive Summary)**
+   - Total Revenue (This Month, Last Month)
+   - Total Expenses (This Month, Last Month)
+   - Net Profit / Burn Rate
+   - Active Projects Count
+   - Total Team Members
+   - Total Published Videos / Shorts
+   - Total Paid Course Enrollments
+   - All metrics in cards + line/bar charts (monthly trend)
+
+---
+
+2. **YouTube Analytics (Content Arm)**
+   - Auto-pull data via YouTube API or manual entry
+   - Fields: Video Title, Publish Date, Views, Watch Time (mins), Avg. View %, CPM/RPM, Likes, Comments, CTR
+   - Sort by best/worst performing
+   - Show: Top 5 Videos by Views / Watch Time / Revenue
+   - Chart: Weekly growth in views & subs
+
+---
+
+3. **Team Productivity Reports**
+   - Hours logged per team member per project/task
+   - Completed vs Assigned Tasks
+   - Task Delay Report (Late tasks %)
+   - Filter by Team, Individual, Project, or Date
+   - Color-coded performance heatmap
+
+---
+
+4. **Project Progress Reports**
+   - Per project: % Completed, Overdue Tasks, Open Bugs
+   - Burndown chart (if using sprint-style tracking)
+   - Client Project Summary Report (Billable vs Non-billable hours)
+
+---
+
+5. **Course Sales Analytics**
+   - Revenue per course
+   - Enrollments over time
+   - Funnel: Visitors → Leads → Enrollments (conversion rate)
+   - Chart: Daily/weekly/monthly sales
+   - Export: Top selling courses CSV
+
+---
+
+6. **Finance Reports**
+   - Monthly Profit & Loss (as chart + table)
+   - Revenue per source: YouTube / Client / Course / Affiliate
+   - Expense per category (pie chart)
+   - Budget vs Actual per department
+
+---
+
+7. **Custom Report Builder**
+   - Drag-drop interface to select KPIs, filters, group by date or team
+   - Export any report as CSV or PDF
+   - Scheduled reports: Email every week/month to founders
+
+---
+
+8. **Visualizations**
+   - Use `Chart.js`, `Recharts`, or D3.js
+   - Allow toggle between bar, line, pie views
+   - Apply light/dark theme support
+   - Responsive UI with data loading states
+
+---
+
+9. **User Access Control**
+   - Admin: Full access
+   - Team Leads: View only their team’s reports
+   - Finance Role: View financial reports only
+
+---
+
+
+
+
+Focus on clean architecture, modular backend, reusable components, and high-performance queries for dashboard loads.
+
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------
+
+
+You are helping me build the Content & Course Operations module inside an ERP system. This module will manage my YouTube content pipeline, Instagram/LinkedIn short-form content, and paid course production lifecycle.
+
+Please implement the following features:
+
+---
+
+### 📽️ 1. YouTube Content Planner
+- Create, edit, schedule YouTube videos
+- Fields: Title, Category (Tutorial, Vlog, Project, Interview), Script Link (Google Docs or file), Description, Tags, Publish Date, Status (Idea, Script Ready, Recording, Editing, Scheduled, Published)
+- Assign: Content Writer, Editor, Reviewer
+- Upload asset links: Script, Thumbnail, Final Video, Caption file
+- Views after publish (to track performance)
+- Filter by category, assignee, status
+
+---
+
+### 📱 2. Shorts/Reels Tracker
+- Manage short-form content for Instagram, YouTube Shorts, LinkedIn
+- Fields: Title, Hook Line, Format (Reel, Short, Carousel), Topic, Assigned To, Deadline, Platform, Hashtags, Asset Links
+- Status workflow: Idea → Draft → Edited → Scheduled → Posted
+
+---
+
+### 🧑‍🏫 3. Paid Course Builder
+- Create a new course and track its production pipeline
+- Fields: Course Title, Topic, Price, Delivery (Self-paced/Live), Status (Planning, Scripting, Recording, Editing, Live)
+- Modules & Lessons Subtable:
+   - Lesson Title, Video File Link, Duration, Notes, Quiz (if any)
+- Assign roles per lesson (writer, editor, instructor)
+- Attach resource files: PDF, Slides, Source Code
+
+---
+
+### 📆 4. Content Calendar View
+- Visual monthly calendar with content publishing dates
+- Toggle views: YouTube / Shorts / Courses
+- Color-coded by content type
+
+---
+
+### ✅ 5. Review & Approval Workflow
+- Allow reviewers (like co-founder or content lead) to comment or approve each script or video
+- Show history: submitted for review → approved/rejected → status updated
+
+---
+
+### 📁 6. Asset Management
+- Central file library with categories: Scripts, Thumbnails, Raw Footage, Final Renders, Slide Decks, PDFs
+- Add tags, owners, last updated date
+- Searchable and filterable
+- Support GDrive or S3 links
+
+---
+
+### 📈 7. Content Performance Insights
+- Auto-sync with YouTube API or allow manual entry
+- Metrics per content: Views, Watch %, CTR, Likes, Comments, RPM
+- Show per-topic analytics (e.g., AI tutorials vs Spring Boot)
+
+---
+
+### 👥 8. Team Assignment & Collaboration
+- Assign roles per task: Writer, Videographer, Editor, Reviewer
+- Comment threads under each content card
+- Notifications for assigned or updated items
+
+---
+
+### 🔒 9. Permissions
+- Admin: Full control
+- Editor: View/edit assigned content only
+- Content Writer: Can edit script fields only
+- Reviewer: Can approve/reject but not edit
+
+---
+
+
+Design for modularity, reusability, and content workflow efficiency. Add inline comments and notes where needed.
