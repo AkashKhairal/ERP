@@ -29,7 +29,11 @@ const PORT = process.env.PORT || 5000;
 app.use(helmet());
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
-    ? (process.env.FRONTEND_URL || 'http://localhost:3000')
+    ? [
+        'https://erp-frontend-new.vercel.app',
+        'https://erp-frontend-meqwjxg3j-akashkhairals-projects.vercel.app',
+        process.env.FRONTEND_URL
+      ].filter(Boolean)
     : true, // Allow all origins in development
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
