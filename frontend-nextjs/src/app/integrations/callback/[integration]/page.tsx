@@ -7,6 +7,8 @@ import { Button } from '@/components/ui/button'
 import { Loader2, CheckCircle, XCircle } from 'lucide-react'
 import integrationService from '@/services/integrationService'
 
+export const dynamic = 'force-dynamic'
+
 export default function IntegrationCallbackPage() {
   const router = useRouter()
   const searchParams = useSearchParams()

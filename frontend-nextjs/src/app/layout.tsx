@@ -1,6 +1,8 @@
 import Layout from '@/components/Layout/Layout'
 import ProtectedRoute from '@/components/Auth/ProtectedRoute'
 
+export const dynamic = 'force-dynamic'
+
 export default function AppLayout({
   children,
 }: {
