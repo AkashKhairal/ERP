@@ -182,8 +182,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   // Login function
   const login = async (email: string, password: string) => {
     try {
+      console.log('AuthContext - login attempt for:', email)
       dispatch({ type: 'AUTH_START' })
       const response = await authService.login(email, password)
+      console.log('AuthContext - login response:', response.data)
       const { user, token } = response.data.data
       
       console.log('Login - storing token:', !!token)
@@ -198,6 +200,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       toast.success('Login successful!')
       router.push('/dashboard')
     } catch (error: any) {
+      console.error('AuthContext - login error:', error)
       const message = error.response?.data?.message || 'Login failed'
       dispatch({ type: 'AUTH_FAILURE', payload: message })
       toast.error(message)

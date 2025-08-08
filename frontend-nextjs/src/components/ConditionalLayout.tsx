@@ -19,7 +19,7 @@ const ConditionalLayout = ({ children }: ConditionalLayoutProps) => {
   }, [])
   
   // Define public routes that don't need authentication or layout
-  const publicRoutes = ['/', '/login', '/register']
+  const publicRoutes = ['/', '/login', '/register', '/forgot-password']
   
   // Check if current route is public
   const currentPath = pathname || ''
