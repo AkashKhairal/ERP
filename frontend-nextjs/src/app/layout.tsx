@@ -19,10 +19,12 @@ export default function AppLayout({
 }: {
   children: React.ReactNode
 }) {
+  const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '852792982943-iadr4llqoiigtpkqc2blcfq25q00plv6.apps.googleusercontent.com'
+  
   return (
     <html lang="en">
       <body>
-        <GoogleOAuthProvider clientId="852792982943-iadr4llqoiigtpkqc2blcfq25q00plv6.apps.googleusercontent.com">
+        <GoogleOAuthProvider clientId={googleClientId}>
           <AuthProvider>
             <Toaster 
               position="top-right"
