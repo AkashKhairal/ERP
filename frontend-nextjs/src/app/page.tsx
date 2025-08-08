@@ -1,8 +1,7 @@
-import { redirect } from 'next/navigation'
-import Dashboard from '@/components/pages/Dashboard'
+import Landing from '@/components/pages/Landing'
 
 export const dynamic = 'force-dynamic'
 
 export default function AppPage() {
-  redirect('/dashboard')
+  return <Landing />
 } 

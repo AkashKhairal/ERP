@@ -4,6 +4,7 @@ import { AuthProvider } from '@/context/AuthContext'
 import { Toaster } from 'react-hot-toast'
 import './globals.css'
 import type { Metadata } from 'next'
+import ConditionalLayout from '@/components/ConditionalLayout'
 
 export const dynamic = 'force-dynamic'
 
@@ -32,11 +33,9 @@ export default function AppLayout({
               },
             }}
           />
-          <ProtectedRoute>
-            <Layout>
-              {children}
-            </Layout>
-          </ProtectedRoute>
+          <ConditionalLayout>
+            {children}
+          </ConditionalLayout>
         </AuthProvider>
       </body>
     </html>
