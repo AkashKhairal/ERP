@@ -69,7 +69,7 @@ frontend-nextjs/
    NEXT_PUBLIC_API_URL=http://localhost:5000/api
    
    # Google OAuth Configuration
-   NEXT_PUBLIC_GOOGLE_CLIENT_ID=852792982943-iadr4llqoiigtpkqc2blcfq25q00plv6.apps.googleusercontent.com
+   NEXT_PUBLIC_GOOGLE_CLIENT_ID=""
    
    # Frontend Configuration
    NEXT_PUBLIC_FRONTEND_URL=http://localhost:3000
