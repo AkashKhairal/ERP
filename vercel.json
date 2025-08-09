@@ -8,6 +8,10 @@
   ],
   "routes": [
     {
+      "src": "/",
+      "dest": "frontend-nextjs/"
+    },
+    {
       "src": "/(.*)",
       "dest": "frontend-nextjs/$1"
     }
