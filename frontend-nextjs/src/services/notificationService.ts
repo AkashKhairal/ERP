@@ -86,6 +86,14 @@ export const notificationService = {
       }
     } catch (error: any) {
       console.error('Error fetching notifications:', error)
+      console.error('API URL:', `${API_URL}/notifications`)
+      console.error('Error details:', error.response?.data || error.message)
+      
+      // Check if it's an authentication error
+      if (error.response?.status === 401) {
+        console.error('Authentication failed - user may need to re-login')
+      }
+      
       // Return sample data as fallback
       return { success: true, data: this.getSampleNotifications() }
     }
