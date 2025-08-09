@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
@@ -27,15 +27,7 @@ const Login = () => {
     formState: { errors, isSubmitting }
   } = useForm<LoginFormData>()
 
-  // Force light mode for login page
-  useEffect(() => {
-    if (typeof document !== 'undefined') {
-      document.documentElement.classList.remove('dark')
-      document.documentElement.style.colorScheme = 'light'
-      document.body.style.backgroundColor = '#ffffff'
-      document.body.style.color = '#000000'
-    }
-  }, [])
+
 
   const onSubmit = async (data: LoginFormData) => {
     try {

@@ -1,6 +1,7 @@
 'use client'
 
 import React, { createContext, useContext, useEffect, useState } from 'react'
+import { usePathname } from 'next/navigation'
 
 type Theme = 'light' | 'dark'
 
@@ -17,6 +18,11 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<Theme>('light')
   const [systemTheme, setSystemTheme] = useState<Theme | null>(null)
   const [mounted, setMounted] = useState(false)
+  const pathname = usePathname()
+  
+  // Define public routes that should always be in light mode
+  const publicRoutes = ['/', '/login', '/register', '/forgot-password']
+  const isPublicRoute = publicRoutes.includes(pathname || '')
 
   // Handle system theme preference
   useEffect(() => {
@@ -48,8 +54,33 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     if (!mounted) return
 
     const root = window.document.documentElement
+    const body = document.body
+    
+    // Force light mode for public routes
+    if (isPublicRoute) {
+      root.classList.remove('light', 'dark')
+      root.classList.add('light')
+      root.style.colorScheme = 'light'
+      body.style.backgroundColor = '#ffffff'
+      body.style.color = '#000000'
+      
+      // Apply smooth transition class
+      root.classList.add('theme-transition')
+      const timeout = setTimeout(() => {
+        root.classList.remove('theme-transition')
+      }, 300)
+      
+      return () => clearTimeout(timeout)
+    }
+    
+    // Apply normal theme for protected routes
     root.classList.remove('light', 'dark')
     root.classList.add(theme)
+    root.style.colorScheme = theme
+    
+    // Reset body styles for protected routes (let CSS handle it)
+    body.style.backgroundColor = ''
+    body.style.color = ''
 
     // Apply smooth transition class
     root.classList.add('theme-transition')
@@ -57,11 +88,11 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       root.classList.remove('theme-transition')
     }, 300)
 
-    // Store theme preference
+    // Store theme preference only if not on public route
     localStorage.setItem('theme', theme)
 
     return () => clearTimeout(timeout)
-  }, [theme, mounted])
+  }, [theme, mounted, isPublicRoute])
 
   const toggleTheme = () => {
     setTheme(prev => (prev === 'light' ? 'dark' : 'light'))

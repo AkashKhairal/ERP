@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
@@ -30,15 +30,7 @@ const Register = () => {
   const router = useRouter()
   const { register: registerUser, googleSignIn } = useAuth()
 
-  // Force light mode for register page
-  useEffect(() => {
-    if (typeof document !== 'undefined') {
-      document.documentElement.classList.remove('dark')
-      document.documentElement.style.colorScheme = 'light'
-      document.body.style.backgroundColor = '#ffffff'
-      document.body.style.color = '#000000'
-    }
-  }, [])
+
 
   const {
     register,

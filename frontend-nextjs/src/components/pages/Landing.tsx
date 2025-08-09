@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 import { 
   ArrowRight, 
@@ -63,13 +63,7 @@ const Landing = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const { isAuthenticated, user } = useAuth()
 
-  // Force light mode for landing page
-  useEffect(() => {
-    document.documentElement.classList.remove('dark')
-    document.documentElement.style.colorScheme = 'light'
-    document.body.style.backgroundColor = '#ffffff'
-    document.body.style.color = '#000000'
-  }, [])
+
 
   const testimonials = [
     {
