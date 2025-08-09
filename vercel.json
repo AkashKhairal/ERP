@@ -1,22 +1,7 @@
 {
-  "version": 2,
-  "name": "erp-frontend",
-  "builds": [
-    {
-      "src": "frontend-nextjs/package.json",
-      "use": "@vercel/next",
-      "config": {
-        "zeroConfig": true
-      }
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "frontend-nextjs/$1"
-    }
-  ],
-  "github": {
-    "silent": true
-  }
+  "buildCommand": "cd frontend-nextjs && npm run build",
+  "outputDirectory": "frontend-nextjs/.next",
+  "installCommand": "cd frontend-nextjs && npm ci",
+  "devCommand": "cd frontend-nextjs && npm run dev",
+  "framework": "nextjs"
 }
