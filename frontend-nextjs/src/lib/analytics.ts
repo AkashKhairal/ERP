@@ -17,7 +17,7 @@ export const analytics = {
 
   // Project events
   projectCreated: (projectType?: string) => {
-    track('project_created', { type: projectType })
+    track('project_created', projectType ? { type: projectType } : {})
   },
   
   projectDeleted: (projectId: string) => {
@@ -25,25 +25,23 @@ export const analytics = {
   },
   
   projectCompleted: (projectId: string, duration?: number) => {
-    track('project_completed', { 
-      project_id: projectId,
-      duration_days: duration 
-    })
+    const properties: Record<string, any> = { project_id: projectId }
+    if (duration !== undefined) properties.duration_days = duration
+    track('project_completed', properties)
   },
 
   // Task events
   taskCreated: (taskType?: string, priority?: string) => {
-    track('task_created', { 
-      type: taskType,
-      priority: priority 
-    })
+    const properties: Record<string, any> = {}
+    if (taskType) properties.type = taskType
+    if (priority) properties.priority = priority
+    track('task_created', properties)
   },
   
   taskCompleted: (taskId: string, timeSpent?: number) => {
-    track('task_completed', { 
-      task_id: taskId,
-      time_spent_minutes: timeSpent 
-    })
+    const properties: Record<string, any> = { task_id: taskId }
+    if (timeSpent !== undefined) properties.time_spent_minutes = timeSpent
+    track('task_completed', properties)
   },
   
   taskAssigned: (taskId: string, assigneeCount: number) => {
@@ -59,10 +57,9 @@ export const analytics = {
   },
   
   teamMemberAdded: (teamId: string, role?: string) => {
-    track('team_member_added', { 
-      team_id: teamId,
-      role: role 
-    })
+    const properties: Record<string, any> = { team_id: teamId }
+    if (role) properties.role = role
+    track('team_member_added', properties)
   },
   
   teamMemberRemoved: (teamId: string) => {
@@ -71,36 +68,32 @@ export const analytics = {
 
   // Content events
   contentCreated: (contentType: string, category?: string) => {
-    track('content_created', { 
-      type: contentType,
-      category: category 
-    })
+    const properties: Record<string, any> = { type: contentType }
+    if (category) properties.category = category
+    track('content_created', properties)
   },
   
   contentPublished: (contentId: string, platform?: string) => {
-    track('content_published', { 
-      content_id: contentId,
-      platform: platform 
-    })
+    const properties: Record<string, any> = { content_id: contentId }
+    if (platform) properties.platform = platform
+    track('content_published', properties)
   },
   
   contentViewed: (contentId: string, viewDuration?: number) => {
-    track('content_viewed', { 
-      content_id: contentId,
-      view_duration_seconds: viewDuration 
-    })
+    const properties: Record<string, any> = { content_id: contentId }
+    if (viewDuration !== undefined) properties.view_duration_seconds = viewDuration
+    track('content_viewed', properties)
   },
 
   // User engagement events
   dashboardViewed: (section?: string) => {
-    track('dashboard_viewed', { section })
+    track('dashboard_viewed', section ? { section } : {})
   },
   
   featureUsed: (featureName: string, context?: string) => {
-    track('feature_used', { 
-      feature: featureName,
-      context: context 
-    })
+    const properties: Record<string, any> = { feature: featureName }
+    if (context) properties.context = context
+    track('feature_used', properties)
   },
   
   searchPerformed: (query: string, resultsCount: number) => {
@@ -111,19 +104,17 @@ export const analytics = {
   },
   
   settingsChanged: (settingType: string, newValue?: string) => {
-    track('settings_changed', { 
-      setting_type: settingType,
-      new_value: newValue 
-    })
+    const properties: Record<string, any> = { setting_type: settingType }
+    if (newValue) properties.new_value = newValue
+    track('settings_changed', properties)
   },
 
   // Error events
   errorOccurred: (errorType: string, errorMessage?: string, context?: string) => {
-    track('error_occurred', { 
-      error_type: errorType,
-      error_message: errorMessage?.substring(0, 100), // Limit message length
-      context: context 
-    })
+    const properties: Record<string, any> = { error_type: errorType }
+    if (errorMessage) properties.error_message = errorMessage.substring(0, 100)
+    if (context) properties.context = context
+    track('error_occurred', properties)
   },
 
   // Performance events
@@ -151,52 +142,61 @@ export const analytics = {
   },
   
   subscriptionCancel: (plan: string, reason?: string) => {
-    track('subscription_cancel', { 
-      plan: plan,
-      reason: reason 
-    })
+    const properties: Record<string, any> = { plan: plan }
+    if (reason) properties.reason = reason
+    track('subscription_cancel', properties)
   },
   
   paymentCompleted: (amount: number, currency: string, plan?: string) => {
-    track('payment_completed', { 
+    const properties: Record<string, any> = { 
       amount: amount,
-      currency: currency,
-      plan: plan 
-    })
+      currency: currency
+    }
+    if (plan) properties.plan = plan
+    track('payment_completed', properties)
   },
 
   // Custom event wrapper for any additional tracking needs
   custom: (eventName: string, properties?: Record<string, any>) => {
-    track(eventName, properties)
+    track(eventName, properties || {})
   }
 }
 
 // Helper function to track page views with additional context
 export const trackPageView = (pageName: string, additionalProps?: Record<string, any>) => {
-  track('page_view', {
+  const properties: Record<string, any> = {
     page: pageName,
-    timestamp: new Date().toISOString(),
-    ...additionalProps
-  })
+    timestamp: new Date().toISOString()
+  }
+  if (additionalProps) {
+    Object.assign(properties, additionalProps)
+  }
+  track('page_view', properties)
 }
 
 // Helper function to track user actions with timing
 export const trackUserAction = (action: string, startTime: number, additionalProps?: Record<string, any>) => {
   const duration = Date.now() - startTime
-  track('user_action', {
+  const properties: Record<string, any> = {
     action: action,
     duration_ms: duration,
-    timestamp: new Date().toISOString(),
-    ...additionalProps
-  })
+    timestamp: new Date().toISOString()
+  }
+  if (additionalProps) {
+    Object.assign(properties, additionalProps)
+  }
+  track('user_action', properties)
 }
 
 // Helper function to track conversion events
 export const trackConversion = (conversionType: string, value?: number, additionalProps?: Record<string, any>) => {
-  track('conversion', {
+  const properties: Record<string, any> = {
     type: conversionType,
-    value: value,
-    timestamp: new Date().toISOString(),
-    ...additionalProps
-  })
+    timestamp: new Date().toISOString()
+  }
+  if (value !== undefined) properties.value = value
+  if (additionalProps) {
+    Object.assign(properties, additionalProps)
+  }
+  track('conversion', properties)
 }
