@@ -1,9 +1,13 @@
 {
   "version": 2,
+  "name": "erp-frontend",
   "builds": [
     {
-      "src": "frontend-nextjs/next.config.js",
-      "use": "@vercel/next"
+      "src": "frontend-nextjs/package.json",
+      "use": "@vercel/next",
+      "config": {
+        "zeroConfig": true
+      }
     }
   ],
   "routes": [
@@ -11,5 +15,8 @@
       "src": "/(.*)",
       "dest": "frontend-nextjs/$1"
     }
-  ]
+  ],
+  "github": {
+    "silent": true
+  }
 }
