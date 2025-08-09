@@ -239,7 +239,7 @@ export function useNotificationHelpers() {
     })
   }, [createNotification])
 
-  const notifySecurityAlert = useCallback (message: string, actionUrl?: string) => {
+  const notifySecurityAlert = useCallback((message: string, actionUrl?: string) => {
     createNotification({
       title: 'Security Alert',
       message,
