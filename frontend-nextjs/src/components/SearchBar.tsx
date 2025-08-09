@@ -117,7 +117,7 @@ const SearchBar = () => {
   }
 
   return (
-    <div className="relative w-full max-w-md" ref={searchRef}>
+    <div className="relative w-full" ref={searchRef}>
       <div className="relative">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
@@ -127,7 +127,7 @@ const SearchBar = () => {
           value={query}
           onChange={handleInputChange}
           onFocus={handleFocus}
-          className="pl-10 pr-10 h-9 sm:h-10 text-sm rounded-full"
+          className="pl-10 pr-16 h-9 sm:h-10 text-sm rounded-full w-full bg-muted/50 border-0 focus:bg-background focus:ring-2 focus:ring-primary/20"
         />
         <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center space-x-1">
           <kbd className="hidden sm:inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">

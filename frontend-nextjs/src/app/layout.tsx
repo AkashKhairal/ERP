@@ -2,6 +2,7 @@ import Layout from '@/components/Layout/Layout'
 import ProtectedRoute from '@/components/Auth/ProtectedRoute'
 import { AuthProvider } from '@/context/AuthContext'
 import { ThemeProvider } from '@/context/ThemeContext'
+import { NotificationProvider } from '@/context/NotificationContext'
 import { Toaster } from 'react-hot-toast'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
@@ -30,20 +31,22 @@ export default function AppLayout({
         <GoogleOAuthProvider clientId={googleClientId}>
           <ThemeProvider>
             <AuthProvider>
-              <Toaster 
-                position="top-right"
-                toastOptions={{
-                  duration: 4000,
-                  style: {
-                    background: 'hsl(var(--background))',
-                    color: 'hsl(var(--foreground))',
-                    border: '1px solid hsl(var(--border))',
-                  },
-                }}
-              />
-              <ConditionalLayout>
-                {children}
-              </ConditionalLayout>
+              <NotificationProvider>
+                <Toaster 
+                  position="top-right"
+                  toastOptions={{
+                    duration: 4000,
+                    style: {
+                      background: 'hsl(var(--background))',
+                      color: 'hsl(var(--foreground))',
+                      border: '1px solid hsl(var(--border))',
+                    },
+                  }}
+                />
+                <ConditionalLayout>
+                  {children}
+                </ConditionalLayout>
+              </NotificationProvider>
             </AuthProvider>
           </ThemeProvider>
         </GoogleOAuthProvider>

@@ -33,6 +33,7 @@ import { ThemeToggle } from '@/components/ui/theme-toggle'
 import { useAuth } from '@/context/AuthContext'
 import SearchBar from '@/components/SearchBar'
 import MobileNavigation from '@/components/MobileNavigation'
+import NotificationDropdown from '@/components/NotificationDropdown'
 
 interface LayoutProps {
   children: React.ReactNode
@@ -169,7 +170,8 @@ const Layout = ({ children }: LayoutProps) => {
       {/* Main content */}
       <div className="lg:pl-64 flex-1 flex flex-col overflow-hidden">
         {/* Top navigation */}
-        <header className="bg-card border-b border-border h-14 sm:h-16 flex items-center justify-between px-3 sm:px-6">
+        <header className="bg-card border-b border-border h-14 sm:h-16 flex items-center px-3 sm:px-6">
+          {/* Left section */}
           <div className="flex items-center space-x-2 sm:space-x-4">
             <Button
               variant="ghost"
@@ -179,27 +181,19 @@ const Layout = ({ children }: LayoutProps) => {
             >
               <Menu className="h-4 w-4" />
             </Button>
-            <div className="hidden sm:block flex-1 max-w-md">
+          </div>
+
+          {/* Center section - Search Bar */}
+          <div className="flex-1 flex justify-center px-4">
+            <div className="w-full max-w-md">
               <SearchBar />
             </div>
           </div>
 
+          {/* Right section */}
           <div className="flex items-center space-x-2 sm:space-x-4">
-            <div className="sm:hidden">
-              <Button variant="ghost" size="sm">
-                <Search className="h-4 w-4" />
-              </Button>
-            </div>
             <ThemeToggle />
-            <Button variant="ghost" size="sm" className="relative">
-              <Bell className="h-4 w-4" />
-              <Badge
-                variant="destructive"
-                className="absolute -top-1 -right-1 h-4 w-4 rounded-full p-0 flex items-center justify-center text-xs"
-              >
-                3
-              </Badge>
-            </Button>
+            <NotificationDropdown />
           </div>
         </header>
 
