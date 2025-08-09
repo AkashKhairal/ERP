@@ -15,7 +15,8 @@ const {
   getTasksByStatus,
   getMyTasks,
   getOverdueTasks,
-  getRecurringTasks
+  getRecurringTasks,
+  getTaskStats
 } = require('../controllers/taskController');
 
 const router = express.Router();
@@ -158,6 +159,9 @@ router.route('/overdue')
 
 router.route('/recurring')
   .get(checkPermission('tasks', 'read'), getRecurringTasks);
+
+router.route('/stats')
+  .get(checkPermission('tasks', 'read'), getTaskStats);
 
 router.route('/status/:status')
   .get(checkPermission('tasks', 'read'), getTasksByStatus);

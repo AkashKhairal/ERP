@@ -693,6 +693,62 @@ const getRecurringTasks = async (req, res) => {
   }
 };
 
+// @desc    Get task statistics
+// @route   GET /api/tasks/stats
+// @access  Private
+const getTaskStats = async (req, res) => {
+  try {
+    const totalTasks = await Task.countDocuments({ isActive: true });
+    const completedTasks = await Task.countDocuments({ status: 'done', isActive: true });
+    const overdueTasks = await Task.countDocuments({
+      dueDate: { $lt: new Date() },
+      status: { $nin: ['done', 'cancelled'] },
+      isActive: true
+    });
+
+    // Get tasks by status
+    const tasksByStatus = await Task.aggregate([
+      { $match: { isActive: true } },
+      { $group: { _id: '$status', count: { $sum: 1 } } },
+      { $project: { status: '$_id', count: 1, _id: 0 } }
+    ]);
+
+    // Get tasks by priority
+    const tasksByPriority = await Task.aggregate([
+      { $match: { isActive: true } },
+      { $group: { _id: '$priority', count: { $sum: 1 } } },
+      { $project: { priority: '$_id', count: 1, _id: 0 } }
+    ]);
+
+    // Get tasks by type
+    const tasksByType = await Task.aggregate([
+      { $match: { isActive: true } },
+      { $group: { _id: '$type', count: { $sum: 1 } } },
+      { $project: { type: '$_id', count: 1, _id: 0 } }
+    ]);
+
+    const stats = {
+      totalTasks,
+      completedTasks,
+      overdueTasks,
+      tasksByStatus,
+      tasksByPriority,
+      tasksByType
+    };
+
+    res.json({
+      success: true,
+      data: stats
+    });
+  } catch (error) {
+    console.error('Get task stats error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error while fetching task statistics'
+    });
+  }
+};
+
 module.exports = {
   getAllTasks,
   getTaskById,
@@ -707,5 +763,6 @@ module.exports = {
   getTasksByStatus,
   getMyTasks,
   getOverdueTasks,
-  getRecurringTasks
+  getRecurringTasks,
+  getTaskStats
 }; 
