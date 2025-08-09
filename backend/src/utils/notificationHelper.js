@@ -4,9 +4,17 @@ const User = require('../models/User');
 class NotificationHelper {
   // Task-related notifications
   static async notifyTaskAssigned(taskId, taskTitle, assigneeId, assignerId, projectName, dueDate, priority) {
-    if (assigneeId.toString() === assignerId.toString()) return null;
+    if (assigneeId.toString() === assignerId.toString()) {
+      console.log('⚠️ Skipping notification: User assigned task to themselves');
+      return null;
+    }
     
-    return await Notification.createNotification({
+    console.log('🔔 NotificationHelper.notifyTaskAssigned called with:', {
+      taskId, taskTitle, assigneeId, assignerId, projectName, priority
+    });
+    
+    try {
+      const result = await Notification.createNotification({
       title: 'New Task Assigned',
       message: `You have been assigned to task: ${taskTitle}`,
       type: 'task',
@@ -27,6 +35,13 @@ class NotificationHelper {
         projectName
       }
     });
+    
+    console.log('✅ NotificationHelper: Task assignment notification created:', result._id);
+    return result;
+    } catch (error) {
+      console.error('❌ NotificationHelper: Failed to create task assignment notification:', error);
+      throw error;
+    }
   }
 
   static async notifyTaskCompleted(taskId, taskTitle, completedById, assignedById, completedByName) {

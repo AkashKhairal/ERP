@@ -193,15 +193,30 @@ const createTask = async (req, res) => {
 
     // Create notification for task assignment if assigned
     if (assignedTo) {
-      await NotificationHelper.notifyTaskAssigned(
-        task._id,
-        task.title,
-        assignedTo,
-        req.user._id,
-        projectExists.name,
-        task.dueDate,
-        task.priority
-      );
+      try {
+        console.log('🔔 Creating notification for task assignment:', {
+          taskId: task._id,
+          taskTitle: task.title,
+          assignedTo: assignedTo,
+          assignedBy: req.user._id,
+          projectName: projectExists.name
+        });
+        
+        await NotificationHelper.notifyTaskAssigned(
+          task._id,
+          task.title,
+          assignedTo,
+          req.user._id,
+          projectExists.name,
+          task.dueDate,
+          task.priority
+        );
+        
+        console.log('✅ Task assignment notification created successfully');
+      } catch (notificationError) {
+        console.error('❌ Failed to create task assignment notification:', notificationError);
+        // Don't fail the task creation if notification fails
+      }
     }
 
     // Log audit event for task assignment if assigned
