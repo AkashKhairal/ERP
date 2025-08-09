@@ -49,12 +49,6 @@
     --input: 214.3 31.8% 91.4%;
     --ring: 221.2 83.2% 53.3%;
     
-    /* Light Mode - Elevation Shadows */
-    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-    
     /* Common Variables */
     --radius: 0.5rem;
   }
@@ -91,11 +85,11 @@
     --accent-muted: 217.2 32.6% 12%;
     
     /* Dark Mode - Status Colors */
-    --success: 142 72% 29%;
+    --success: 142 76% 36%;
     --success-foreground: 210 40% 98%;
     --warning: 38 92% 50%;
-    --warning-foreground: 48 96% 89%;
-    --error: 0 84.2% 60.2%;
+    --warning-foreground: 222.2 84% 4.9%;
+    --error: 0 72% 51%;
     --error-foreground: 210 40% 98%;
     --info: 199 89% 48%;
     --info-foreground: 210 40% 98%;
@@ -105,11 +99,28 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 224.3 76.3% 48%;
     
-    /* Dark Mode - Elevation Shadows */
-    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.4);
-    --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.4), 0 1px 2px -1px rgb(0 0 0 / 0.4);
-    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4);
-    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.4);
+    /* Dark Mode - Text Hierarchy (Professional UX Design) */
+    --text-primary: 210 40% 98%;      /* Highest contrast - headlines, primary content */
+    --text-secondary: 215 20.2% 75%;  /* Medium contrast - subheadings, secondary content */
+    --text-tertiary: 215 20.2% 65%;   /* Lower contrast - labels, captions */
+    --text-quaternary: 215 20.2% 55%; /* Lowest contrast - placeholders, disabled text */
+    --text-inverse: 222.2 84% 4.9%;   /* For use on light backgrounds */
+    
+    /* Dark Mode - Interactive Text Colors */
+    --text-link: 217.2 91.2% 64%;     /* Links and interactive elements */
+    --text-link-hover: 217.2 91.2% 74%; /* Link hover state */
+    --text-brand: 217.2 91.2% 59.8%;  /* Brand color text */
+    
+    /* Dark Mode - Status Text Colors (Improved contrast) */
+    --text-success: 142 76% 46%;      /* Success messages */
+    --text-warning: 38 92% 60%;       /* Warning messages */
+    --text-error: 0 72% 61%;          /* Error messages */
+    --text-info: 199 89% 58%;         /* Info messages */
+    
+    /* Dark Mode - Surface-specific text */
+    --text-on-card: 210 40% 95%;      /* Text on elevated surfaces */
+    --text-on-muted: 215 20.2% 80%;   /* Text on muted backgrounds */
+    --text-on-accent: 210 40% 98%;    /* Text on accent backgrounds */
   }
 }
 
@@ -122,115 +133,338 @@
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
+  
+  /* Dark mode text hierarchy base classes */
+  .dark {
+    /* Override default text colors with our hierarchy */
+    color: hsl(var(--text-primary));
+  }
+  
+  .dark h1,
+  .dark h2,
+  .dark h3,
+  .dark h4,
+  .dark h5,
+  .dark h6 {
+    color: hsl(var(--text-primary));
+    font-weight: 600;
+  }
+  
+  .dark p,
+  .dark div,
+  .dark span {
+    color: hsl(var(--text-secondary));
+  }
+  
+  .dark small,
+  .dark .text-sm {
+    color: hsl(var(--text-tertiary));
+  }
+  
+  .dark .text-xs {
+    color: hsl(var(--text-quaternary));
+  }
+  
+  .dark a {
+    color: hsl(var(--text-link));
+  }
+  
+  .dark a:hover {
+    color: hsl(var(--text-link-hover));
+  }
+  
+  .dark .text-muted-foreground {
+    color: hsl(var(--text-tertiary)) !important;
+  }
+  
+  .dark label {
+    color: hsl(var(--text-secondary));
+    font-weight: 500;
+  }
+  
+  .dark input::placeholder,
+  .dark textarea::placeholder {
+    color: hsl(var(--text-quaternary));
+  }
 }
 
 @layer components {
-  /* Dark mode specific component styles */
+  /* Dark mode component-specific text styles */
   .dark .card {
     @apply bg-card border-border shadow-lg;
+    color: hsl(var(--text-on-card));
   }
   
-  .dark .card:hover {
-    @apply bg-muted border-muted;
+  .dark .card h1,
+  .dark .card h2,
+  .dark .card h3,
+  .dark .card h4,
+  .dark .card h5,
+  .dark .card h6 {
+    color: hsl(var(--text-primary));
+  }
+  
+  .dark .card p,
+  .dark .card div:not(.card):not(.flex):not(.grid) {
+    color: hsl(var(--text-secondary));
+  }
+  
+  .dark .card .text-muted {
+    color: hsl(var(--text-tertiary));
   }
   
   .dark .sidebar {
     @apply bg-card border-r border-border;
   }
   
-  .dark .nav-item {
-    @apply text-muted-foreground hover:text-foreground hover:bg-muted;
+  .dark .sidebar .nav-item {
+    color: hsl(var(--text-tertiary));
+    font-weight: 500;
   }
   
-  .dark .nav-item.active {
-    @apply bg-muted text-foreground;
+  .dark .sidebar .nav-item:hover {
+    color: hsl(var(--text-primary));
+    background-color: hsl(var(--muted));
   }
   
+  .dark .sidebar .nav-item.active {
+    color: hsl(var(--text-brand));
+    background-color: hsl(var(--accent));
+  }
+  
+  .dark .sidebar .nav-item .icon {
+    color: currentColor;
+  }
+  
+  /* Navigation and header text */
+  .dark .navbar {
+    color: hsl(var(--text-primary));
+  }
+  
+  .dark .navbar .brand {
+    color: hsl(var(--text-brand));
+    font-weight: 700;
+  }
+  
+  .dark .navbar .nav-link {
+    color: hsl(var(--text-secondary));
+  }
+  
+  .dark .navbar .nav-link:hover {
+    color: hsl(var(--text-primary));
+  }
+  
+  .dark .navbar .nav-link.active {
+    color: hsl(var(--text-brand));
+  }
+  
+  /* Form elements */
   .dark .input {
-    @apply bg-card border-border text-foreground;
+    @apply bg-card border-border;
+    color: hsl(var(--text-primary));
   }
   
   .dark .input:focus {
     @apply border-ring ring-ring;
   }
   
+  .dark .select {
+    @apply bg-card border-border;
+    color: hsl(var(--text-primary));
+  }
+  
+  .dark .textarea {
+    @apply bg-card border-border;
+    color: hsl(var(--text-primary));
+  }
+  
+  /* Button text colors */
   .dark .button-primary {
-    @apply bg-primary hover:bg-primary/90 text-primary-foreground;
+    @apply bg-primary hover:bg-primary/90;
+    color: hsl(var(--primary-foreground));
   }
   
   .dark .button-secondary {
-    @apply bg-secondary hover:bg-secondary/90 text-secondary-foreground;
+    @apply bg-secondary hover:bg-secondary/90;
+    color: hsl(var(--text-primary));
   }
   
-  .dark .dropdown {
-    @apply bg-card border-border shadow-lg;
+  .dark .button-ghost {
+    color: hsl(var(--text-secondary));
   }
   
-  .dark .dropdown-item {
-    @apply text-muted-foreground hover:bg-muted hover:text-foreground;
+  .dark .button-ghost:hover {
+    color: hsl(var(--text-primary));
+    background-color: hsl(var(--muted));
   }
   
+  .dark .button-link {
+    color: hsl(var(--text-link));
+  }
+  
+  .dark .button-link:hover {
+    color: hsl(var(--text-link-hover));
+  }
+  
+  /* Table text */
   .dark .table {
     @apply bg-card;
   }
   
   .dark .table th {
-    @apply bg-muted text-muted-foreground;
+    @apply bg-muted;
+    color: hsl(var(--text-primary));
+    font-weight: 600;
   }
   
   .dark .table td {
-    @apply border-border text-foreground;
+    @apply border-border;
+    color: hsl(var(--text-secondary));
   }
   
-  .dark .table tr:hover {
-    @apply bg-muted;
+  .dark .table tr:hover td {
+    color: hsl(var(--text-primary));
   }
   
-  /* Status indicators */
+  /* Dropdown menu text */
+  .dark .dropdown {
+    @apply bg-card border-border shadow-lg;
+  }
+  
+  .dark .dropdown-item {
+    color: hsl(var(--text-secondary));
+  }
+  
+  .dark .dropdown-item:hover {
+    color: hsl(var(--text-primary));
+    background-color: hsl(var(--muted));
+  }
+  
+  .dark .dropdown-item.disabled {
+    color: hsl(var(--text-quaternary));
+  }
+  
+  /* Status indicators with proper text contrast */
   .dark .status-success {
-    @apply bg-[hsl(var(--success)_/_0.2)] text-[hsl(var(--success))] border-[hsl(var(--success)_/_0.3)];
+    background-color: hsl(var(--success) / 0.15);
+    color: hsl(var(--text-success));
+    border-color: hsl(var(--success) / 0.3);
   }
   
   .dark .status-warning {
-    @apply bg-[hsl(var(--warning)_/_0.2)] text-[hsl(var(--warning))] border-[hsl(var(--warning)_/_0.3)];
+    background-color: hsl(var(--warning) / 0.15);
+    color: hsl(var(--text-warning));
+    border-color: hsl(var(--warning) / 0.3);
   }
   
   .dark .status-error {
-    @apply bg-[hsl(var(--error)_/_0.2)] text-[hsl(var(--error))] border-[hsl(var(--error)_/_0.3)];
+    background-color: hsl(var(--error) / 0.15);
+    color: hsl(var(--text-error));
+    border-color: hsl(var(--error) / 0.3);
   }
   
   .dark .status-info {
-    @apply bg-[hsl(var(--info)_/_0.2)] text-[hsl(var(--info))] border-[hsl(var(--info)_/_0.3)];
+    background-color: hsl(var(--info) / 0.15);
+    color: hsl(var(--text-info));
+    border-color: hsl(var(--info) / 0.3);
   }
   
-  /* Charts and data visualization */
-  .dark .chart-grid {
-    @apply stroke-border;
+  /* Badge text */
+  .dark .badge {
+    color: hsl(var(--text-primary));
+    background-color: hsl(var(--muted));
   }
   
+  .dark .badge-primary {
+    color: hsl(var(--primary-foreground));
+    background-color: hsl(var(--primary));
+  }
+  
+  .dark .badge-secondary {
+    color: hsl(var(--text-on-muted));
+    background-color: hsl(var(--secondary));
+  }
+  
+  /* Alert text */
+  .dark .alert {
+    color: hsl(var(--text-secondary));
+  }
+  
+  .dark .alert-title {
+    color: hsl(var(--text-primary));
+    font-weight: 600;
+  }
+  
+  .dark .alert-success {
+    color: hsl(var(--text-success));
+    background-color: hsl(var(--success) / 0.1);
+    border-color: hsl(var(--success) / 0.2);
+  }
+  
+  .dark .alert-warning {
+    color: hsl(var(--text-warning));
+    background-color: hsl(var(--warning) / 0.1);
+    border-color: hsl(var(--warning) / 0.2);
+  }
+  
+  .dark .alert-error {
+    color: hsl(var(--text-error));
+    background-color: hsl(var(--error) / 0.1);
+    border-color: hsl(var(--error) / 0.2);
+  }
+  
+  .dark .alert-info {
+    color: hsl(var(--text-info));
+    background-color: hsl(var(--info) / 0.1);
+    border-color: hsl(var(--info) / 0.2);
+  }
+  
+  /* Chart and data visualization text */
   .dark .chart-text {
-    @apply fill-muted-foreground;
+    fill: hsl(var(--text-tertiary));
   }
   
-  /* Form elements */
-  .dark .checkbox {
-    @apply border-border bg-card;
+  .dark .chart-title {
+    fill: hsl(var(--text-primary));
   }
   
-  .dark .checkbox:checked {
-    @apply bg-primary border-primary;
+  .dark .chart-legend {
+    fill: hsl(var(--text-secondary));
   }
   
-  .dark .radio {
-    @apply border-border bg-card;
+  /* Tooltip text */
+  .dark .tooltip {
+    background-color: hsl(var(--popover));
+    color: hsl(var(--text-primary));
+    border-color: hsl(var(--border));
   }
   
-  .dark .radio:checked {
-    @apply bg-primary border-primary;
+  /* Code text */
+  .dark code {
+    color: hsl(var(--text-brand));
+    background-color: hsl(var(--muted));
   }
   
-  .dark .select {
-    @apply bg-card border-border text-foreground;
+  .dark pre {
+    color: hsl(var(--text-secondary));
+    background-color: hsl(var(--card));
+  }
+  
+  /* Breadcrumb text */
+  .dark .breadcrumb {
+    color: hsl(var(--text-tertiary));
+  }
+  
+  .dark .breadcrumb .active {
+    color: hsl(var(--text-primary));
+  }
+  
+  .dark .breadcrumb a {
+    color: hsl(var(--text-link));
+  }
+  
+  .dark .breadcrumb a:hover {
+    color: hsl(var(--text-link-hover));
   }
   
   /* Scrollbars */
@@ -249,6 +483,55 @@
   
   .dark ::-webkit-scrollbar-thumb:hover {
     @apply bg-muted;
+  }
+  
+  /* Selection text */
+  .dark ::selection {
+    background-color: hsl(var(--primary) / 0.2);
+    color: hsl(var(--text-primary));
+  }
+}
+
+/* Utility classes for text hierarchy */
+@layer utilities {
+  .dark .text-primary {
+    color: hsl(var(--text-primary)) !important;
+  }
+  
+  .dark .text-secondary {
+    color: hsl(var(--text-secondary)) !important;
+  }
+  
+  .dark .text-tertiary {
+    color: hsl(var(--text-tertiary)) !important;
+  }
+  
+  .dark .text-quaternary {
+    color: hsl(var(--text-quaternary)) !important;
+  }
+  
+  .dark .text-link {
+    color: hsl(var(--text-link)) !important;
+  }
+  
+  .dark .text-brand {
+    color: hsl(var(--text-brand)) !important;
+  }
+  
+  .dark .text-success {
+    color: hsl(var(--text-success)) !important;
+  }
+  
+  .dark .text-warning {
+    color: hsl(var(--text-warning)) !important;
+  }
+  
+  .dark .text-error {
+    color: hsl(var(--text-error)) !important;
+  }
+  
+  .dark .text-info {
+    color: hsl(var(--text-info)) !important;
   }
 }
 
