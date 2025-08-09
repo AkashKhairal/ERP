@@ -535,21 +535,167 @@
   }
 }
 
-/* Mobile-first utilities */
+/* Mobile-first responsive utilities */
 @layer components {
+  /* Container and layout fixes */
   .container-mobile {
-    @apply px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl;
+    @apply px-3 sm:px-4 md:px-6 lg:px-8 mx-auto max-w-7xl w-full;
   }
   
+  .page-container {
+    @apply px-3 sm:px-4 md:px-6 w-full min-h-full;
+  }
+  
+  /* Card mobile fixes */
   .card-mobile {
-    @apply bg-card rounded-lg border shadow-sm p-4 sm:p-6;
+    @apply bg-card rounded-lg border shadow-sm p-3 sm:p-4 md:p-6 w-full;
   }
   
+  /* Button mobile fixes */
   .button-mobile {
-    @apply h-10 sm:h-11 px-4 sm:px-6 text-sm font-medium rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2;
+    @apply h-9 sm:h-10 md:h-11 px-3 sm:px-4 md:px-6 text-xs sm:text-sm font-medium rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 w-full sm:w-auto;
   }
   
+  .button-group-mobile {
+    @apply flex flex-col sm:flex-row gap-2 sm:gap-3 w-full;
+  }
+  
+  .button-group-mobile .button-mobile {
+    @apply flex-1 sm:flex-none;
+  }
+  
+  /* Input mobile fixes */
   .input-mobile {
-    @apply h-10 sm:h-11 px-3 sm:px-4 text-sm border border-input bg-background rounded-md focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2;
+    @apply h-9 sm:h-10 md:h-11 px-3 sm:px-4 text-sm border border-input bg-background rounded-md focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 w-full;
+  }
+  
+  /* Grid mobile fixes */
+  .grid-mobile-1 {
+    @apply grid grid-cols-1 gap-3 sm:gap-4 md:gap-6;
+  }
+  
+  .grid-mobile-2 {
+    @apply grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 md:gap-6;
+  }
+  
+  .grid-mobile-3 {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6;
+  }
+  
+  .grid-mobile-4 {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6;
+  }
+  
+  /* Header mobile fixes */
+  .header-mobile {
+    @apply flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 w-full;
+  }
+  
+  .header-mobile .header-content {
+    @apply flex-1 min-w-0;
+  }
+  
+  .header-mobile .header-actions {
+    @apply w-full sm:w-auto flex flex-col sm:flex-row gap-2 sm:gap-3;
+  }
+  
+  .header-mobile .header-actions .button-mobile {
+    @apply w-full sm:w-auto;
+  }
+  
+  /* Stats card mobile fixes */
+  .stats-card-mobile {
+    @apply bg-card rounded-lg border p-3 sm:p-4 md:p-6 w-full;
+  }
+  
+  .stats-card-mobile .stats-header {
+    @apply flex flex-row items-center justify-between space-y-0 pb-2;
+  }
+  
+  .stats-card-mobile .stats-content {
+    @apply space-y-1;
+  }
+  
+  .stats-card-mobile .stats-value {
+    @apply text-xl sm:text-2xl font-bold;
+  }
+  
+  .stats-card-mobile .stats-description {
+    @apply text-xs text-muted-foreground;
+  }
+  
+  /* Table mobile fixes */
+  .table-container-mobile {
+    @apply w-full overflow-x-auto;
+  }
+  
+  .table-mobile {
+    @apply w-full min-w-full;
+  }
+  
+  .table-mobile th,
+  .table-mobile td {
+    @apply px-2 sm:px-4 py-2 sm:py-3 text-left;
+  }
+  
+  .table-mobile th {
+    @apply text-xs sm:text-sm font-medium text-muted-foreground;
+  }
+  
+  .table-mobile td {
+    @apply text-xs sm:text-sm;
+  }
+  
+  /* Form mobile fixes */
+  .form-group-mobile {
+    @apply space-y-3 sm:space-y-4 w-full;
+  }
+  
+  .form-row-mobile {
+    @apply flex flex-col sm:flex-row gap-3 sm:gap-4 w-full;
+  }
+  
+  .form-row-mobile > * {
+    @apply flex-1;
+  }
+  
+  /* Text responsive sizes */
+  .text-responsive-xl {
+    @apply text-xl sm:text-2xl md:text-3xl;
+  }
+  
+  .text-responsive-lg {
+    @apply text-lg sm:text-xl md:text-2xl;
+  }
+  
+  .text-responsive-md {
+    @apply text-base sm:text-lg;
+  }
+  
+  .text-responsive-sm {
+    @apply text-sm sm:text-base;
+  }
+  
+  /* Spacing mobile fixes */
+  .space-y-mobile {
+    @apply space-y-3 sm:space-y-4 md:space-y-6;
+  }
+  
+  .space-x-mobile {
+    @apply space-x-2 sm:space-x-3 md:space-x-4;
+  }
+  
+  /* Touch target improvements */
+  .touch-target {
+    @apply min-h-[44px] min-w-[44px] flex items-center justify-center;
+  }
+  
+  /* Overflow fixes */
+  .overflow-mobile {
+    @apply overflow-hidden sm:overflow-visible;
+  }
+  
+  .text-overflow-mobile {
+    @apply truncate sm:text-clip;
   }
 }

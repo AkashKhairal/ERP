@@ -205,7 +205,7 @@ const Layout = ({ children }: LayoutProps) => {
 
         {/* Page content */}
         <main className="flex-1 overflow-y-auto bg-background">
-          <div className="p-3 sm:p-4 md:p-6">
+          <div className="page-container">
             {children}
           </div>
         </main>

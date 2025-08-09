@@ -162,33 +162,35 @@ const ProjectDashboard = () => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-mobile">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Project Dashboard</h1>
-          <p className="text-muted-foreground">
+      <div className="header-mobile">
+        <div className="header-content">
+          <h1 className="text-responsive-xl font-bold">Project Dashboard</h1>
+          <p className="text-muted-foreground text-responsive-sm">
             Overview of your projects and key metrics
           </p>
         </div>
-        <Button onClick={() => router.push('/projects/create')}>
-          <Plus className="h-4 w-4 mr-2" />
-          New Project
-        </Button>
+        <div className="header-actions">
+          <Button onClick={() => router.push('/projects/create')} size="mobile">
+            <Plus className="h-4 w-4 mr-2" />
+            New Project
+          </Button>
+        </div>
       </div>
 
       {/* Quick Actions */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid-mobile-4">
         {quickActions.map((action, index) => (
           <Card key={index} className="hover:shadow-lg transition-shadow cursor-pointer" onClick={action.action}>
-            <CardContent className="p-6">
-              <div className="flex items-center space-x-4">
-                <div className={`p-3 rounded-lg ${action.color} text-white`}>
+            <CardContent>
+              <div className="flex items-center space-x-mobile">
+                <div className={`p-2 sm:p-3 rounded-lg ${action.color} text-white flex-shrink-0`}>
                   {action.icon}
                 </div>
-                <div>
-                  <h3 className="font-semibold">{action.title}</h3>
-                  <p className="text-sm text-muted-foreground">{action.description}</p>
+                <div className="min-w-0 flex-1">
+                  <h3 className="font-semibold text-responsive-sm">{action.title}</h3>
+                  <p className="text-xs sm:text-sm text-muted-foreground">{action.description}</p>
                 </div>
               </div>
             </CardContent>
@@ -197,7 +199,7 @@ const ProjectDashboard = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid-mobile-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Projects</CardTitle>
