@@ -82,6 +82,10 @@ app.use('/api/analytics', analyticsRoutes);
 app.use('/api/content', contentRoutes);
 app.use('/api/integrations', integrationRoutes);
 
+// Notification routes
+const notificationRoutes = require('./src/routes/notifications');
+app.use('/api/notifications', notificationRoutes);
+
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });

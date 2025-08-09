@@ -1,6 +1,8 @@
 const Project = require('../models/Project');
 const Task = require('../models/Task');
 const User = require('../models/User');
+const Notification = require('../models/Notification');
+const NotificationHelper = require('../utils/notificationHelper');
 const { validationResult } = require('express-validator');
 
 // @desc    Get all projects
@@ -332,6 +334,16 @@ const addTeamMember = async (req, res) => {
     await project.addTeamMember(userId, role);
     
     await project.populate('teamMembers.user', 'firstName lastName email role');
+    
+    // Create notification for new team member
+    await NotificationHelper.notifyProjectTeamMemberAdded(
+      project._id,
+      project.name,
+      userId,
+      role,
+      req.user._id,
+      `${req.user.firstName} ${req.user.lastName}`
+    );
     
     res.json({
       success: true,

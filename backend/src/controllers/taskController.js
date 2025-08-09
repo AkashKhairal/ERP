@@ -2,6 +2,8 @@ const Task = require('../models/Task');
 const Project = require('../models/Project');
 const User = require('../models/User');
 const AuditLog = require('../models/AuditLog');
+const Notification = require('../models/Notification');
+const NotificationHelper = require('../utils/notificationHelper');
 const { validationResult } = require('express-validator');
 
 // @desc    Get all tasks
@@ -188,6 +190,19 @@ const createTask = async (req, res) => {
         userAgent: req.get('User-Agent')
       }
     });
+
+    // Create notification for task assignment if assigned
+    if (assignedTo) {
+      await NotificationHelper.notifyTaskAssigned(
+        task._id,
+        task.title,
+        assignedTo,
+        req.user._id,
+        projectExists.name,
+        task.dueDate,
+        task.priority
+      );
+    }
 
     // Log audit event for task assignment if assigned
     if (assignedTo) {
@@ -384,6 +399,17 @@ const updateTaskStatus = async (req, res) => {
           userAgent: req.get('User-Agent')
         }
       });
+
+      // Create notification for task completion to assignedBy user
+      if (task.assignedBy) {
+        await NotificationHelper.notifyTaskCompleted(
+          task._id,
+          task.title,
+          req.user._id,
+          task.assignedBy,
+          `${req.user.firstName} ${req.user.lastName}`
+        );
+      }
     }
     
     res.json({
