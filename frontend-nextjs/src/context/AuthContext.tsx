@@ -4,6 +4,7 @@ import React, { createContext, useContext, useReducer, useEffect, useRef, useCal
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 import { authService } from '@/services/authService'
+import { analytics } from '@/lib/analytics'
 
 interface User {
   _id: string
@@ -197,6 +198,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         payload: { user, token }
       })
       
+      // Track login analytics
+      analytics.login('email')
+      
       toast.success('Login successful!')
       router.push('/dashboard')
     } catch (error: any) {
@@ -221,6 +225,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         type: 'AUTH_SUCCESS',
         payload: { user, token }
       })
+      
+      // Track registration analytics
+      analytics.register('email')
       
       toast.success('Registration successful!')
       router.push('/dashboard')
@@ -250,6 +257,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         payload: { user, token: jwtToken }
       })
       
+      // Track Google sign-in analytics
+      analytics.login('google')
+      
       toast.success('Google sign-in successful!')
       router.push('/dashboard')
     } catch (error: any) {
@@ -269,6 +279,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       if (typeof window !== 'undefined') {
         localStorage.removeItem('token')
       }
+      
+      // Track logout analytics
+      analytics.logout()
+      
       dispatch({ type: 'LOGOUT' })
       router.push('/')
       toast.success('Logged out successfully')

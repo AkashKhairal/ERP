@@ -24,6 +24,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { useAuth } from '@/context/AuthContext'
+import { analytics, trackPageView } from '@/lib/analytics'
 
 const Dashboard = () => {
   const { user } = useAuth()
@@ -46,7 +47,13 @@ const Dashboard = () => {
       teamProductivity: 87,
       contentViews: 125000
     })
-  }, [])
+    
+    // Track dashboard page view
+    trackPageView('dashboard', {
+      user_id: user?._id,
+      user_role: user?.roles?.[0]?.name || 'unknown'
+    })
+  }, [user])
 
   const quickActions = [
     {

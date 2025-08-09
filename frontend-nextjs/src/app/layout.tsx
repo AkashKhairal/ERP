@@ -3,6 +3,8 @@ import ProtectedRoute from '@/components/Auth/ProtectedRoute'
 import { AuthProvider } from '@/context/AuthContext'
 import { ThemeProvider } from '@/context/ThemeContext'
 import { Toaster } from 'react-hot-toast'
+import { Analytics } from '@vercel/analytics/react'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import './globals.css'
 import type { Metadata } from 'next'
 import ConditionalLayout from '@/components/ConditionalLayout'
@@ -45,6 +47,8 @@ export default function AppLayout({
             </AuthProvider>
           </ThemeProvider>
         </GoogleOAuthProvider>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )
