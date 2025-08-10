@@ -111,13 +111,15 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
 
     setLoading(true);
     try {
-      const submitData = {
-        ...formData,
-        amount: parseFloat(formData.amount),
-        linkedProject: formData.linkedProject || undefined,
-        linkedEmployee: formData.linkedEmployee || undefined,
-        tags: formData.tags.filter(tag => tag.trim() !== '')
-      };
+          const { receipt, ...formDataWithoutReceipt } = formData;
+    const submitData = {
+      ...formDataWithoutReceipt,
+      amount: parseFloat(formData.amount),
+      linkedProject: formData.linkedProject || undefined,
+      linkedEmployee: formData.linkedEmployee || undefined,
+      tags: formData.tags.filter(tag => tag.trim() !== ''),
+      // Note: File upload would be handled separately in a real implementation
+    };
 
       let result;
       if (transaction) {
