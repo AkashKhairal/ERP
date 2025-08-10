@@ -73,10 +73,16 @@ const HRDashboard = () => {
       setLeaves(leavesRes.data || [])
       setPayroll(payrollRes.data || [])
 
-      const todays = (todayAttRes.data || []) as any[]
-      const present = todays.filter((a) => a.checkIn && !a.checkOut).length || 0
-      const absent = todays.filter((a) => a.status === 'absent').length || 0
-      const late = 0
+      const todaysAttendance = (todayAttRes.data || []) as any[]
+      const present = todaysAttendance.filter((a) => a.status === 'present' && a.checkIn).length
+      const absent = todaysAttendance.filter((a) => a.status === 'absent').length
+      const late = todaysAttendance.filter((a) => {
+        if (!a.checkIn?.time) return false
+        const checkInTime = new Date(a.checkIn.time)
+        const lateThreshold = new Date()
+        lateThreshold.setHours(9, 15, 0, 0) // 9:15 AM threshold
+        return checkInTime > lateThreshold && a.status === 'present'
+      }).length
       setTodayAttendanceCount({ present, absent, late })
     } catch (e: any) {
       toast.error(e?.message || 'Failed to load HR data')
@@ -536,7 +542,7 @@ const HRDashboard = () => {
                   <div className="text-xs text-muted-foreground">
                     {p.month}/{p.year} • Net: {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(p.netSalary || 0)} • {p.status}
                   </div>
-                </div>
+              </div>
                 <div className="space-x-2">
                   {p.status === 'pending' && (
                     <Button size="sm" variant="outline" onClick={async () => { await hrService.approvePayroll(p._id); toast.success('Payroll approved'); await loadAll() }}>Approve</Button>
@@ -545,7 +551,7 @@ const HRDashboard = () => {
                     <Button size="sm" onClick={async () => { const today = new Date().toISOString(); await hrService.markPayrollAsPaid(p._id, { paymentDate: today, paymentMethod: 'bank_transfer' }); toast.success('Marked as paid'); await loadAll() }}>Mark Paid</Button>
                   )}
               </div>
-              </div>
+            </div>
             ))}
           </div>
         </CardContent>

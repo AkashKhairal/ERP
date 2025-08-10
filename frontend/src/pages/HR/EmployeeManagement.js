@@ -26,70 +26,68 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '.
 import { useAuth } from '../../context/AuthContext';
 import toast from 'react-hot-toast';
 
+// API service for HR operations
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+
+const hrService = {
+  getEmployees: async (filters = {}) => {
+    const token = localStorage.getItem('token');
+    const params = new URLSearchParams(filters).toString();
+    const response = await fetch(`${API_BASE}/employees?${params}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    return response.json();
+  },
+  
+  createEmployee: async (data) => {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_BASE}/employees`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
+    return response.json();
+  }
+};
+
 const EmployeeManagement = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [departmentFilter, setDepartmentFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
+  const [employees, setEmployees] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  // Mock data - will be replaced with API calls
-  const employees = [
-    {
-      id: 1,
-      employeeId: 'EMP001',
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'john.doe@company.com',
-      phone: '+91 98765 43210',
-      department: 'engineering',
-      position: 'Senior Software Engineer',
-      status: 'active',
-      dateOfJoining: '2023-01-15',
-      workType: 'full_time',
-      salary: 75000
-    },
-    {
-      id: 2,
-      employeeId: 'EMP002',
-      firstName: 'Jane',
-      lastName: 'Smith',
-      email: 'jane.smith@company.com',
-      phone: '+91 98765 43211',
-      department: 'content',
-      position: 'Content Creator',
-      status: 'active',
-      dateOfJoining: '2023-03-20',
-      workType: 'full_time',
-      salary: 45000
-    },
-    {
-      id: 3,
-      employeeId: 'EMP003',
-      firstName: 'Mike',
-      lastName: 'Johnson',
-      email: 'mike.johnson@company.com',
-      phone: '+91 98765 43212',
-      department: 'marketing',
-      position: 'Marketing Manager',
-      status: 'active',
-      dateOfJoining: '2023-02-10',
-      workType: 'full_time',
-      salary: 65000
-    },
-    {
-      id: 4,
-      employeeId: 'EMP004',
-      firstName: 'Sarah',
-      lastName: 'Wilson',
-      email: 'sarah.wilson@company.com',
-      phone: '+91 98765 43213',
-      department: 'engineering',
-      position: 'Frontend Developer',
-      status: 'on_leave',
-      dateOfJoining: '2023-04-05',
-      workType: 'full_time',
-      salary: 55000
+  // Load employees from API
+  const loadEmployees = async () => {
+    setLoading(true);
+    try {
+      const filters = {};
+      if (departmentFilter) filters.department = departmentFilter;
+      if (statusFilter) filters.status = statusFilter;
+      
+      const response = await hrService.getEmployees(filters);
+      if (response.success) {
+        setEmployees(response.data || []);
+      } else {
+        toast.error('Failed to load employees');
+      }
+    } catch (error) {
+      console.error('Error loading employees:', error);
+      toast.error('Failed to load employees');
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
+
+  useEffect(() => {
+    loadEmployees();
+  }, [departmentFilter, statusFilter]);
 
   const departments = ['engineering', 'content', 'marketing', 'finance', 'hr', 'operations'];
   const roles = ['admin', 'manager', 'team_lead', 'developer', 'content_creator', 'analyst', 'viewer'];
@@ -97,13 +95,18 @@ const EmployeeManagement = () => {
 
   // Filter employees based on search and filters
   const filteredEmployees = employees.filter(employee => {
-    const matchesSearch = 
-      employee.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      employee.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      employee.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      employee.employeeId.toLowerCase().includes(searchTerm.toLowerCase());
+    const firstName = employee.user?.firstName || '';
+    const lastName = employee.user?.lastName || '';
+    const email = employee.user?.email || '';
+    const employeeId = employee.employeeId || '';
     
-    const matchesDepartment = !departmentFilter || employee.department === departmentFilter;
+    const matchesSearch = 
+      firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      employeeId.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    const matchesDepartment = !departmentFilter || employee.user?.department === departmentFilter;
     const matchesStatus = !statusFilter || employee.status === statusFilter;
 
     return matchesSearch && matchesDepartment && matchesStatus;
@@ -208,8 +211,14 @@ const EmployeeManagement = () => {
 
       {/* Employee Table */}
       <div className="bg-white rounded-lg shadow overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
+        {loading ? (
+          <div className="p-8 text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+            <p className="mt-2 text-gray-500">Loading employees...</p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -236,23 +245,23 @@ const EmployeeManagement = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {filteredEmployees.map((employee) => (
-                <tr key={employee.id} className="hover:bg-gray-50">
+                          {filteredEmployees.map((employee) => (
+              <tr key={employee._id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div className="flex-shrink-0 h-10 w-10">
                         <div className="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center">
                           <span className="text-sm font-medium text-gray-700">
-                            {employee.firstName[0]}{employee.lastName[0]}
+                            {(employee.user?.firstName?.[0] || '') + (employee.user?.lastName?.[0] || '')}
                           </span>
                         </div>
                       </div>
                       <div className="ml-4">
                         <div className="text-sm font-medium text-gray-900">
-                          {employee.firstName} {employee.lastName}
+                          {employee.user?.firstName} {employee.user?.lastName}
                         </div>
                         <div className="text-sm text-gray-500">
-                          {employee.email}
+                          {employee.user?.email}
                         </div>
                         <div className="text-xs text-gray-400">
                           {employee.employeeId}
@@ -261,10 +270,10 @@ const EmployeeManagement = () => {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    {getDepartmentBadge(employee.department)}
+                    {getDepartmentBadge(employee.user?.department)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {employee.position}
+                    {employee.user?.position || 'N/A'}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {getStatusBadge(employee.status)}
@@ -273,7 +282,7 @@ const EmployeeManagement = () => {
                     {new Date(employee.dateOfJoining).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    ₹{employee.salary.toLocaleString()}
+                    ₹{(employee.salary?.base || 0).toLocaleString()}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <div className="flex items-center justify-end space-x-2">
@@ -284,7 +293,7 @@ const EmployeeManagement = () => {
                         <Eye className="w-4 h-4" />
                       </button>
                       <Link
-                        to={`/hr/employees/${employee.id}/edit`}
+                        to={`/hr/employees/${employee._id}/edit`}
                         className="text-green-600 hover:text-green-900"
                       >
                         <Edit className="w-4 h-4" />
@@ -308,6 +317,7 @@ const EmployeeManagement = () => {
             </tbody>
           </table>
         </div>
+        )}
       </div>
 
       {/* Pagination */}

@@ -19,54 +19,12 @@ import { Input } from '../../components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../components/ui/table';
 import { useAuth } from '../../context/AuthContext';
+import { hrService } from '../../services/hrService';
 import toast from 'react-hot-toast';
 
 const LeaveManagement = () => {
-  const [leaveRequests, setLeaveRequests] = useState([
-    {
-      id: 1,
-      employeeId: 'EMP001',
-      employeeName: 'John Doe',
-      leaveType: 'annual',
-      startDate: '2024-12-15',
-      endDate: '2024-12-17',
-      totalDays: 3,
-      reason: 'Family vacation',
-      status: 'pending',
-      submittedAt: '2024-12-01T10:30:00Z',
-      approvedBy: null,
-      approvedAt: null
-    },
-    {
-      id: 2,
-      employeeId: 'EMP002',
-      employeeName: 'Jane Smith',
-      leaveType: 'sick',
-      startDate: '2024-12-10',
-      endDate: '2024-12-10',
-      totalDays: 1,
-      reason: 'Not feeling well',
-      status: 'approved',
-      submittedAt: '2024-12-09T08:15:00Z',
-      approvedBy: 'Manager Name',
-      approvedAt: '2024-12-09T14:30:00Z'
-    },
-    {
-      id: 3,
-      employeeId: 'EMP003',
-      employeeName: 'Mike Johnson',
-      leaveType: 'casual',
-      startDate: '2024-12-20',
-      endDate: '2024-12-20',
-      totalDays: 1,
-      reason: 'Personal appointment',
-      status: 'rejected',
-      submittedAt: '2024-12-05T16:45:00Z',
-      approvedBy: 'Manager Name',
-      approvedAt: '2024-12-06T09:20:00Z',
-      rejectionReason: 'High workload period'
-    }
-  ]);
+  const { user } = useAuth();
+  const [leaveRequests, setLeaveRequests] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
@@ -74,41 +32,77 @@ const LeaveManagement = () => {
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
   const [showRequestForm, setShowRequestForm] = useState(false);
   const [selectedLeave, setSelectedLeave] = useState(null);
-
-  // Mock data - will be replaced with API calls
-  const leaveBalance = {
-    annual: { total: 21, used: 5, remaining: 16 },
-    casual: { total: 7, used: 2, remaining: 5 },
-    sick: { total: 10, used: 1, remaining: 9 },
+  const [leaveBalance, setLeaveBalance] = useState({
+    annual: { total: 21, used: 0, remaining: 21 },
+    casual: { total: 7, used: 0, remaining: 7 },
+    sick: { total: 10, used: 0, remaining: 10 },
     unpaid: { total: 0, used: 0, remaining: 0 }
-  };
+  });
 
-  const pendingRequests = leaveRequests.filter(request => request.status === 'pending');
+  useEffect(() => {
+    loadLeaveData();
+  }, []);
 
-  // Mock functions - will be replaced with actual API calls
-  const handleApproveLeave = async (leaveId) => {
+  const loadLeaveData = async () => {
     setLoading(true);
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      toast.success('Leave request approved successfully!');
-      // Update leave requests here
+      await Promise.all([
+        loadLeaveRequests(),
+        loadLeaveBalance()
+      ]);
     } catch (error) {
-      toast.error('Approval failed. Please try again.');
+      console.error('Error loading leave data:', error);
+      toast.error('Failed to load leave data');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleRejectLeave = async (leaveId) => {
+  const loadLeaveRequests = async () => {
+    try {
+      const response = await hrService.getLeaveRequests();
+      setLeaveRequests(response.data || []);
+    } catch (error) {
+      console.error('Error loading leave requests:', error);
+    }
+  };
+
+  const loadLeaveBalance = async () => {
+    try {
+      const response = await hrService.getLeaveBalance();
+      if (response.data) {
+        setLeaveBalance(response.data);
+      }
+    } catch (error) {
+      console.error('Error loading leave balance:', error);
+    }
+  };
+
+  const pendingRequests = leaveRequests.filter(request => request.status === 'pending');
+
+  const handleApproveLeave = async (leaveId) => {
     setLoading(true);
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      toast.success('Leave request rejected successfully!');
-      // Update leave requests here
+      await hrService.approveLeave(leaveId);
+      toast.success('Leave request approved successfully!');
+      await loadLeaveRequests(); // Reload the data
     } catch (error) {
-      toast.error('Rejection failed. Please try again.');
+      console.error('Approval error:', error);
+      toast.error(error.message || 'Approval failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRejectLeave = async (leaveId, rejectionReason = '') => {
+    setLoading(true);
+    try {
+      await hrService.rejectLeave(leaveId, { rejectionReason });
+      toast.success('Leave request rejected successfully!');
+      await loadLeaveRequests(); // Reload the data
+    } catch (error) {
+      console.error('Rejection error:', error);
+      toast.error(error.message || 'Rejection failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -285,22 +279,22 @@ const LeaveManagement = () => {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {leaveRequests.map((request) => (
-                <tr key={request.id} className="hover:bg-gray-50">
+                <tr key={request._id || request.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div className="flex-shrink-0 h-8 w-8">
                         <div className="h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center">
                           <span className="text-xs font-medium text-gray-700">
-                            {request.employeeName.split(' ').map(n => n[0]).join('')}
+                            {((request.employee?.user?.firstName || '') + (request.employee?.user?.lastName || '')).split(' ').map(n => n[0]).join('').substring(0, 2)}
                           </span>
                         </div>
                       </div>
                       <div className="ml-3">
                         <div className="text-sm font-medium text-gray-900">
-                          {request.employeeName}
+                          {request.employee?.user?.firstName} {request.employee?.user?.lastName}
                         </div>
                         <div className="text-xs text-gray-500">
-                          {request.employeeId}
+                          {request.employee?.employeeId}
                         </div>
                       </div>
                     </div>
@@ -335,16 +329,16 @@ const LeaveManagement = () => {
                       {request.status === 'pending' && (
                         <>
                           <button
-                            onClick={() => handleApproveLeave(request.id)}
+                            onClick={() => handleApproveLeave(request._id)}
                             disabled={loading}
-                            className="text-green-600 hover:text-green-900"
+                            className="text-green-600 hover:text-green-900 disabled:opacity-50"
                           >
                             <CheckCircle className="w-4 h-4" />
                           </button>
                           <button
-                            onClick={() => handleRejectLeave(request.id)}
+                            onClick={() => handleRejectLeave(request._id)}
                             disabled={loading}
-                            className="text-red-600 hover:text-red-900"
+                            className="text-red-600 hover:text-red-900 disabled:opacity-50"
                           >
                             <XCircle className="w-4 h-4" />
                           </button>

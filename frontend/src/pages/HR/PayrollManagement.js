@@ -20,63 +20,12 @@ import { Input } from '../../components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../components/ui/table';
 import { useAuth } from '../../context/AuthContext';
+import { hrService } from '../../services/hrService';
 import toast from 'react-hot-toast';
 
 const PayrollManagement = () => {
   const { user } = useAuth();
-  const [payrollData, setPayrollData] = useState([
-    {
-      id: 1,
-      employeeId: 'EMP001',
-      employeeName: 'John Doe',
-      month: 12,
-      year: 2024,
-      basicSalary: 75000,
-      allowances: 15000,
-      deductions: 5000,
-      bonuses: 10000,
-      overtime: 5000,
-      grossSalary: 105000,
-      netSalary: 100000,
-      status: 'approved',
-      paymentDate: '2024-12-05',
-      paymentMethod: 'bank_transfer'
-    },
-    {
-      id: 2,
-      employeeId: 'EMP002',
-      employeeName: 'Jane Smith',
-      month: 12,
-      year: 2024,
-      basicSalary: 45000,
-      allowances: 8000,
-      deductions: 3000,
-      bonuses: 5000,
-      overtime: 2000,
-      grossSalary: 60000,
-      netSalary: 57000,
-      status: 'pending',
-      paymentDate: null,
-      paymentMethod: null
-    },
-    {
-      id: 3,
-      employeeId: 'EMP003',
-      employeeName: 'Mike Johnson',
-      month: 12,
-      year: 2024,
-      basicSalary: 65000,
-      allowances: 12000,
-      deductions: 4000,
-      bonuses: 8000,
-      overtime: 3000,
-      grossSalary: 88000,
-      netSalary: 84000,
-      status: 'paid',
-      paymentDate: '2024-12-05',
-      paymentMethod: 'bank_transfer'
-    }
-  ]);
+  const [payrollData, setPayrollData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
@@ -85,15 +34,53 @@ const PayrollManagement = () => {
   const [selectedPayroll, setSelectedPayroll] = useState(null);
   const [monthFilter, setMonthFilter] = useState('');
   const [yearFilter, setYearFilter] = useState('');
+  const [payrollStats, setPayrollStats] = useState({
+    totalEmployees: 0,
+    totalPayroll: 0,
+    averageSalary: 0,
+    highestSalary: 0,
+    lowestSalary: 0,
+    pendingApprovals: 0
+  });
 
-  // Mock data - will be replaced with API calls
-  const payrollStats = {
-    totalEmployees: 24,
-    totalPayroll: 1850000,
-    averageSalary: 77083,
-    highestSalary: 120000,
-    lowestSalary: 45000,
-    pendingApprovals: 3
+  useEffect(() => {
+    loadPayrollData();
+  }, [selectedMonth]);
+
+  const loadPayrollData = async () => {
+    setLoading(true);
+    try {
+      await Promise.all([
+        loadPayrollRecords(),
+        loadPayrollStats()
+      ]);
+    } catch (error) {
+      console.error('Error loading payroll data:', error);
+      toast.error('Failed to load payroll data');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadPayrollRecords = async () => {
+    try {
+      const [month, year] = selectedMonth.split('-');
+      const response = await hrService.getPayrollByMonth(parseInt(month), parseInt(year));
+      setPayrollData(response.data || []);
+    } catch (error) {
+      console.error('Error loading payroll records:', error);
+    }
+  };
+
+  const loadPayrollStats = async () => {
+    try {
+      const response = await hrService.getPayrollSummary();
+      if (response.data) {
+        setPayrollStats(response.data);
+      }
+    } catch (error) {
+      console.error('Error loading payroll stats:', error);
+    }
   };
 
   const pendingPayrolls = payrollData.filter(payroll => payroll.status === 'pending');
@@ -102,12 +89,12 @@ const PayrollManagement = () => {
   const handleGeneratePayroll = async (month, year) => {
     setLoading(true);
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      await hrService.generatePayroll({ month, year });
       toast.success('Payroll generated successfully!');
-      // Update payroll data here
+      await loadPayrollRecords();
     } catch (error) {
-      toast.error('Payroll generation failed. Please try again.');
+      console.error('Payroll generation error:', error);
+      toast.error(error.message || 'Payroll generation failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -116,26 +103,32 @@ const PayrollManagement = () => {
   const handleApprovePayroll = async (payrollId) => {
     setLoading(true);
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await hrService.approvePayroll(payrollId);
       toast.success('Payroll approved successfully!');
-      // Update payroll data here
+      await loadPayrollRecords();
     } catch (error) {
-      toast.error('Approval failed. Please try again.');
+      console.error('Approval error:', error);
+      toast.error(error.message || 'Approval failed. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleMarkAsPaid = async (payrollId) => {
+  const handleMarkAsPaid = async (payrollId, paymentData = {}) => {
     setLoading(true);
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const defaultPaymentData = {
+        paymentDate: new Date().toISOString(),
+        paymentMethod: 'bank_transfer',
+        transactionId: '',
+        ...paymentData
+      };
+      await hrService.markPayrollAsPaid(payrollId, defaultPaymentData);
       toast.success('Payment marked as completed!');
-      // Update payroll data here
+      await loadPayrollRecords();
     } catch (error) {
-      toast.error('Operation failed. Please try again.');
+      console.error('Payment marking error:', error);
+      toast.error(error.message || 'Operation failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -359,22 +352,22 @@ const PayrollManagement = () => {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {payrollData.map((payroll) => (
-                <tr key={payroll.id} className="hover:bg-gray-50">
+                <tr key={payroll._id || payroll.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div className="flex-shrink-0 h-8 w-8">
                         <div className="h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center">
                           <span className="text-xs font-medium text-gray-700">
-                            {payroll.employeeName.split(' ').map(n => n[0]).join('')}
+                            {((payroll.employee?.user?.firstName || '') + (payroll.employee?.user?.lastName || '')).split(' ').map(n => n[0]).join('').substring(0, 2)}
                           </span>
                         </div>
                       </div>
                       <div className="ml-3">
                         <div className="text-sm font-medium text-gray-900">
-                          {payroll.employeeName}
+                          {payroll.employee?.user?.firstName} {payroll.employee?.user?.lastName}
                         </div>
                         <div className="text-xs text-gray-500">
-                          {payroll.employeeId}
+                          {payroll.employee?.employeeId}
                         </div>
                       </div>
                     </div>
@@ -407,7 +400,7 @@ const PayrollManagement = () => {
                       </button>
                       {payroll.status === 'pending' && (
                         <button
-                          onClick={() => handleApprovePayroll(payroll.id)}
+                          onClick={() => handleApprovePayroll(payroll._id || payroll.id)}
                           disabled={loading}
                           className="text-green-600 hover:text-green-900"
                         >
@@ -416,7 +409,7 @@ const PayrollManagement = () => {
                       )}
                       {payroll.status === 'approved' && (
                         <button
-                          onClick={() => handleMarkAsPaid(payroll.id)}
+                          onClick={() => handleMarkAsPaid(payroll._id || payroll.id)}
                           disabled={loading}
                           className="text-purple-600 hover:text-purple-900"
                         >

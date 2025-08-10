@@ -27,8 +27,17 @@ const requestLeave = async (req, res) => {
       workHandover
     } = req.body;
 
+    // Get employee first
+    const employee = await Employee.findOne({ user: req.user._id });
+    if (!employee) {
+      return res.status(400).json({
+        success: false,
+        message: 'Employee profile not found'
+      });
+    }
+
     // Check for date conflicts
-    const conflicts = await Leave.checkConflicts(req.user._id, startDate, endDate);
+    const conflicts = await Leave.checkConflicts(employee._id, startDate, endDate);
     if (conflicts.length > 0) {
       return res.status(400).json({
         success: false,
@@ -37,14 +46,7 @@ const requestLeave = async (req, res) => {
       });
     }
 
-    // Check leave balance
-    const employee = await Employee.findOne({ user: req.user._id });
-    if (!employee) {
-      return res.status(400).json({
-        success: false,
-        message: 'Employee profile not found'
-      });
-    }
+    // Employee already fetched above
 
     const totalDays = Math.ceil((new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24)) + 1;
     
@@ -56,7 +58,7 @@ const requestLeave = async (req, res) => {
     }
 
     const leave = new Leave({
-      employee: req.user._id,
+      employee: employee._id,
       leaveType,
       startDate,
       endDate,
@@ -104,7 +106,10 @@ const getAllLeaves = async (req, res) => {
     } else {
       // If no employeeId, only show own leaves (unless admin/manager)
       if (req.user.role !== 'admin' && req.user.role !== 'manager') {
-        query.employee = req.user._id;
+        const employee = await Employee.findOne({ user: req.user._id });
+        if (employee) {
+          query.employee = employee._id;
+        }
       }
     }
 

@@ -58,8 +58,8 @@ const payrollSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['draft', 'approved', 'paid', 'cancelled'],
-    default: 'draft'
+    enum: ['pending', 'approved', 'paid', 'cancelled'],
+    default: 'pending'
   },
   paymentDate: {
     type: Date
