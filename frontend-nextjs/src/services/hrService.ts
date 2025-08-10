@@ -21,9 +21,7 @@ api.interceptors.request.use(
     }
     return config
   },
-  (error) => {
-    return Promise.reject(error)
-  }
+  (error) => Promise.reject(error)
 )
 
 export interface Employee {
@@ -38,7 +36,7 @@ export interface Employee {
     position: string
     avatar?: string
   }
-  employeeId: string
+  employeeId?: string
   phone: string
   reportingManager?: {
     _id: string
@@ -48,8 +46,8 @@ export interface Employee {
   }
   dateOfJoining: string
   dateOfExit?: string
-  panNumber: string
-  aadharNumber: string
+  panNumber?: string
+  aadharNumber?: string
   linkedin?: string
   skills: string[]
   profilePicture?: {
@@ -61,9 +59,9 @@ export interface Employee {
   salary: {
     base: number
     currency: string
-    effectiveFrom: string
+    effectiveFrom?: string
   }
-  leaveBalance: {
+  leaveBalance?: {
     sick: number
     casual: number
     annual: number
@@ -88,7 +86,7 @@ export interface Employee {
     bankName: string
     branch: string
   }
-  onboardingStatus: {
+  onboardingStatus?: {
     isCompleted: boolean
     completedSteps: Array<{
       step: string
@@ -97,7 +95,7 @@ export interface Employee {
     }>
     pendingSteps: string[]
   }
-  offboardingStatus: {
+  offboardingStatus?: {
     isInitiated: boolean
     initiatedAt?: string
     exitDate?: string
@@ -116,7 +114,7 @@ export interface Leave {
   _id: string
   employee: {
     _id: string
-    user: {
+    user?: {
       firstName: string
       lastName: string
       email: string
@@ -135,7 +133,7 @@ export interface Leave {
   }
   approvedAt?: string
   rejectionReason?: string
-  isHalfDay: boolean
+  isHalfDay?: boolean
   halfDayType?: 'first_half' | 'second_half'
   createdAt: string
   updatedAt: string
@@ -145,16 +143,18 @@ export interface Attendance {
   _id: string
   employee: {
     _id: string
-    user: {
+    user?: {
       firstName: string
       lastName: string
     }
   }
   date: string
-  checkIn: string
-  checkOut?: string
+  checkIn?: { time: string; location?: string; ipAddress?: string }
+  checkOut?: { time: string; location?: string; ipAddress?: string }
   totalHours?: number
-  status: 'present' | 'absent' | 'half_day' | 'leave'
+  status?: 'present' | 'absent' | 'half_day' | 'leave'
+  isApproved?: boolean
+  approvedBy?: any
   notes?: string
   createdAt: string
   updatedAt: string
@@ -172,12 +172,15 @@ export interface Payroll {
   }
   month: number
   year: number
-  baseSalary: number
-  allowances: number
-  deductions: number
-  bonus: number
-  totalSalary: number
-  status: 'pending' | 'paid' | 'cancelled'
+  basicSalary: number
+  allowances?: Record<string, number>
+  deductions?: Record<string, number>
+  bonuses?: Record<string, number>
+  overtime?: { hours: number; amount: number }
+  leaves?: { totalDays: number; amount: number }
+  grossSalary: number
+  netSalary: number
+  status: 'pending' | 'approved' | 'paid' | 'cancelled'
   paidAt?: string
   remarks?: string
   createdAt: string
@@ -195,7 +198,6 @@ export interface HRStats {
 }
 
 export interface EmployeeFilters {
-  search?: string
   department?: string
   status?: string
   workType?: string
@@ -204,11 +206,11 @@ export interface EmployeeFilters {
 }
 
 export const hrService = {
-  // Employee Management
+  // Employees
   getEmployees: async (filters: EmployeeFilters = {}): Promise<{ success: boolean; data: Employee[]; count: number }> => {
     try {
-      const response = await api.get('/employees', { params: filters })
-      return response.data
+      const res = await api.get('/employees', { params: filters })
+      return res.data
     } catch (error: any) {
       console.error('Error fetching employees:', error)
       throw new Error(error.response?.data?.message || 'Failed to fetch employees')
@@ -217,18 +219,18 @@ export const hrService = {
 
   getEmployeeById: async (id: string): Promise<{ success: boolean; data: Employee }> => {
     try {
-      const response = await api.get(`/employees/${id}`)
-      return response.data
+      const res = await api.get(`/employees/${id}`)
+      return res.data
     } catch (error: any) {
       console.error('Error fetching employee:', error)
       throw new Error(error.response?.data?.message || 'Failed to fetch employee')
     }
   },
 
-  createEmployee: async (employeeData: Partial<Employee>): Promise<{ success: boolean; data: Employee }> => {
+  createEmployee: async (employeeData: Partial<Employee> & { userId: string }): Promise<{ success: boolean; data: Employee }> => {
     try {
-      const response = await api.post('/employees', employeeData)
-      return response.data
+      const res = await api.post('/employees', employeeData)
+      return res.data
     } catch (error: any) {
       console.error('Error creating employee:', error)
       throw new Error(error.response?.data?.message || 'Failed to create employee')
@@ -237,29 +239,62 @@ export const hrService = {
 
   updateEmployee: async (id: string, employeeData: Partial<Employee>): Promise<{ success: boolean; data: Employee }> => {
     try {
-      const response = await api.put(`/employees/${id}`, employeeData)
-      return response.data
+      const res = await api.put(`/employees/${id}`, employeeData)
+      return res.data
     } catch (error: any) {
       console.error('Error updating employee:', error)
       throw new Error(error.response?.data?.message || 'Failed to update employee')
     }
   },
 
-  deleteEmployee: async (id: string): Promise<{ success: boolean; message: string }> => {
+  // Attendance
+  getAttendance: async (filters: { employeeId?: string; startDate: string; endDate: string }): Promise<{ success: boolean; data: Attendance[]; count: number }> => {
     try {
-      const response = await api.delete(`/employees/${id}`)
-      return response.data
+      const params: any = { startDate: filters.startDate, endDate: filters.endDate }
+      if (filters.employeeId) params.employeeId = filters.employeeId
+      const res = await api.get('/attendance/range', { params })
+      return res.data
     } catch (error: any) {
-      console.error('Error deleting employee:', error)
-      throw new Error(error.response?.data?.message || 'Failed to delete employee')
+      console.error('Error fetching attendance:', error)
+      throw new Error(error.response?.data?.message || 'Failed to fetch attendance')
     }
   },
 
-  // Leave Management
-  getLeaves: async (filters: { status?: string; employee?: string; startDate?: string; endDate?: string } = {}): Promise<{ success: boolean; data: Leave[]; count: number }> => {
+  getAttendanceToday: async (): Promise<{ success: boolean; data: Attendance[]; count: number }> => {
     try {
-      const response = await api.get('/leaves', { params: filters })
-      return response.data
+      const res = await api.get('/attendance/today')
+      return res.data
+    } catch (error: any) {
+      console.error('Error fetching today attendance:', error)
+      throw new Error(error.response?.data?.message || 'Failed to fetch today attendance')
+    }
+  },
+
+  checkIn: async (payload?: { location?: string; notes?: string }): Promise<{ success: boolean; data: Attendance; message?: string }> => {
+    try {
+      const res = await api.post('/attendance/check-in', payload || {})
+      return res.data
+    } catch (error: any) {
+      console.error('Error checking in:', error)
+      throw new Error(error.response?.data?.message || 'Failed to check in')
+    }
+  },
+
+  checkOut: async (payload?: { location?: string; notes?: string }): Promise<{ success: boolean; data: Attendance; message?: string }> => {
+    try {
+      const res = await api.post('/attendance/check-out', payload || {})
+      return res.data
+    } catch (error: any) {
+      console.error('Error checking out:', error)
+      throw new Error(error.response?.data?.message || 'Failed to check out')
+    }
+  },
+
+  // Leaves
+  getLeaves: async (filters: { status?: string; leaveType?: string; employeeId?: string } = {}): Promise<{ success: boolean; data: Leave[]; count: number }> => {
+    try {
+      const res = await api.get('/leaves', { params: filters })
+      return res.data
     } catch (error: any) {
       console.error('Error fetching leaves:', error)
       throw new Error(error.response?.data?.message || 'Failed to fetch leaves')
@@ -268,88 +303,124 @@ export const hrService = {
 
   createLeave: async (leaveData: Partial<Leave>): Promise<{ success: boolean; data: Leave }> => {
     try {
-      const response = await api.post('/leaves', leaveData)
-      return response.data
+      const res = await api.post('/leaves', leaveData)
+      return res.data
     } catch (error: any) {
       console.error('Error creating leave:', error)
       throw new Error(error.response?.data?.message || 'Failed to create leave')
     }
   },
 
-  updateLeaveStatus: async (id: string, status: string, approvedBy?: string, rejectionReason?: string): Promise<{ success: boolean; data: Leave }> => {
+  approveLeave: async (id: string, comments?: string): Promise<{ success: boolean; data: Leave }> => {
     try {
-      const response = await api.patch(`/leaves/${id}/status`, { status, approvedBy, rejectionReason })
-      return response.data
+      const res = await api.put(`/leaves/${id}/approve`, { comments })
+      return res.data
     } catch (error: any) {
-      console.error('Error updating leave status:', error)
-      throw new Error(error.response?.data?.message || 'Failed to update leave status')
+      console.error('Error approving leave:', error)
+      throw new Error(error.response?.data?.message || 'Failed to approve leave')
     }
   },
 
-  // Attendance Management
-  getAttendance: async (filters: { employee?: string; startDate?: string; endDate?: string } = {}): Promise<{ success: boolean; data: Attendance[]; count: number }> => {
+  rejectLeave: async (id: string, rejectionReason: string): Promise<{ success: boolean; data: Leave }> => {
     try {
-      const response = await api.get('/attendance/range', { params: filters })
-      return response.data
+      const res = await api.put(`/leaves/${id}/reject`, { rejectionReason })
+      return res.data
     } catch (error: any) {
-      console.error('Error fetching attendance:', error)
-      throw new Error(error.response?.data?.message || 'Failed to fetch attendance')
+      console.error('Error rejecting leave:', error)
+      throw new Error(error.response?.data?.message || 'Failed to reject leave')
     }
   },
 
-  checkIn: async (employeeId: string): Promise<{ success: boolean; data: Attendance }> => {
+  cancelLeave: async (id: string): Promise<{ success: boolean; data: Leave }> => {
     try {
-      const response = await api.post('/attendance/checkin', { employeeId })
-      return response.data
+      const res = await api.put(`/leaves/${id}/cancel`)
+      return res.data
     } catch (error: any) {
-      console.error('Error checking in:', error)
-      throw new Error(error.response?.data?.message || 'Failed to check in')
+      console.error('Error cancelling leave:', error)
+      throw new Error(error.response?.data?.message || 'Failed to cancel leave')
     }
   },
 
-  checkOut: async (employeeId: string): Promise<{ success: boolean; data: Attendance }> => {
+  // Payroll
+  getPayroll: async (filters: { month?: number; year?: number; employeeId?: string; status?: string } = {}): Promise<{ success: boolean; data: Payroll[]; count: number }> => {
     try {
-      const response = await api.post('/attendance/checkout', { employeeId })
-      return response.data
-    } catch (error: any) {
-      console.error('Error checking out:', error)
-      throw new Error(error.response?.data?.message || 'Failed to check out')
-    }
-  },
-
-  // Payroll Management
-  getPayroll: async (filters: { month?: number; year?: number; employee?: string } = {}): Promise<{ success: boolean; data: Payroll[]; count: number }> => {
-    try {
-      const response = await api.get('/payroll', { params: filters })
-      return response.data
+      const res = await api.get('/payroll', { params: filters })
+      return res.data
     } catch (error: any) {
       console.error('Error fetching payroll:', error)
       throw new Error(error.response?.data?.message || 'Failed to fetch payroll')
     }
   },
 
-  // HR Dashboard Stats
+  generatePayroll: async (payload: {
+    employeeId: string
+    month: number
+    year: number
+    allowances?: Record<string, number>
+    deductions?: Record<string, number>
+    bonuses?: Record<string, number>
+    remarks?: string
+  }): Promise<{ success: boolean; data: Payroll }> => {
+    try {
+      const res = await api.post('/payroll/generate', payload)
+      return res.data
+    } catch (error: any) {
+      console.error('Error generating payroll:', error)
+      throw new Error(error.response?.data?.message || 'Failed to generate payroll')
+    }
+  },
+
+  approvePayroll: async (id: string): Promise<{ success: boolean; data: Payroll }> => {
+    try {
+      const res = await api.put(`/payroll/${id}/approve`)
+      return res.data
+    } catch (error: any) {
+      console.error('Error approving payroll:', error)
+      throw new Error(error.response?.data?.message || 'Failed to approve payroll')
+    }
+  },
+
+  markPayrollAsPaid: async (
+    id: string,
+    payload: { paymentDate: string; paymentMethod: 'bank_transfer' | 'check' | 'cash' | 'online'; transactionId?: string }
+  ): Promise<{ success: boolean; data: Payroll }> => {
+    try {
+      const res = await api.put(`/payroll/${id}/mark-paid`, payload)
+      return res.data
+    } catch (error: any) {
+      console.error('Error marking payroll as paid:', error)
+      throw new Error(error.response?.data?.message || 'Failed to mark payroll as paid')
+    }
+  },
+
+  getPayrollStatistics: async (): Promise<{ success: boolean; data: any }> => {
+    try {
+      const res = await api.get('/payroll/statistics')
+      return res.data
+    } catch (error: any) {
+      console.error('Error fetching payroll statistics:', error)
+      throw new Error(error.response?.data?.message || 'Failed to fetch payroll statistics')
+    }
+  },
+
+  getDepartmentPayrollStatistics: async (): Promise<{ success: boolean; data: any }> => {
+    try {
+      const res = await api.get('/payroll/department-statistics')
+      return res.data
+    } catch (error: any) {
+      console.error('Error fetching department payroll statistics:', error)
+      throw new Error(error.response?.data?.message || 'Failed to fetch department payroll statistics')
+    }
+  },
+
+  // HR Dashboard
   getHRStats: async (): Promise<{ success: boolean; data: HRStats }> => {
     try {
-      const response = await api.get('/hr/stats')
-      return response.data
+      const res = await api.get('/hr/stats')
+      return res.data
     } catch (error: any) {
       console.error('Error fetching HR stats:', error)
       throw new Error(error.response?.data?.message || 'Failed to fetch HR stats')
     }
   },
-
-  // Export Reports
-  exportReport: async (type: 'employees' | 'attendance' | 'leaves' | 'payroll', filters: any = {}): Promise<Blob> => {
-    try {
-      const response = await api.get(`/hr/export/${type}`, { 
-        params: filters,
-        responseType: 'blob'
-      })
-      return response.data
-    } catch (error: any) {
-      console.error('Error exporting report:', error)
-      throw new Error('Failed to export report')
-    }
-  }
 }
