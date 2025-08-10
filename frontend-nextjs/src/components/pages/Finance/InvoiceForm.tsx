@@ -27,8 +27,39 @@ interface InvoiceFormProps {
   onCancel?: () => void;
 }
 
+interface InvoiceFormData {
+  client?: string;
+  clientDetails: {
+    name: string;
+    email: string;
+    phone?: string;
+    companyName?: string;
+    address?: {
+      line1?: string;
+      line2?: string;
+      city?: string;
+      state?: string;
+      postalCode?: string;
+      country?: string;
+    };
+  };
+  invoiceDate?: string;
+  dueDate?: string;
+  items: InvoiceItem[];
+  currency: 'INR' | 'USD' | 'EUR' | 'GBP';
+  paymentTerms: 'immediate' | 'net_15' | 'net_30' | 'net_45' | 'net_60' | 'custom';
+  discountType: 'percentage' | 'fixed';
+  discountValue?: number;
+  notes?: string;
+  terms?: string;
+  subtotal?: number;
+  taxTotal?: number;
+  discountAmount?: number;
+  total?: number;
+}
+
 const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoiceId, onSave, onCancel }) => {
-  const [invoice, setInvoice] = useState<Partial<Invoice>>({
+  const [invoice, setInvoice] = useState<InvoiceFormData>({
     client: '',
     clientDetails: {
       name: '',
@@ -98,7 +129,27 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoiceId, onSave, onCancel }
     try {
       setLoadingData(true);
       const invoiceData = await InvoiceService.getInvoice(invoiceId);
-      setInvoice(invoiceData);
+      
+      // Convert Invoice to InvoiceFormData
+      const formData: InvoiceFormData = {
+        client: typeof invoiceData.client === 'object' ? invoiceData.client._id : invoiceData.client,
+        clientDetails: invoiceData.clientDetails,
+        invoiceDate: invoiceData.invoiceDate,
+        dueDate: invoiceData.dueDate,
+        items: invoiceData.items,
+        currency: invoiceData.currency,
+        paymentTerms: invoiceData.paymentTerms,
+        discountType: invoiceData.discountType,
+        discountValue: invoiceData.discountValue,
+        notes: invoiceData.notes,
+        terms: invoiceData.terms,
+        subtotal: invoiceData.subtotal,
+        taxTotal: invoiceData.taxTotal,
+        discountAmount: invoiceData.discountAmount,
+        total: invoiceData.total
+      };
+      
+      setInvoice(formData);
     } catch (error: any) {
       console.error('Error loading invoice:', error);
       toast.error('Failed to load invoice');
