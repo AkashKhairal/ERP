@@ -23,6 +23,7 @@ const contentRoutes = require('./src/routes/content');
 const integrationRoutes = require('./src/routes/integrations');
 const hrRoutes = require('./src/routes/hr');
 const invoiceRoutes = require('./src/routes/invoices');
+const subscriptionRoutes = require('./src/routes/subscriptions');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -93,6 +94,7 @@ app.use('/api/content', contentRoutes);
 app.use('/api/integrations', integrationRoutes);
 app.use('/api/hr', hrRoutes);
 app.use('/api/invoices', invoiceRoutes);
+app.use('/api/subscriptions', subscriptionRoutes);
 
 // Notification routes
 const notificationRoutes = require('./src/routes/notifications');

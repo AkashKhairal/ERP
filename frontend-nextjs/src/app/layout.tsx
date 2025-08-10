@@ -3,6 +3,7 @@ import ProtectedRoute from '@/components/Auth/ProtectedRoute'
 import { AuthProvider } from '@/context/AuthContext'
 import { ThemeProvider } from '@/context/ThemeContext'
 import { NotificationProvider } from '@/context/NotificationContext'
+import { SubscriptionProvider } from '@/context/SubscriptionContext'
 import { Toaster } from 'react-hot-toast'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
@@ -31,7 +32,8 @@ export default function AppLayout({
         <GoogleOAuthProvider clientId={googleClientId}>
           <ThemeProvider>
             <AuthProvider>
-              <NotificationProvider>
+              <SubscriptionProvider>
+                <NotificationProvider>
                 <Toaster 
                   position="top-right"
                   toastOptions={{
@@ -46,7 +48,8 @@ export default function AppLayout({
                 <ConditionalLayout>
                   {children}
                 </ConditionalLayout>
-              </NotificationProvider>
+                </NotificationProvider>
+              </SubscriptionProvider>
             </AuthProvider>
           </ThemeProvider>
         </GoogleOAuthProvider>

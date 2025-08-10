@@ -254,7 +254,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoiceId, onSave, onCancel }
     const dueDate = calculateDueDate(terms, invoice.invoiceDate || '');
     setInvoice(prev => ({
       ...prev,
-      paymentTerms: terms,
+      paymentTerms: terms as 'immediate' | 'net_15' | 'net_30' | 'net_45' | 'net_60' | 'custom',
       dueDate
     }));
   };
@@ -279,13 +279,31 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ invoiceId, onSave, onCancel }
         return;
       }
 
+      // Convert InvoiceFormData to Invoice format for API
+      const invoiceData: any = {
+        clientDetails: invoice.clientDetails,
+        items: invoice.items,
+        currency: invoice.currency,
+        paymentTerms: invoice.paymentTerms,
+        discountType: invoice.discountType,
+        discountValue: invoice.discountValue,
+        notes: invoice.notes,
+        invoiceDate: invoice.invoiceDate,
+        dueDate: invoice.dueDate
+      };
+
+      // Only include client ID if it's provided
+      if (invoice.client && invoice.client.trim()) {
+        invoiceData.client = invoice.client;
+      }
+
       let savedInvoice: Invoice;
       
       if (invoiceId) {
-        savedInvoice = await InvoiceService.updateInvoice(invoiceId, invoice);
+        savedInvoice = await InvoiceService.updateInvoice(invoiceId, invoiceData);
         toast.success('Invoice updated successfully');
       } else {
-        savedInvoice = await InvoiceService.createInvoice(invoice);
+        savedInvoice = await InvoiceService.createInvoice(invoiceData);
         toast.success('Invoice created successfully');
       }
 

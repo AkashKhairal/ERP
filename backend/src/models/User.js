@@ -84,13 +84,63 @@ const userSchema = new mongoose.Schema({
   customPermissions: [{
     module: {
       type: String,
-      enum: ['users', 'teams', 'employees', 'attendance', 'leaves', 'payroll', 'projects', 'tasks', 'sprints', 'finance', 'analytics', 'content', 'integrations']
+      enum: ['users', 'teams', 'employees', 'attendance', 'leaves', 'payroll', 'projects', 'tasks', 'sprints', 'finance', 'analytics', 'content', 'integrations', 'billing']
     },
     actions: [{
       type: String,
       enum: ['create', 'read', 'update', 'delete', 'approve', 'export']
     }]
   }],
+  
+  // Subscription and billing information
+  subscription: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Subscription'
+  },
+  plan: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Plan'
+  },
+  billingInfo: {
+    customerId: {
+      razorpay: String,
+      stripe: String
+    },
+    paymentMethods: [{
+      id: String,
+      gateway: {
+        type: String,
+        enum: ['razorpay', 'stripe']
+      },
+      type: {
+        type: String,
+        enum: ['card', 'upi', 'netbanking', 'wallet']
+      },
+      last4: String,
+      brand: String,
+      isDefault: {
+        type: Boolean,
+        default: false
+      },
+      addedAt: {
+        type: Date,
+        default: Date.now
+      }
+    }],
+    billingAddress: {
+      line1: String,
+      line2: String,
+      city: String,
+      state: String,
+      postalCode: String,
+      country: {
+        type: String,
+        default: 'India'
+      }
+    },
+    taxId: String, // GST number for Indian customers
+    companyName: String
+  },
   preferences: {
     theme: {
       type: String,
