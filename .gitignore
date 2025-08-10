@@ -1,0 +1,12 @@
+<<<<<<< HEAD
+node_modules
+=======
+node_modules/
+.next/
+.env*
+dist/
+build/
+coverage/
+.DS_Store
+npm-debug.log*
+>>>>>>> 83623c6 (feat(hr): production-ready HR module with live API integration, employee CRUD, leave approvals, attendance/payroll, RBAC, and export)
