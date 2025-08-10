@@ -111,14 +111,20 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
 
     setLoading(true);
     try {
-          const { receipt, ...formDataWithoutReceipt } = formData;
-    const submitData = {
-      ...formDataWithoutReceipt,
+          // Create API-compatible payload
+    const submitData: any = {
+      type: formData.type,
+      category: formData.category,
       amount: parseFloat(formData.amount),
-      linkedProject: formData.linkedProject || undefined,
-      linkedEmployee: formData.linkedEmployee || undefined,
+      description: formData.description,
+      date: formData.date,
+      paymentMethod: formData.paymentMethod,
+      status: formData.status,
+      notes: formData.notes,
       tags: formData.tags.filter(tag => tag.trim() !== ''),
-      // Note: File upload would be handled separately in a real implementation
+      // Send only IDs for linked entities - backend will populate full objects
+      ...(formData.linkedProject && { linkedProject: formData.linkedProject }),
+      ...(formData.linkedEmployee && { linkedEmployee: formData.linkedEmployee }),
     };
 
       let result;
