@@ -34,6 +34,10 @@ const HRDashboard = () => {
   // Auxiliary
   const [allUsers, setAllUsers] = useState<any[]>([])
   const [creatingEmployee, setCreatingEmployee] = useState(false)
+  const [viewingEmployee, setViewingEmployee] = useState<Employee | null>(null)
+  const [editingEmployee, setEditingEmployee] = useState<Employee | null>(null)
+  const [creatingLeave, setCreatingLeave] = useState(false)
+  const [generatingPayroll, setGeneratingPayroll] = useState(false)
 
   const attendanceChartData = useMemo(
     () => [
@@ -73,10 +77,16 @@ const HRDashboard = () => {
       setLeaves(leavesRes.data || [])
       setPayroll(payrollRes.data || [])
 
-      const todays = (todayAttRes.data || []) as any[]
-      const present = todays.filter((a) => a.checkIn && !a.checkOut).length || 0
-      const absent = todays.filter((a) => a.status === 'absent').length || 0
-      const late = 0
+      const todaysAttendance = (todayAttRes.data || []) as any[]
+      const present = todaysAttendance.filter((a) => a.status === 'present' && a.checkIn).length
+      const absent = todaysAttendance.filter((a) => a.status === 'absent').length
+      const late = todaysAttendance.filter((a) => {
+        if (!a.checkIn?.time) return false
+        const checkInTime = new Date(a.checkIn.time)
+        const lateThreshold = new Date()
+        lateThreshold.setHours(9, 15, 0, 0) // 9:15 AM threshold
+        return checkInTime > lateThreshold && a.status === 'present'
+      }).length
       setTodayAttendanceCount({ present, absent, late })
     } catch (e: any) {
       toast.error(e?.message || 'Failed to load HR data')
@@ -248,6 +258,48 @@ const HRDashboard = () => {
       await loadAll()
     } catch (e: any) {
       toast.error(e?.message || 'Failed to create employee')
+    }
+  }
+
+  const onViewEmployee = (employee: Employee) => {
+    setViewingEmployee(employee)
+  }
+
+  const onEditEmployee = (employee: Employee) => {
+    setEditingEmployee(employee)
+  }
+
+  const onSaveEmployee = async (updatedData: Partial<Employee>) => {
+    if (!editingEmployee) return
+    try {
+      await hrService.updateEmployee(editingEmployee._id, updatedData)
+      toast.success('Employee updated successfully')
+      setEditingEmployee(null)
+      await loadAll()
+    } catch (e: any) {
+      toast.error(e?.message || 'Failed to update employee')
+    }
+  }
+
+  const onCreateLeave = async (leaveData: Partial<Leave>) => {
+    try {
+      await hrService.createLeave(leaveData)
+      toast.success('Leave request submitted successfully')
+      setCreatingLeave(false)
+      await loadAll()
+    } catch (e: any) {
+      toast.error(e?.message || 'Failed to create leave request')
+    }
+  }
+
+  const onGeneratePayroll = async (month: number, year: number) => {
+    try {
+      await hrService.generatePayroll({ month, year })
+      toast.success('Payroll generated successfully for all employees')
+      setGeneratingPayroll(false)
+      await loadAll()
+    } catch (e: any) {
+      toast.error(e?.message || 'Failed to generate payroll')
     }
   }
 
@@ -431,10 +483,10 @@ const HRDashboard = () => {
                 </div>
                 <div className="flex items-center space-x-2">
                   <Badge className={getStatusColor(employee.status)}>{employee.status}</Badge>
-                  <Button variant="outline" size="sm">
+                  <Button variant="outline" size="sm" onClick={() => onViewEmployee(employee)}>
                     <Eye className="h-4 w-4" />
                   </Button>
-                  <Button variant="outline" size="sm">
+                  <Button variant="outline" size="sm" onClick={() => onEditEmployee(employee)}>
                     <Edit className="h-4 w-4" />
                   </Button>
                 </div>
@@ -481,17 +533,32 @@ const HRDashboard = () => {
 
   const renderLeavesTab = () => (
     <div className="space-y-4">
+      <div className="flex justify-between items-center">
+        <div>
+          <h2 className="text-lg font-semibold">Leave Management</h2>
+          <p className="text-sm text-muted-foreground">Approve and manage leave requests</p>
+        </div>
+        <Button onClick={() => setCreatingLeave(true)}>
+          <Plus className="h-4 w-4 mr-2" />
+          Request Leave
+        </Button>
+      </div>
       <Card>
         <CardHeader>
-          <CardTitle>Leave Management</CardTitle>
-          <CardDescription>Approve and manage leave requests</CardDescription>
+          <CardTitle>Leave Requests</CardTitle>
+          <CardDescription>Current leave requests and their status</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             {leaves.map((leave) => (
               <div key={leave._id} className="flex items-center justify-between p-4 border rounded-lg">
                 <div>
-                  <h3 className="font-medium">{leave.employee?._id}</h3>
+                  <h3 className="font-medium">
+                    {leave.employee?.user?.firstName && leave.employee?.user?.lastName 
+                      ? `${leave.employee.user.firstName} ${leave.employee.user.lastName}`
+                      : leave.employee?.user?.email || leave.employee?._id || 'Unknown Employee'
+                    }
+                  </h3>
                   <p className="text-sm text-muted-foreground">
                     {leave.leaveType} Leave - {leave.startDate?.slice(0, 10)} to {leave.endDate?.slice(0, 10)} ({leave.totalDays} days)
                   </p>
@@ -522,10 +589,20 @@ const HRDashboard = () => {
 
   const renderPayrollTab = () => (
     <div className="space-y-4">
+      <div className="flex justify-between items-center">
+        <div>
+          <h2 className="text-lg font-semibold">Payroll Management</h2>
+          <p className="text-sm text-muted-foreground">Manage salaries and payroll processing</p>
+        </div>
+        <Button onClick={() => setGeneratingPayroll(true)}>
+          <Plus className="h-4 w-4 mr-2" />
+          Generate Payroll
+        </Button>
+      </div>
       <Card>
         <CardHeader>
-          <CardTitle>Payroll Management</CardTitle>
-          <CardDescription>Manage salaries and payroll processing</CardDescription>
+          <CardTitle>Current Month Payroll</CardTitle>
+          <CardDescription>Payroll records for the current month</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4">
@@ -536,7 +613,7 @@ const HRDashboard = () => {
                   <div className="text-xs text-muted-foreground">
                     {p.month}/{p.year} • Net: {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(p.netSalary || 0)} • {p.status}
                   </div>
-                </div>
+              </div>
                 <div className="space-x-2">
                   {p.status === 'pending' && (
                     <Button size="sm" variant="outline" onClick={async () => { await hrService.approvePayroll(p._id); toast.success('Payroll approved'); await loadAll() }}>Approve</Button>
@@ -545,7 +622,7 @@ const HRDashboard = () => {
                     <Button size="sm" onClick={async () => { const today = new Date().toISOString(); await hrService.markPayrollAsPaid(p._id, { paymentDate: today, paymentMethod: 'bank_transfer' }); toast.success('Marked as paid'); await loadAll() }}>Mark Paid</Button>
                   )}
               </div>
-              </div>
+            </div>
             ))}
           </div>
         </CardContent>
@@ -605,6 +682,290 @@ const HRDashboard = () => {
           {renderTabContent()}
         </TabsContent>
       </Tabs>
+
+      {/* Employee View Modal */}
+      {viewingEmployee && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-bold">Employee Details</h2>
+              <Button variant="outline" size="sm" onClick={() => setViewingEmployee(null)}>✕</Button>
+            </div>
+            <div className="space-y-4">
+              <div className="flex items-center space-x-4">
+                <img
+                  src={viewingEmployee.user?.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(`${viewingEmployee.user?.firstName || ''} ${viewingEmployee.user?.lastName || ''}`)}`}
+                  alt={`${viewingEmployee.user?.firstName || ''} ${viewingEmployee.user?.lastName || ''}`}
+                  className="h-16 w-16 rounded-full"
+                />
+                <div>
+                  <h3 className="text-lg font-medium">{viewingEmployee.user?.firstName} {viewingEmployee.user?.lastName}</h3>
+                  <p className="text-sm text-muted-foreground">{viewingEmployee.user?.position}</p>
+                  <p className="text-sm text-muted-foreground">{viewingEmployee.user?.email}</p>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-medium">Department</label>
+                  <p className="text-sm">{viewingEmployee.user?.department || 'N/A'}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium">Phone</label>
+                  <p className="text-sm">{viewingEmployee.phone || 'N/A'}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium">Work Type</label>
+                  <p className="text-sm">{viewingEmployee.workType || 'N/A'}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium">Status</label>
+                  <Badge className={getStatusColor(viewingEmployee.status)}>{viewingEmployee.status}</Badge>
+                </div>
+                <div>
+                  <label className="text-sm font-medium">Date of Joining</label>
+                  <p className="text-sm">{viewingEmployee.dateOfJoining ? new Date(viewingEmployee.dateOfJoining).toLocaleDateString() : 'N/A'}</p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium">Base Salary</label>
+                  <p className="text-sm">{viewingEmployee.salary?.base ? `${viewingEmployee.salary.currency || 'USD'} ${viewingEmployee.salary.base}` : 'N/A'}</p>
+                </div>
+              </div>
+              {viewingEmployee.skills && viewingEmployee.skills.length > 0 && (
+                <div>
+                  <label className="text-sm font-medium">Skills</label>
+                  <div className="flex flex-wrap gap-1 mt-1">
+                    {viewingEmployee.skills.map((skill, idx) => (
+                      <Badge key={idx} variant="outline">{skill}</Badge>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Employee Edit Modal */}
+      {editingEmployee && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-bold">Edit Employee</h2>
+              <Button variant="outline" size="sm" onClick={() => setEditingEmployee(null)}>✕</Button>
+            </div>
+            <form onSubmit={(e) => {
+              e.preventDefault()
+              const formData = new FormData(e.currentTarget)
+              const updates = {
+                phone: formData.get('phone') as string,
+                workType: formData.get('workType') as any,
+                status: formData.get('status') as any,
+                salary: {
+                  base: parseInt(formData.get('salary') as string) || 0,
+                  currency: formData.get('currency') as string || 'USD'
+                }
+              }
+              onSaveEmployee(updates)
+            }}>
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-sm font-medium">Phone</label>
+                    <Input name="phone" defaultValue={editingEmployee.phone || ''} />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">Work Type</label>
+                    <Select name="workType" defaultValue={editingEmployee.workType}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="full_time">Full Time</SelectItem>
+                        <SelectItem value="freelancer">Freelancer</SelectItem>
+                        <SelectItem value="intern">Intern</SelectItem>
+                        <SelectItem value="contract">Contract</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">Status</label>
+                    <Select name="status" defaultValue={editingEmployee.status}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="active">Active</SelectItem>
+                        <SelectItem value="exited">Exited</SelectItem>
+                        <SelectItem value="on_leave">On Leave</SelectItem>
+                        <SelectItem value="suspended">Suspended</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">Base Salary</label>
+                    <div className="flex space-x-2">
+                      <Input name="salary" type="number" defaultValue={editingEmployee.salary?.base || 0} />
+                      <Select name="currency" defaultValue={editingEmployee.salary?.currency || 'USD'}>
+                        <SelectTrigger className="w-20">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="USD">USD</SelectItem>
+                          <SelectItem value="INR">INR</SelectItem>
+                          <SelectItem value="EUR">EUR</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex justify-end space-x-2">
+                  <Button type="button" variant="outline" onClick={() => setEditingEmployee(null)}>Cancel</Button>
+                  <Button type="submit">Save Changes</Button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Create Leave Modal */}
+      {creatingLeave && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-bold">Request Leave</h2>
+              <Button variant="outline" size="sm" onClick={() => setCreatingLeave(false)}>✕</Button>
+            </div>
+            <form onSubmit={(e) => {
+              e.preventDefault()
+              const formData = new FormData(e.currentTarget)
+              const startDate = formData.get('startDate') as string
+              const endDate = formData.get('endDate') as string
+              const start = new Date(startDate)
+              const end = new Date(endDate)
+              const totalDays = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1
+              
+              const leaveData = {
+                leaveType: formData.get('leaveType') as any,
+                startDate,
+                endDate,
+                totalDays,
+                reason: formData.get('reason') as string,
+              }
+              onCreateLeave(leaveData)
+            }}>
+              <div className="space-y-4">
+                <div>
+                  <label className="text-sm font-medium">Leave Type</label>
+                  <Select name="leaveType" required>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select leave type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="sick">Sick Leave</SelectItem>
+                      <SelectItem value="casual">Casual Leave</SelectItem>
+                      <SelectItem value="annual">Annual Leave</SelectItem>
+                      <SelectItem value="unpaid">Unpaid Leave</SelectItem>
+                      <SelectItem value="maternity">Maternity Leave</SelectItem>
+                      <SelectItem value="paternity">Paternity Leave</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-sm font-medium">Start Date</label>
+                    <Input name="startDate" type="date" required />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">End Date</label>
+                    <Input name="endDate" type="date" required />
+                  </div>
+                </div>
+                <div>
+                  <label className="text-sm font-medium">Reason</label>
+                  <textarea 
+                    name="reason" 
+                    className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm" 
+                    rows={3}
+                    placeholder="Please provide a reason for your leave request"
+                    required
+                  />
+                </div>
+                <div className="flex justify-end space-x-2">
+                  <Button type="button" variant="outline" onClick={() => setCreatingLeave(false)}>Cancel</Button>
+                  <Button type="submit">Submit Request</Button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Generate Payroll Modal */}
+      {generatingPayroll && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-bold">Generate Payroll</h2>
+              <Button variant="outline" size="sm" onClick={() => setGeneratingPayroll(false)}>✕</Button>
+            </div>
+            <form onSubmit={(e) => {
+              e.preventDefault()
+              const formData = new FormData(e.currentTarget)
+              const month = parseInt(formData.get('month') as string)
+              const year = parseInt(formData.get('year') as string)
+              onGeneratePayroll(month, year)
+            }}>
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-sm font-medium">Month</label>
+                    <Select name="month" defaultValue={String(new Date().getMonth() + 1)}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="1">January</SelectItem>
+                        <SelectItem value="2">February</SelectItem>
+                        <SelectItem value="3">March</SelectItem>
+                        <SelectItem value="4">April</SelectItem>
+                        <SelectItem value="5">May</SelectItem>
+                        <SelectItem value="6">June</SelectItem>
+                        <SelectItem value="7">July</SelectItem>
+                        <SelectItem value="8">August</SelectItem>
+                        <SelectItem value="9">September</SelectItem>
+                        <SelectItem value="10">October</SelectItem>
+                        <SelectItem value="11">November</SelectItem>
+                        <SelectItem value="12">December</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium">Year</label>
+                    <Select name="year" defaultValue={String(new Date().getFullYear())}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="2024">2024</SelectItem>
+                        <SelectItem value="2025">2025</SelectItem>
+                        <SelectItem value="2026">2026</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                <div className="text-sm text-muted-foreground">
+                  This will generate payroll for all active employees for the selected month and year.
+                </div>
+                <div className="flex justify-end space-x-2">
+                  <Button type="button" variant="outline" onClick={() => setGeneratingPayroll(false)}>Cancel</Button>
+                  <Button type="submit">Generate Payroll</Button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

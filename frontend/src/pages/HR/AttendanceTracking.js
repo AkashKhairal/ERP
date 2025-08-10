@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Clock, 
   CheckCircle,
@@ -15,85 +15,91 @@ import { Input } from '../../components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../components/ui/table';
 import toast from 'react-hot-toast';
+import { useAuth } from '../../context/AuthContext';
+import { hrService } from '../../services/hrService';
 
 const AttendanceTracking = () => {
+  const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
+  const [todayAttendance, setTodayAttendance] = useState(null);
+  const [attendanceLogs, setAttendanceLogs] = useState([]);
+  const [attendanceStats, setAttendanceStats] = useState({
+    present: 0,
+    absent: 0,
+    pending: 0,
+    avgHours: 0
+  });
 
-  // Mock data - will be replaced with API calls
-  const todayAttendance = {
-    checkIn: '09:00 AM',
-    checkOut: null,
-    totalHours: 0,
-    status: 'present',
-    location: 'Office'
+  useEffect(() => {
+    loadInitialData();
+  }, [selectedDate]);
+
+  const loadInitialData = async () => {
+    setLoading(true);
+    try {
+      await Promise.all([
+        loadTodayAttendance(),
+        loadAttendanceLogs(),
+        loadAttendanceStats()
+      ]);
+    } catch (error) {
+      console.error('Error loading attendance data:', error);
+      toast.error('Failed to load attendance data');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const attendanceLogs = [
-    {
-      id: 1,
-      employeeId: 'EMP001',
-      employeeName: 'John Doe',
-      date: '2024-12-03',
-      checkIn: '09:00 AM',
-      checkOut: '06:00 PM',
-      totalHours: 9,
-      status: 'present',
-      location: 'Office',
-      isApproved: true
-    },
-    {
-      id: 2,
-      employeeId: 'EMP002',
-      employeeName: 'Jane Smith',
-      date: '2024-12-03',
-      checkIn: '08:45 AM',
-      checkOut: '05:30 PM',
-      totalHours: 8.75,
-      status: 'present',
-      location: 'Office',
-      isApproved: true
-    },
-    {
-      id: 3,
-      employeeId: 'EMP003',
-      employeeName: 'Mike Johnson',
-      date: '2024-12-03',
-      checkIn: null,
-      checkOut: null,
-      totalHours: 0,
-      status: 'absent',
-      location: null,
-      isApproved: false
-    },
-    {
-      id: 4,
-      employeeId: 'EMP004',
-      employeeName: 'Sarah Wilson',
-      date: '2024-12-03',
-      checkIn: '10:15 AM',
-      checkOut: null,
-      totalHours: 0,
-      status: 'present',
-      location: 'Office',
-      isApproved: false
+  const loadTodayAttendance = async () => {
+    try {
+      const response = await hrService.getMyTodayAttendance();
+      setTodayAttendance(response.data);
+    } catch (error) {
+      console.error('Error loading today attendance:', error);
     }
-  ];
+  };
+
+  const loadAttendanceLogs = async () => {
+    try {
+      const response = await hrService.getAttendanceByDate(selectedDate);
+      setAttendanceLogs(response.data || []);
+    } catch (error) {
+      console.error('Error loading attendance logs:', error);
+    }
+  };
+
+  const loadAttendanceStats = async () => {
+    try {
+      const response = await hrService.getAttendanceToday();
+      const logs = response.data || [];
+      const present = logs.filter(log => log.status === 'present').length;
+      const absent = logs.filter(log => log.status === 'absent').length;
+      const pending = logs.filter(log => !log.isApproved).length;
+      const avgHours = logs.reduce((sum, log) => sum + (log.totalHours || 0), 0) / (logs.length || 1);
+      
+      setAttendanceStats({ present, absent, pending, avgHours: Math.round(avgHours * 10) / 10 });
+    } catch (error) {
+      console.error('Error loading attendance stats:', error);
+    }
+  };
 
   const pendingApprovals = attendanceLogs.filter(log => !log.isApproved);
 
-  // Mock functions - will be replaced with actual API calls
   const handleCheckIn = async () => {
     setLoading(true);
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const location = 'Office'; // Could be detected via geolocation
+      const notes = '';
+      await hrService.checkIn({ location, notes });
       toast.success('Check-in successful!');
-      // Update attendance data here
+      await loadTodayAttendance();
+      await loadAttendanceStats();
     } catch (error) {
-      toast.error('Check-in failed. Please try again.');
+      console.error('Check-in error:', error);
+      toast.error(error.message || 'Check-in failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -102,12 +108,15 @@ const AttendanceTracking = () => {
   const handleCheckOut = async () => {
     setLoading(true);
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const location = 'Office';
+      const notes = '';
+      await hrService.checkOut({ location, notes });
       toast.success('Check-out successful!');
-      // Update attendance data here
+      await loadTodayAttendance();
+      await loadAttendanceStats();
     } catch (error) {
-      toast.error('Check-out failed. Please try again.');
+      console.error('Check-out error:', error);
+      toast.error(error.message || 'Check-out failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -116,12 +125,13 @@ const AttendanceTracking = () => {
   const handleApproveAttendance = async (attendanceId) => {
     setLoading(true);
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await hrService.approveAttendance(attendanceId);
       toast.success('Attendance approved successfully!');
-      // Update attendance data here
+      await loadAttendanceLogs();
+      await loadAttendanceStats();
     } catch (error) {
-      toast.error('Approval failed. Please try again.');
+      console.error('Approval error:', error);
+      toast.error(error.message || 'Approval failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -179,58 +189,77 @@ const AttendanceTracking = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="text-center">
-            <div className="text-2xl font-bold text-gray-900 mb-2">
-              {todayAttendance.checkIn || '--:--'}
-            </div>
-            <div className="text-sm text-gray-600">Check In</div>
+        {loading && !todayAttendance ? (
+          <div className="text-center py-8">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+            <p className="mt-2 text-gray-500">Loading attendance data...</p>
           </div>
-          
-          <div className="text-center">
-            <div className="text-2xl font-bold text-gray-900 mb-2">
-              {todayAttendance.checkOut || '--:--'}
+        ) : (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-gray-900 mb-2">
+                  {todayAttendance?.checkIn?.time ? 
+                    new Date(todayAttendance.checkIn.time).toLocaleTimeString('en-US', { 
+                      hour: '2-digit', 
+                      minute: '2-digit' 
+                    }) : '--:--'
+                  }
+                </div>
+                <div className="text-sm text-gray-600">Check In</div>
+              </div>
+              
+              <div className="text-center">
+                <div className="text-2xl font-bold text-gray-900 mb-2">
+                  {todayAttendance?.checkOut?.time ? 
+                    new Date(todayAttendance.checkOut.time).toLocaleTimeString('en-US', { 
+                      hour: '2-digit', 
+                      minute: '2-digit' 
+                    }) : '--:--'
+                  }
+                </div>
+                <div className="text-sm text-gray-600">Check Out</div>
+              </div>
+              
+              <div className="text-center">
+                <div className="text-2xl font-bold text-gray-900 mb-2">
+                  {todayAttendance?.totalHours || 0}h
+                </div>
+                <div className="text-sm text-gray-600">Total Hours</div>
+              </div>
             </div>
-            <div className="text-sm text-gray-600">Check Out</div>
-          </div>
-          
-          <div className="text-center">
-            <div className="text-2xl font-bold text-gray-900 mb-2">
-              {todayAttendance.totalHours}h
-            </div>
-            <div className="text-sm text-gray-600">Total Hours</div>
-          </div>
-        </div>
 
-        <div className="mt-6 flex justify-center space-x-4">
-          {!todayAttendance.checkIn ? (
-            <button
-              onClick={handleCheckIn}
-              disabled={loading}
-              className="btn-primary flex items-center"
-            >
-              <CheckCircle className="w-4 h-4 mr-2" />
-              {loading ? 'Checking In...' : 'Check In'}
-            </button>
-          ) : !todayAttendance.checkOut ? (
-            <button
-              onClick={handleCheckOut}
-              disabled={loading}
-              className="btn-secondary flex items-center"
-            >
-              <XCircle className="w-4 h-4 mr-2" />
-              {loading ? 'Checking Out...' : 'Check Out'}
-            </button>
-          ) : (
-            <div className="text-green-600 font-medium">Day Complete!</div>
-          )}
-        </div>
+            <div className="mt-6 flex justify-center space-x-4">
+              {!todayAttendance?.checkIn?.time ? (
+                <button
+                  onClick={handleCheckIn}
+                  disabled={loading}
+                  className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 flex items-center"
+                >
+                  <CheckCircle className="w-4 h-4 mr-2" />
+                  {loading ? 'Checking In...' : 'Check In'}
+                </button>
+              ) : !todayAttendance?.checkOut?.time ? (
+                <button
+                  onClick={handleCheckOut}
+                  disabled={loading}
+                  className="px-6 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 disabled:opacity-50 flex items-center"
+                >
+                  <XCircle className="w-4 h-4 mr-2" />
+                  {loading ? 'Checking Out...' : 'Check Out'}
+                </button>
+              ) : (
+                <div className="text-green-600 font-medium">Day Complete!</div>
+              )}
+            </div>
 
-        {todayAttendance.location && (
-          <div className="mt-4 text-center text-sm text-gray-600">
-            <MapPin className="w-4 h-4 inline mr-1" />
-            Location: {todayAttendance.location}
-          </div>
+            {todayAttendance?.checkIn?.location && (
+              <div className="mt-4 text-center text-sm text-gray-600">
+                <MapPin className="w-4 h-4 inline mr-1" />
+                Location: {todayAttendance.checkIn.location}
+              </div>
+            )}
+          </>
         )}
       </div>
 
@@ -322,61 +351,82 @@ const AttendanceTracking = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {attendanceLogs.map((log) => (
-                <tr key={log.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      <div className="flex-shrink-0 h-8 w-8">
-                        <div className="h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center">
-                          <span className="text-xs font-medium text-gray-700">
-                            {log.employeeName.split(' ').map(n => n[0]).join('')}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="ml-3">
-                        <div className="text-sm font-medium text-gray-900">
-                          {log.employeeName}
-                        </div>
-                        <div className="text-xs text-gray-500">
-                          {log.employeeId}
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {new Date(log.date).toLocaleDateString()}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {log.checkIn || '--:--'}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {log.checkOut || '--:--'}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {log.totalHours}h
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {getStatusBadge(log.status)}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {getApprovalBadge(log.isApproved)}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    {!log.isApproved && (
-                      <button
-                        onClick={() => handleApproveAttendance(log.id)}
-                        disabled={loading}
-                        className="text-green-600 hover:text-green-900 mr-3"
-                      >
-                        Approve
-                      </button>
-                    )}
-                    <button className="text-blue-600 hover:text-blue-900">
-                      View
-                    </button>
+              {loading && attendanceLogs.length === 0 ? (
+                <tr>
+                  <td colSpan="8" className="px-6 py-12 text-center">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+                    <p className="mt-2 text-gray-500">Loading attendance records...</p>
                   </td>
                 </tr>
-              ))}
+              ) : attendanceLogs.length === 0 ? (
+                <tr>
+                  <td colSpan="8" className="px-6 py-12 text-center text-gray-500">
+                    No attendance records found for this date.
+                  </td>
+                </tr>
+              ) : (
+                attendanceLogs.map((log) => (
+                  <tr key={log._id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center">
+                        <div className="flex-shrink-0 h-8 w-8">
+                          <div className="h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center">
+                            <span className="text-xs font-medium text-gray-700">
+                              {((log.employee?.user?.firstName || '') + (log.employee?.user?.lastName || '')).split(' ').map(n => n[0]).join('').substring(0, 2)}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="ml-3">
+                          <div className="text-sm font-medium text-gray-900">
+                            {log.employee?.user?.firstName} {log.employee?.user?.lastName}
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            {log.employee?.employeeId}
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      {new Date(log.date).toLocaleDateString()}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      {log.checkIn?.time ? new Date(log.checkIn.time).toLocaleTimeString('en-US', { 
+                        hour: '2-digit', 
+                        minute: '2-digit' 
+                      }) : '--:--'}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      {log.checkOut?.time ? new Date(log.checkOut.time).toLocaleTimeString('en-US', { 
+                        hour: '2-digit', 
+                        minute: '2-digit' 
+                      }) : '--:--'}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      {log.totalHours || 0}h
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {getStatusBadge(log.status)}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {getApprovalBadge(log.isApproved)}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      {!log.isApproved && user?.role && ['admin', 'manager'].includes(user.role) && (
+                        <button
+                          onClick={() => handleApproveAttendance(log._id)}
+                          disabled={loading}
+                          className="text-green-600 hover:text-green-900 mr-3 disabled:opacity-50"
+                        >
+                          Approve
+                        </button>
+                      )}
+                      <button className="text-blue-600 hover:text-blue-900">
+                        View
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
@@ -391,7 +441,7 @@ const AttendanceTracking = () => {
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Present Today</p>
-              <p className="text-2xl font-bold text-gray-900">3</p>
+              <p className="text-2xl font-bold text-gray-900">{attendanceStats.present}</p>
             </div>
           </div>
         </div>
@@ -403,7 +453,7 @@ const AttendanceTracking = () => {
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Absent Today</p>
-              <p className="text-2xl font-bold text-gray-900">1</p>
+              <p className="text-2xl font-bold text-gray-900">{attendanceStats.absent}</p>
             </div>
           </div>
         </div>
@@ -415,7 +465,7 @@ const AttendanceTracking = () => {
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Pending Approval</p>
-              <p className="text-2xl font-bold text-gray-900">2</p>
+              <p className="text-2xl font-bold text-gray-900">{attendanceStats.pending}</p>
             </div>
           </div>
         </div>
@@ -427,7 +477,7 @@ const AttendanceTracking = () => {
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Avg. Hours</p>
-              <p className="text-2xl font-bold text-gray-900">8.9h</p>
+              <p className="text-2xl font-bold text-gray-900">{attendanceStats.avgHours}h</p>
             </div>
           </div>
         </div>

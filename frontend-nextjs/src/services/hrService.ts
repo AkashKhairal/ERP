@@ -262,11 +262,21 @@ export const hrService = {
 
   getAttendanceToday: async (): Promise<{ success: boolean; data: Attendance[]; count: number }> => {
     try {
-      const res = await api.get('/attendance/today')
+      const res = await api.get('/attendance/today/all')
       return res.data
     } catch (error: any) {
       console.error('Error fetching today attendance:', error)
       throw new Error(error.response?.data?.message || 'Failed to fetch today attendance')
+    }
+  },
+
+  getMyTodayAttendance: async (): Promise<{ success: boolean; data: Attendance | null }> => {
+    try {
+      const res = await api.get('/attendance/today')
+      return res.data
+    } catch (error: any) {
+      console.error('Error fetching my today attendance:', error)
+      throw new Error(error.response?.data?.message || 'Failed to fetch my today attendance')
     }
   },
 
@@ -290,6 +300,26 @@ export const hrService = {
     }
   },
 
+  getAttendanceByDate: async (date: string): Promise<{ success: boolean; data: Attendance[]; count: number }> => {
+    try {
+      const res = await api.get('/attendance/date', { params: { date } })
+      return res.data
+    } catch (error: any) {
+      console.error('Error fetching attendance by date:', error)
+      throw new Error(error.response?.data?.message || 'Failed to fetch attendance by date')
+    }
+  },
+
+  approveAttendance: async (id: string): Promise<{ success: boolean; data: Attendance }> => {
+    try {
+      const res = await api.put(`/attendance/${id}/approve`)
+      return res.data
+    } catch (error: any) {
+      console.error('Error approving attendance:', error)
+      throw new Error(error.response?.data?.message || 'Failed to approve attendance')
+    }
+  },
+
   // Leaves
   getLeaves: async (filters: { status?: string; leaveType?: string; employeeId?: string } = {}): Promise<{ success: boolean; data: Leave[]; count: number }> => {
     try {
@@ -298,6 +328,22 @@ export const hrService = {
     } catch (error: any) {
       console.error('Error fetching leaves:', error)
       throw new Error(error.response?.data?.message || 'Failed to fetch leaves')
+    }
+  },
+
+  // Alias for getLeaves for compatibility
+  getLeaveRequests: async (filters: { status?: string; leaveType?: string; employeeId?: string } = {}): Promise<{ success: boolean; data: Leave[]; count: number }> => {
+    return hrService.getLeaves(filters)
+  },
+
+  getLeaveBalance: async (employeeId?: string): Promise<{ success: boolean; data: any }> => {
+    try {
+      const endpoint = employeeId ? `/leaves/balance/${employeeId}` : '/leaves/balance'
+      const res = await api.get(endpoint)
+      return res.data
+    } catch (error: any) {
+      console.error('Error fetching leave balance:', error)
+      throw new Error(error.response?.data?.message || 'Failed to fetch leave balance')
     }
   },
 
@@ -321,9 +367,10 @@ export const hrService = {
     }
   },
 
-  rejectLeave: async (id: string, rejectionReason: string): Promise<{ success: boolean; data: Leave }> => {
+  rejectLeave: async (id: string, payload: { rejectionReason?: string } | string): Promise<{ success: boolean; data: Leave }> => {
     try {
-      const res = await api.put(`/leaves/${id}/reject`, { rejectionReason })
+      const body = typeof payload === 'string' ? { rejectionReason: payload } : payload
+      const res = await api.put(`/leaves/${id}/reject`, body)
       return res.data
     } catch (error: any) {
       console.error('Error rejecting leave:', error)
@@ -353,20 +400,43 @@ export const hrService = {
   },
 
   generatePayroll: async (payload: {
-    employeeId: string
+    employeeId?: string
     month: number
     year: number
     allowances?: Record<string, number>
     deductions?: Record<string, number>
     bonuses?: Record<string, number>
     remarks?: string
-  }): Promise<{ success: boolean; data: Payroll }> => {
+  }): Promise<{ success: boolean; data: Payroll | Payroll[] }> => {
     try {
       const res = await api.post('/payroll/generate', payload)
       return res.data
     } catch (error: any) {
       console.error('Error generating payroll:', error)
       throw new Error(error.response?.data?.message || 'Failed to generate payroll')
+    }
+  },
+
+  getPayrollByMonth: async (month: number, year: number): Promise<{ success: boolean; data: Payroll[]; count: number }> => {
+    try {
+      const res = await api.get('/payroll', { params: { month, year } })
+      return res.data
+    } catch (error: any) {
+      console.error('Error fetching payroll by month:', error)
+      throw new Error(error.response?.data?.message || 'Failed to fetch payroll by month')
+    }
+  },
+
+  getPayrollSummary: async (month?: number, year?: number): Promise<{ success: boolean; data: any }> => {
+    try {
+      const params: any = {}
+      if (month) params.month = month
+      if (year) params.year = year
+      const res = await api.get('/payroll/summary', { params })
+      return res.data
+    } catch (error: any) {
+      console.error('Error fetching payroll summary:', error)
+      throw new Error(error.response?.data?.message || 'Failed to fetch payroll summary')
     }
   },
 

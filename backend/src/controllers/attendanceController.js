@@ -8,12 +8,23 @@ const { validationResult } = require('express-validator');
 const checkIn = async (req, res) => {
   try {
     const { location, notes } = req.body;
+    
+    // Find employee record for current user
+    const employee = await Employee.findOne({ user: req.user._id });
+    
+    if (!employee) {
+      return res.status(404).json({
+        success: false,
+        message: 'Employee profile not found. Please contact HR.'
+      });
+    }
+
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
     // Check if already checked in today
     const existingAttendance = await Attendance.findOne({
-      employee: req.user._id,
+      employee: employee._id,
       date: today
     });
 
@@ -31,18 +42,20 @@ const checkIn = async (req, res) => {
       attendance.checkIn = {
         time: new Date(),
         location: location || 'Office',
-        ipAddress: req.ip
+        method: 'manual'
       };
+      attendance.status = 'present';
     } else {
       // Create new record
       attendance = new Attendance({
-        employee: req.user._id,
+        employee: employee._id,
         date: today,
         checkIn: {
           time: new Date(),
           location: location || 'Office',
-          ipAddress: req.ip
+          method: 'manual'
         },
+        status: 'present',
         notes: notes || ''
       });
     }
@@ -70,11 +83,22 @@ const checkIn = async (req, res) => {
 const checkOut = async (req, res) => {
   try {
     const { location, notes } = req.body;
+    
+    // Find employee record for current user
+    const employee = await Employee.findOne({ user: req.user._id });
+    
+    if (!employee) {
+      return res.status(404).json({
+        success: false,
+        message: 'Employee profile not found. Please contact HR.'
+      });
+    }
+
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
     const attendance = await Attendance.findOne({
-      employee: req.user._id,
+      employee: employee._id,
       date: today
     });
 
@@ -102,7 +126,7 @@ const checkOut = async (req, res) => {
     attendance.checkOut = {
       time: new Date(),
       location: location || 'Office',
-      ipAddress: req.ip
+      method: 'manual'
     };
 
     if (notes) {
@@ -354,7 +378,7 @@ const getAttendanceSummary = async (req, res) => {
   }
 };
 
-// @desc    Get today's attendance
+// @desc    Get today's attendance (current user)
 // @route   GET /api/attendance/today
 // @access  Private
 const getTodayAttendance = async (req, res) => {
@@ -362,8 +386,18 @@ const getTodayAttendance = async (req, res) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
+    // Find employee record for current user
+    const employee = await Employee.findOne({ user: req.user._id });
+    
+    if (!employee) {
+      return res.status(404).json({
+        success: false,
+        message: 'Employee profile not found'
+      });
+    }
+
     const attendance = await Attendance.findOne({
-      employee: req.user._id,
+      employee: employee._id,
       date: today
     });
 
@@ -373,6 +407,43 @@ const getTodayAttendance = async (req, res) => {
     });
   } catch (error) {
     console.error('Get today attendance error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error while fetching today\'s attendance',
+      error: process.env.NODE_ENV === 'development' ? error.message : {}
+    });
+  }
+};
+
+// @desc    Get all employees' today attendance (for HR dashboard)
+// @route   GET /api/attendance/today/all
+// @access  Private (Admin, Manager)
+const getAllTodayAttendance = async (req, res) => {
+  try {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const endOfDay = new Date(today);
+    endOfDay.setHours(23, 59, 59, 999);
+
+    // Get all employees' attendance for today
+    const attendance = await Attendance.find({
+      date: { $gte: today, $lte: endOfDay }
+    })
+    .populate({
+      path: 'employee',
+      populate: {
+        path: 'user',
+        select: 'firstName lastName email'
+      }
+    });
+
+    res.json({
+      success: true,
+      data: attendance,
+      count: attendance.length
+    });
+  } catch (error) {
+    console.error('Get all today attendance error:', error);
     res.status(500).json({
       success: false,
       message: 'Server error while fetching today\'s attendance',
@@ -417,5 +488,6 @@ module.exports = {
   approveAttendance,
   getAttendanceSummary,
   getTodayAttendance,
+  getAllTodayAttendance,
   getPendingApprovals
 }; 

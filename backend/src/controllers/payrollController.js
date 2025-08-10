@@ -249,7 +249,13 @@ const markPayrollAsPaid = async (req, res) => {
       });
     }
 
-    await payroll.markAsPaid(paymentDate, paymentMethod, transactionId);
+    payroll.status = 'paid';
+    payroll.paymentDate = paymentDate;
+    payroll.paymentMethod = paymentMethod;
+    if (transactionId) {
+      payroll.transactionId = transactionId;
+    }
+    await payroll.save();
 
     const updatedPayroll = await Payroll.findById(payroll._id)
       .populate('employee', 'firstName lastName email department')

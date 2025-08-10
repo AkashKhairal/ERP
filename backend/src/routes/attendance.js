@@ -10,6 +10,7 @@ const {
   approveAttendance,
   getAttendanceSummary,
   getTodayAttendance,
+  getAllTodayAttendance,
   getPendingApprovals
 } = require('../controllers/attendanceController');
 
@@ -68,6 +69,13 @@ router.post('/check-out', checkOutValidation, checkOut);
 
 // Get today's attendance
 router.get('/today', getTodayAttendance);
+
+// Get all employees' today attendance (Admin, Manager)
+router.get('/today/all', 
+  authorize('admin', 'manager'), 
+  checkPermission('attendance', 'read'), 
+  getAllTodayAttendance
+);
 
 // Get attendance by date range
 router.get('/range', getAttendanceByDateRange);
