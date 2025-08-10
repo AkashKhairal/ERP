@@ -64,7 +64,7 @@ const InvoiceDetail: React.FC<InvoiceDetailProps> = ({ invoiceId, onBack, onEdit
       
       // Set payment amount to balance due
       if (invoiceData.balanceDue) {
-        setPaymentForm(prev => ({ ...prev, amount: invoiceData.balanceDue }));
+        setPaymentForm(prev => ({ ...prev, amount: invoiceData.balanceDue || 0 }));
       }
     } catch (error: any) {
       console.error('Error loading invoice:', error);
