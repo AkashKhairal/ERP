@@ -385,3 +385,151 @@ Please implement the following features:
 
 
 Design for modularity, reusability, and content workflow efficiency. Add inline comments and notes where needed.
+
+
+
+------------------------------------------------------------------------------------------------
+
+
+You are helping me build the Subscription & Billing Module for my ERP/SaaS product "CrestorBase."
+
+This system should have fixed subscription tiers (Beginner, Pro, Master) and handle payments, renewals, and plan-based access control. There is no admin ability to create or edit plans — they are hardcoded in the backend.
+
+---
+
+### 1. Predefined Plans (Static)
+Plans (stored in DB but seeded by code; not editable from UI):
+
+**Beginner (Free)**
+- Price: ₹0 / month
+- Features:
+  - 1 team member
+  - 3 projects
+  - 500 MB storage
+  - Basic analytics only
+
+**Pro**
+- Price: ₹999 / month
+- Features:
+  - 5 team members
+  - 20 projects
+  - 5 GB storage
+  - Advanced analytics
+  - Priority support
+
+**Master**
+- Price: ₹2,499 / month
+- Features:
+  - Unlimited team members
+  - Unlimited projects
+  - 50 GB storage
+  - Advanced analytics
+  - Priority support
+  - Custom integrations
+
+---
+
+### 2. User Subscription Flow
+- New user signs up → automatically assigned "Beginner" plan
+- User can upgrade to Pro or Master anytime
+- Upgrade triggers payment process
+- After successful payment:
+  - Assign new plan
+  - Start subscription period (monthly, auto-renew)
+- User can downgrade at end of billing cycle
+- Payment failure → retry process + email reminders
+- If final retry fails, downgrade to "Beginner"
+
+---
+
+### 3. Payment Integration
+- Integrate **Razorpay** (for Indian customers) and **Stripe** (for global customers)
+- One-time payment at checkout + optional auto-renew toggle
+- Store payment transaction history
+- Handle failed payments gracefully (retry attempts, downgrade after 3 failures)
+
+---
+
+### 4. Usage Tracking & Enforcement
+- Track:
+  - Team members count
+  - Projects count
+  - Storage usage
+- Block creation if user exceeds plan limit
+- Show warnings at 80% usage
+- Store usage stats in DB
+
+---
+
+### 5. UI Requirements
+- "Plans & Pricing" page:
+  - Side-by-side plan comparison
+  - Upgrade buttons
+- "My Subscription" page:
+  - Current plan details
+  - Renewal date
+  - Usage stats (progress bars for limits)
+  - Upgrade/Downgrade/Cancel buttons
+- Invoice download section
+
+---
+
+
+
+---
+
+### 7. Access Control
+- Middleware to check:
+  - Is feature allowed under current plan?
+  - Is user within usage limits?
+- Restrict premium features for free plan users
+- Downgrade logic on payment failure
+
+---
+
+### 8. Notifications
+- Email on:
+  - Payment success
+  - Payment failure
+  - Upgrade/downgrade confirmation
+  - Usage limit warnings
+  - Renewal reminders
+
+---
+
+### 9. Compliance & Security
+- PCI-DSS compliance via payment gateway
+- Store minimal payment metadata only
+- GDPR-compliant user data handling
+
+---
+
+Design Notes:
+- Predefined plans are seeded in DB at application start; no CRUD UI for plans
+- Modular payment gateway integration (Razorpay + Stripe switchable)
+- Build reusable plan-check middleware for access control
+- Optimize usage tracking queries for performance
+
+ Major Modules Still To Build:
+1. Subscription & Billing Module (High Priority)
+This is the most critical missing piece from your prompts:
+Predefined plans (Beginner/Pro/Master) with usage limits
+Razorpay & Stripe payment integration
+Usage tracking and enforcement
+Invoice generation and management
+Subscription lifecycle management
+2. Advanced Analytics & Reporting
+YouTube API integration for real-time analytics
+Custom report builder with drag-drop interface
+Executive dashboard enhancements
+Automated report scheduling
+3. Enhanced Content Operations
+Review & approval workflows
+Asset management system
+Content performance insights
+Calendar integration
+4. Integration APIs
+YouTube Studio API integration
+Slack/Discord notifications
+Google Calendar sync
+Notion integration

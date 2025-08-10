@@ -22,6 +22,7 @@ const analyticsRoutes = require('./src/routes/analytics');
 const contentRoutes = require('./src/routes/content');
 const integrationRoutes = require('./src/routes/integrations');
 const hrRoutes = require('./src/routes/hr');
+const invoiceRoutes = require('./src/routes/invoices');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -62,7 +63,15 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/creatorba
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
-.then(() => console.log('Connected to MongoDB'))
+.then(() => {
+  console.log('Connected to MongoDB');
+  
+  // Initialize scheduled jobs
+  if (process.env.NODE_ENV !== 'test') {
+    const InvoiceJobService = require('./src/services/invoiceJobs');
+    InvoiceJobService.initializeJobs();
+  }
+})
 .catch(err => console.error('MongoDB connection error:', err));
 
 // Routes
@@ -83,6 +92,7 @@ app.use('/api/analytics', analyticsRoutes);
 app.use('/api/content', contentRoutes);
 app.use('/api/integrations', integrationRoutes);
 app.use('/api/hr', hrRoutes);
+app.use('/api/invoices', invoiceRoutes);
 
 // Notification routes
 const notificationRoutes = require('./src/routes/notifications');
