@@ -1,0 +1,18 @@
+<svg width="120" height="90" viewBox="0 0 120 90" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="videoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f1f5f9;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e2e8f0;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="120" height="90" fill="url(#videoGradient)" rx="8"/>
+  
+  <!-- Video Icon -->
+  <circle cx="60" cy="45" r="20" fill="#3b82f6" opacity="0.8"/>
+  <polygon points="55,35 55,55 75,45" fill="white"/>
+  
+  <!-- Text -->
+  <text x="60" y="80" font-family="Arial, sans-serif" font-size="8" fill="#64748b" text-anchor="middle">Video</text>
+</svg> 
