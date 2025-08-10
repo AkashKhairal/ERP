@@ -39,7 +39,7 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
     description: '',
     date: new Date().toISOString().split('T')[0],
     paymentMethod: 'upi',
-    status: 'completed',
+    status: 'completed' as 'completed' | 'pending' | 'cancelled' | 'failed',
     linkedProject: '',
     linkedEmployee: '',
     tags: [] as string[],
@@ -58,7 +58,7 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
         description: transaction.description || '',
         date: transaction.date ? new Date(transaction.date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
         paymentMethod: transaction.paymentMethod || 'upi',
-        status: transaction.status || 'completed',
+        status: (transaction.status || 'completed') as 'completed' | 'pending' | 'cancelled' | 'failed',
         linkedProject: transaction.linkedProject?._id || '',
         linkedEmployee: transaction.linkedEmployee?._id || '',
         tags: transaction.tags || [],
@@ -73,7 +73,7 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
         description: '',
         date: new Date().toISOString().split('T')[0],
         paymentMethod: 'upi',
-        status: 'completed',
+        status: 'completed' as 'completed' | 'pending' | 'cancelled' | 'failed',
         linkedProject: '',
         linkedEmployee: '',
         tags: [],
@@ -310,7 +310,7 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
             <select
               id="status"
               value={formData.status}
-              onChange={(e) => handleInputChange('status', e.target.value)}
+              onChange={(e) => handleInputChange('status', e.target.value as 'completed' | 'pending' | 'cancelled' | 'failed')}
               className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
             >
               <option value="completed">Completed</option>
