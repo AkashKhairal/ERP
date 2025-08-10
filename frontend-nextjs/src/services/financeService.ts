@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
 // Create axios instance with default config
 const api = axios.create({
@@ -13,7 +13,7 @@ const api = axios.create({
 // Request interceptor to add auth token
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -29,240 +29,299 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Only logout if it's a real authentication error, not just missing data
+      // Only logout if it's a real authentication error
       if (error.response?.data?.message?.includes('token') || 
           error.response?.data?.message?.includes('authorized')) {
-        localStorage.removeItem('token');
-        window.location.href = '/login';
+        if (typeof window !== 'undefined') {
+          localStorage.removeItem('token');
+          window.location.href = '/login';
+        }
       }
     }
     return Promise.reject(error);
   }
 );
 
+// ==================== INTERFACES ====================
+
+export interface Transaction {
+  _id: string;
+  type: 'income' | 'expense';
+  category: string;
+  amount: number;
+  description: string;
+  date: string;
+  paymentMethod: string;
+  status: 'completed' | 'pending' | 'cancelled' | 'failed';
+  receipt?: string;
+  linkedProject?: {
+    _id: string;
+    name: string;
+  };
+  linkedEmployee?: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+  };
+  tags: string[];
+  notes?: string;
+  createdBy: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+  };
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Budget {
+  _id: string;
+  name: string;
+  category: string;
+  amount: number;
+  period: 'monthly' | 'quarterly' | 'yearly';
+  startDate: string;
+  endDate: string;
+  isActive: boolean;
+  createdBy: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+  };
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Invoice {
+  _id: string;
+  invoiceNumber: string;
+  clientName: string;
+  clientEmail: string;
+  clientAddress?: string;
+  items: InvoiceItem[];
+  subtotal: number;
+  taxRate: number;
+  taxAmount: number;
+  total: number;
+  issueDate: string;
+  dueDate: string;
+  status: 'draft' | 'sent' | 'paid' | 'overdue' | 'cancelled';
+  paymentDate?: string;
+  notes?: string;
+  linkedProject?: {
+    _id: string;
+    name: string;
+  };
+  createdBy: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+  };
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface InvoiceItem {
+  description: string;
+  quantity: number;
+  unitPrice: number;
+  amount: number;
+}
+
+export interface DashboardData {
+  summary: {
+    currentMonth: {
+      income: number;
+      expenses: number;
+      profit: number;
+      profitMargin: number;
+    };
+    changes: {
+      incomeChange: number;
+      expenseChange: number;
+      profitChange: number;
+    };
+    invoices: {
+      pending: number;
+      overdue: number;
+      totalReceivables: number;
+      totalOverdue: number;
+    };
+  };
+  charts: {
+    monthlyTrends: Array<{
+      month: string;
+      income: number;
+      expenses: number;
+      profit: number;
+    }>;
+    expenseByCategory: Array<{
+      category: string;
+      amount: number;
+      count: number;
+    }>;
+    incomeByCategory: Array<{
+      category: string;
+      amount: number;
+      count: number;
+    }>;
+  };
+  budgetVsActual: Array<{
+    category: string;
+    budget: number;
+    actual: number;
+    remaining: number;
+    percentage: number;
+    status: 'good' | 'warning' | 'over';
+  }>;
+  recentTransactions: Transaction[];
+  overdueInvoices: Invoice[];
+  invoiceStats: Array<{
+    status: string;
+    count: number;
+    total: number;
+  }>;
+}
+
 // ==================== TRANSACTION SERVICES ====================
 
-/**
- * Get all transactions with optional filters
- * @param {Object} filters - Query parameters for filtering
- * @returns {Promise} - Promise with transactions data
- */
-export const getTransactions = async (filters = {}) => {
+export const getTransactions = async (filters: any = {}): Promise<{ success: boolean; data: Transaction[] }> => {
   try {
     const response = await api.get('/finance/transactions', { params: filters });
     return response.data;
-  } catch (error) {
+  } catch (error: any) {
     throw new Error(error.response?.data?.message || 'Failed to fetch transactions');
   }
 };
 
-/**
- * Get transaction by ID
- * @param {string} id - Transaction ID
- * @returns {Promise} - Promise with transaction data
- */
-export const getTransactionById = async (id) => {
+export const getTransactionById = async (id: string): Promise<{ success: boolean; data: Transaction }> => {
   try {
     const response = await api.get(`/finance/transactions/${id}`);
     return response.data;
-  } catch (error) {
+  } catch (error: any) {
     throw new Error(error.response?.data?.message || 'Failed to fetch transaction');
   }
 };
 
-/**
- * Create new transaction
- * @param {Object} transactionData - Transaction data
- * @returns {Promise} - Promise with created transaction
- */
-export const createTransaction = async (transactionData) => {
+export const createTransaction = async (transactionData: Partial<Transaction>): Promise<{ success: boolean; data: Transaction }> => {
   try {
     const response = await api.post('/finance/transactions', transactionData);
     return response.data;
-  } catch (error) {
+  } catch (error: any) {
     throw new Error(error.response?.data?.message || 'Failed to create transaction');
   }
 };
 
-/**
- * Update transaction
- * @param {string} id - Transaction ID
- * @param {Object} transactionData - Updated transaction data
- * @returns {Promise} - Promise with updated transaction
- */
-export const updateTransaction = async (id, transactionData) => {
+export const updateTransaction = async (id: string, transactionData: Partial<Transaction>): Promise<{ success: boolean; data: Transaction }> => {
   try {
     const response = await api.put(`/finance/transactions/${id}`, transactionData);
     return response.data;
-  } catch (error) {
+  } catch (error: any) {
     throw new Error(error.response?.data?.message || 'Failed to update transaction');
   }
 };
 
-/**
- * Delete transaction
- * @param {string} id - Transaction ID
- * @returns {Promise} - Promise with deletion result
- */
-export const deleteTransaction = async (id) => {
+export const deleteTransaction = async (id: string): Promise<{ success: boolean }> => {
   try {
     const response = await api.delete(`/finance/transactions/${id}`);
     return response.data;
-  } catch (error) {
+  } catch (error: any) {
     throw new Error(error.response?.data?.message || 'Failed to delete transaction');
   }
 };
 
 // ==================== BUDGET SERVICES ====================
 
-/**
- * Get all budgets with optional filters
- * @param {Object} filters - Query parameters for filtering
- * @returns {Promise} - Promise with budgets data
- */
-export const getBudgets = async (filters = {}) => {
+export const getBudgets = async (filters: any = {}): Promise<{ success: boolean; data: Budget[] }> => {
   try {
     const response = await api.get('/finance/budgets', { params: filters });
     return response.data;
-  } catch (error) {
+  } catch (error: any) {
     throw new Error(error.response?.data?.message || 'Failed to fetch budgets');
   }
 };
 
-/**
- * Create new budget
- * @param {Object} budgetData - Budget data
- * @returns {Promise} - Promise with created budget
- */
-export const createBudget = async (budgetData) => {
+export const createBudget = async (budgetData: Partial<Budget>): Promise<{ success: boolean; data: Budget }> => {
   try {
     const response = await api.post('/finance/budgets', budgetData);
     return response.data;
-  } catch (error) {
+  } catch (error: any) {
     throw new Error(error.response?.data?.message || 'Failed to create budget');
   }
 };
 
-/**
- * Update budget
- * @param {string} id - Budget ID
- * @param {Object} budgetData - Updated budget data
- * @returns {Promise} - Promise with updated budget
- */
-export const updateBudget = async (id, budgetData) => {
+export const updateBudget = async (id: string, budgetData: Partial<Budget>): Promise<{ success: boolean; data: Budget }> => {
   try {
     const response = await api.put(`/finance/budgets/${id}`, budgetData);
     return response.data;
-  } catch (error) {
+  } catch (error: any) {
     throw new Error(error.response?.data?.message || 'Failed to update budget');
   }
 };
 
 // ==================== INVOICE SERVICES ====================
 
-/**
- * Get all invoices with optional filters
- * @param {Object} filters - Query parameters for filtering
- * @returns {Promise} - Promise with invoices data
- */
-export const getInvoices = async (filters = {}) => {
+export const getInvoices = async (filters: any = {}): Promise<{ success: boolean; data: Invoice[] }> => {
   try {
     const response = await api.get('/finance/invoices', { params: filters });
     return response.data;
-  } catch (error) {
+  } catch (error: any) {
     throw new Error(error.response?.data?.message || 'Failed to fetch invoices');
   }
 };
 
-/**
- * Create new invoice
- * @param {Object} invoiceData - Invoice data
- * @returns {Promise} - Promise with created invoice
- */
-export const createInvoice = async (invoiceData) => {
+export const createInvoice = async (invoiceData: Partial<Invoice>): Promise<{ success: boolean; data: Invoice }> => {
   try {
     const response = await api.post('/finance/invoices', invoiceData);
     return response.data;
-  } catch (error) {
+  } catch (error: any) {
     throw new Error(error.response?.data?.message || 'Failed to create invoice');
   }
 };
 
-/**
- * Update invoice status
- * @param {string} id - Invoice ID
- * @param {string} status - New status
- * @returns {Promise} - Promise with updated invoice
- */
-export const updateInvoiceStatus = async (id, status) => {
+export const updateInvoiceStatus = async (id: string, status: string): Promise<{ success: boolean; data: Invoice }> => {
   try {
     const response = await api.put(`/finance/invoices/${id}/status`, { status });
     return response.data;
-  } catch (error) {
+  } catch (error: any) {
     throw new Error(error.response?.data?.message || 'Failed to update invoice status');
   }
 };
 
 // ==================== ANALYTICS SERVICES ====================
 
-/**
- * Get financial dashboard data
- * @param {Object} filters - Query parameters for filtering
- * @returns {Promise} - Promise with dashboard data
- */
-export const getFinancialDashboard = async (filters = {}) => {
+export const getFinancialDashboard = async (filters: any = {}): Promise<{ success: boolean; data: DashboardData }> => {
   try {
     const response = await api.get('/finance/dashboard', { params: filters });
     return response.data;
-  } catch (error) {
+  } catch (error: any) {
     throw new Error(error.response?.data?.message || 'Failed to fetch dashboard data');
   }
 };
 
-/**
- * Get financial reports
- * @param {Object} filters - Query parameters for filtering
- * @returns {Promise} - Promise with reports data
- */
-export const getFinancialReports = async (filters = {}) => {
+export const getFinancialReports = async (filters: any = {}): Promise<{ success: boolean; data: any }> => {
   try {
     const response = await api.get('/finance/reports', { params: filters });
     return response.data;
-  } catch (error) {
+  } catch (error: any) {
     throw new Error(error.response?.data?.message || 'Failed to fetch reports');
   }
 };
 
 // ==================== UTILITY FUNCTIONS ====================
 
-/**
- * Format currency for display
- * @param {number} amount - Amount to format
- * @param {string} currency - Currency code (default: 'INR')
- * @returns {string} - Formatted currency string
- */
-export const formatCurrency = (amount, currency = 'INR') => {
+export const formatCurrency = (amount: number, currency = 'INR'): string => {
   return new Intl.NumberFormat('en-IN', {
     style: 'currency',
     currency: currency
   }).format(amount);
 };
 
-/**
- * Calculate percentage change
- * @param {number} current - Current value
- * @param {number} previous - Previous value
- * @returns {number} - Percentage change
- */
-export const calculatePercentageChange = (current, previous) => {
+export const calculatePercentageChange = (current: number, previous: number): number => {
   if (previous === 0) return current > 0 ? 100 : 0;
   return ((current - previous) / previous) * 100;
 };
 
-/**
- * Get transaction categories for income
- * @returns {Array} - Array of income categories
- */
 export const getIncomeCategories = () => [
   { value: 'youtube_adsense', label: 'YouTube AdSense' },
   { value: 'paid_courses', label: 'Paid Courses' },
@@ -274,10 +333,6 @@ export const getIncomeCategories = () => [
   { value: 'other_income', label: 'Other Income' }
 ];
 
-/**
- * Get transaction categories for expenses
- * @returns {Array} - Array of expense categories
- */
 export const getExpenseCategories = () => [
   { value: 'salary', label: 'Salary' },
   { value: 'marketing', label: 'Marketing' },
@@ -291,10 +346,6 @@ export const getExpenseCategories = () => [
   { value: 'misc', label: 'Miscellaneous' }
 ];
 
-/**
- * Get payment methods
- * @returns {Array} - Array of payment methods
- */
 export const getPaymentMethods = () => [
   { value: 'cash', label: 'Cash' },
   { value: 'upi', label: 'UPI' },
@@ -304,20 +355,12 @@ export const getPaymentMethods = () => [
   { value: 'stripe', label: 'Stripe' }
 ];
 
-/**
- * Get budget periods
- * @returns {Array} - Array of budget periods
- */
 export const getBudgetPeriods = () => [
   { value: 'monthly', label: 'Monthly' },
   { value: 'quarterly', label: 'Quarterly' },
   { value: 'yearly', label: 'Yearly' }
 ];
 
-/**
- * Get invoice statuses
- * @returns {Array} - Array of invoice statuses
- */
 export const getInvoiceStatuses = () => [
   { value: 'draft', label: 'Draft', color: 'gray' },
   { value: 'sent', label: 'Sent', color: 'blue' },
@@ -326,42 +369,21 @@ export const getInvoiceStatuses = () => [
   { value: 'cancelled', label: 'Cancelled', color: 'gray' }
 ];
 
-/**
- * Get status color for UI
- * @param {string} status - Status value
- * @returns {string} - CSS color class
- */
-export const getStatusColor = (status) => {
-  const statusColors = {
-    draft: 'text-gray-600 bg-gray-100',
-    sent: 'text-blue-600 bg-blue-100',
-    paid: 'text-green-600 bg-green-100',
-    overdue: 'text-red-600 bg-red-100',
-    cancelled: 'text-gray-600 bg-gray-100',
-    pending: 'text-yellow-600 bg-yellow-100',
-    completed: 'text-green-600 bg-green-100',
-    failed: 'text-red-600 bg-red-100'
+export const getStatusColor = (status: string): string => {
+  const statusColors: { [key: string]: string } = {
+    draft: 'bg-gray-100 text-gray-800',
+    sent: 'bg-blue-100 text-blue-800',
+    paid: 'bg-green-100 text-green-800',
+    overdue: 'bg-red-100 text-red-800',
+    cancelled: 'bg-gray-100 text-gray-800',
+    pending: 'bg-yellow-100 text-yellow-800',
+    completed: 'bg-green-100 text-green-800',
+    failed: 'bg-red-100 text-red-800'
   };
-  return statusColors[status] || 'text-gray-600 bg-gray-100';
+  return statusColors[status] || 'bg-gray-100 text-gray-800';
 };
 
-/**
- * Get transaction type color for UI
- * @param {string} type - Transaction type
- * @returns {string} - CSS color class
- */
-export const getTransactionTypeColor = (type) => {
-  return type === 'income' 
-    ? 'text-green-600 bg-green-100' 
-    : 'text-red-600 bg-red-100';
-};
-
-/**
- * Export transactions to CSV
- * @param {Array} transactions - Array of transactions
- * @param {string} filename - Filename for download
- */
-export const exportTransactionsToCSV = (transactions, filename = 'transactions.csv') => {
+export const exportTransactionsToCSV = (transactions: Transaction[], filename = 'transactions.csv'): void => {
   const headers = ['Date', 'Type', 'Category', 'Description', 'Amount', 'Payment Method', 'Status'];
   const csvContent = [
     headers.join(','),
@@ -384,40 +406,3 @@ export const exportTransactionsToCSV = (transactions, filename = 'transactions.c
   a.click();
   window.URL.revokeObjectURL(url);
 };
-
-const financeService = {
-  // Transaction services
-  getTransactions,
-  getTransactionById,
-  createTransaction,
-  updateTransaction,
-  deleteTransaction,
-  
-  // Budget services
-  getBudgets,
-  createBudget,
-  updateBudget,
-  
-  // Invoice services
-  getInvoices,
-  createInvoice,
-  updateInvoiceStatus,
-  
-  // Dashboard and reports
-  getFinancialDashboard,
-  getFinancialReports,
-  
-  // Utility functions
-  formatCurrency,
-  calculatePercentageChange,
-  getIncomeCategories,
-  getExpenseCategories,
-  getPaymentMethods,
-  getBudgetPeriods,
-  getInvoiceStatuses,
-  getStatusColor,
-  getTransactionTypeColor,
-  exportTransactionsToCSV
-};
-
-export default financeService; 

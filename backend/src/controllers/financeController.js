@@ -467,28 +467,189 @@ const getFinancialDashboard = async (req, res) => {
     const currentYear = year ? parseInt(year) : new Date().getFullYear();
     const currentMonth = month ? parseInt(month) : new Date().getMonth() + 1;
 
-    // Get monthly stats
-    const monthlyStats = await Transaction.getMonthlyStats(currentYear, currentMonth);
-    
-    // Calculate totals
-    const income = monthlyStats.find(stat => stat._id === 'income')?.total || 0;
-    const expenses = monthlyStats.find(stat => stat._id === 'expense')?.total || 0;
-    const profit = income - expenses;
+    // Calculate date ranges
+    const currentMonthStart = new Date(currentYear, currentMonth - 1, 1);
+    const currentMonthEnd = new Date(currentYear, currentMonth, 0, 23, 59, 59);
+    const previousMonthStart = new Date(currentYear, currentMonth - 2, 1);
+    const previousMonthEnd = new Date(currentYear, currentMonth - 1, 0, 23, 59, 59);
+    const yearStart = new Date(currentYear, 0, 1);
+    const yearEnd = new Date(currentYear, 11, 31, 23, 59, 59);
+
+    // Get current month stats
+    const currentMonthStats = await Transaction.aggregate([
+      {
+        $match: {
+          date: { $gte: currentMonthStart, $lte: currentMonthEnd }
+        }
+      },
+      {
+        $group: {
+          _id: '$type',
+          total: { $sum: '$amount' },
+          count: { $sum: 1 }
+        }
+      }
+    ]);
+
+    // Get previous month stats for comparison
+    const previousMonthStats = await Transaction.aggregate([
+      {
+        $match: {
+          date: { $gte: previousMonthStart, $lte: previousMonthEnd }
+        }
+      },
+      {
+        $group: {
+          _id: '$type',
+          total: { $sum: '$amount' },
+          count: { $sum: 1 }
+        }
+      }
+    ]);
+
+    // Calculate current and previous month totals
+    const currentIncome = currentMonthStats.find(stat => stat._id === 'income')?.total || 0;
+    const currentExpenses = currentMonthStats.find(stat => stat._id === 'expense')?.total || 0;
+    const currentProfit = currentIncome - currentExpenses;
+
+    const previousIncome = previousMonthStats.find(stat => stat._id === 'income')?.total || 0;
+    const previousExpenses = previousMonthStats.find(stat => stat._id === 'expense')?.total || 0;
+    const previousProfit = previousIncome - previousExpenses;
+
+    // Calculate percentage changes
+    const incomeChange = previousIncome > 0 ? ((currentIncome - previousIncome) / previousIncome) * 100 : 0;
+    const expenseChange = previousExpenses > 0 ? ((currentExpenses - previousExpenses) / previousExpenses) * 100 : 0;
+    const profitChange = previousProfit !== 0 ? ((currentProfit - previousProfit) / Math.abs(previousProfit)) * 100 : 0;
+
+    // Get 12-month trend data for charts
+    const monthlyTrends = await Transaction.aggregate([
+      {
+        $match: {
+          date: {
+            $gte: new Date(currentYear, currentMonth - 12, 1),
+            $lte: currentMonthEnd
+          }
+        }
+      },
+      {
+        $group: {
+          _id: {
+            year: { $year: '$date' },
+            month: { $month: '$date' },
+            type: '$type'
+          },
+          total: { $sum: '$amount' }
+        }
+      },
+      {
+        $sort: { '_id.year': 1, '_id.month': 1 }
+      }
+    ]);
+
+    // Format trend data for charts
+    const chartData = [];
+    for (let i = 11; i >= 0; i--) {
+      const date = new Date(currentYear, currentMonth - 1 - i, 1);
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1;
+      
+      const income = monthlyTrends.find(t => 
+        t._id.year === year && t._id.month === month && t._id.type === 'income'
+      )?.total || 0;
+      
+      const expenses = monthlyTrends.find(t => 
+        t._id.year === year && t._id.month === month && t._id.type === 'expense'
+      )?.total || 0;
+
+      chartData.push({
+        month: date.toLocaleString('default', { month: 'short', year: '2-digit' }),
+        income: income,
+        expenses: expenses,
+        profit: income - expenses
+      });
+    }
+
+    // Get expense breakdown by category for current month
+    const expenseByCategory = await Transaction.aggregate([
+      {
+        $match: {
+          type: 'expense',
+          date: { $gte: currentMonthStart, $lte: currentMonthEnd }
+        }
+      },
+      {
+        $group: {
+          _id: '$category',
+          total: { $sum: '$amount' },
+          count: { $sum: 1 }
+        }
+      },
+      {
+        $sort: { total: -1 }
+      }
+    ]);
+
+    // Get income breakdown by category for current month
+    const incomeByCategory = await Transaction.aggregate([
+      {
+        $match: {
+          type: 'income',
+          date: { $gte: currentMonthStart, $lte: currentMonthEnd }
+        }
+      },
+      {
+        $group: {
+          _id: '$category',
+          total: { $sum: '$amount' },
+          count: { $sum: 1 }
+        }
+      },
+      {
+        $sort: { total: -1 }
+      }
+    ]);
 
     // Get budget vs actual for current month
-    const startDate = new Date(currentYear, currentMonth - 1, 1);
-    const endDate = new Date(currentYear, currentMonth, 0, 23, 59, 59);
-    
-    const budgetCategories = ['salary', 'marketing', 'saas_tools', 'freelancers', 'rent'];
+    const budgetCategories = ['salary', 'marketing', 'saas_tools', 'freelancers', 'rent', 'utilities', 'office_supplies', 'travel', 'meals'];
     const budgetVsActual = [];
 
     for (const category of budgetCategories) {
-      const budgetData = await Budget.getBudgetVsActual(category, startDate, endDate);
+      const budget = await Budget.findOne({
+        category,
+        period: 'monthly',
+        startDate: { $lte: currentMonthStart },
+        endDate: { $gte: currentMonthEnd },
+        isActive: true
+      });
+
+      const actual = await Transaction.aggregate([
+        {
+          $match: {
+            type: 'expense',
+            category,
+            date: { $gte: currentMonthStart, $lte: currentMonthEnd }
+          }
+        },
+        {
+          $group: {
+            _id: null,
+            total: { $sum: '$amount' }
+          }
+        }
+      ]);
+
+      const budgetAmount = budget ? budget.amount : 0;
+      const actualAmount = actual.length > 0 ? actual[0].total : 0;
+      const remaining = budgetAmount - actualAmount;
+      const percentage = budgetAmount > 0 ? (actualAmount / budgetAmount) * 100 : 0;
+
       budgetVsActual.push({
         category,
-        budget: budgetData.budget,
-        actual: budgetData.actual,
-        remaining: budgetData.budget - budgetData.actual
+        budget: budgetAmount,
+        actual: actualAmount,
+        remaining,
+        percentage,
+        status: percentage > 100 ? 'over' : percentage > 80 ? 'warning' : 'good'
       });
     }
 
@@ -496,7 +657,20 @@ const getFinancialDashboard = async (req, res) => {
     const recentTransactions = await Transaction.find()
       .sort({ date: -1 })
       .limit(10)
-      .populate('createdBy', 'firstName lastName');
+      .populate('createdBy', 'firstName lastName')
+      .populate('linkedProject', 'name')
+      .populate('linkedEmployee', 'firstName lastName');
+
+    // Get invoice stats
+    const invoiceStats = await Invoice.aggregate([
+      {
+        $group: {
+          _id: '$status',
+          count: { $sum: 1 },
+          total: { $sum: '$total' }
+        }
+      }
+    ]);
 
     // Get overdue invoices
     const overdueInvoices = await Invoice.find({
@@ -504,20 +678,62 @@ const getFinancialDashboard = async (req, res) => {
       dueDate: { $lt: new Date() }
     })
     .populate('createdBy', 'firstName lastName')
+    .populate('linkedProject', 'name')
+    .sort({ dueDate: 1 })
     .limit(5);
+
+    // Get pending invoices
+    const pendingInvoices = await Invoice.find({
+      status: { $in: ['draft', 'sent'] }
+    }).countDocuments();
+
+    // Calculate cash flow
+    const totalReceivables = invoiceStats.find(stat => stat._id === 'sent')?.total || 0;
+    const totalOverdue = overdueInvoices.reduce((sum, invoice) => sum + invoice.total, 0);
 
     res.json({
       success: true,
       data: {
         summary: {
-          income,
-          expenses,
-          profit,
-          profitMargin: income > 0 ? (profit / income) * 100 : 0
+          currentMonth: {
+            income: currentIncome,
+            expenses: currentExpenses,
+            profit: currentProfit,
+            profitMargin: currentIncome > 0 ? (currentProfit / currentIncome) * 100 : 0
+          },
+          changes: {
+            incomeChange: Math.round(incomeChange * 100) / 100,
+            expenseChange: Math.round(expenseChange * 100) / 100,
+            profitChange: Math.round(profitChange * 100) / 100
+          },
+          invoices: {
+            pending: pendingInvoices,
+            overdue: overdueInvoices.length,
+            totalReceivables,
+            totalOverdue
+          }
+        },
+        charts: {
+          monthlyTrends: chartData,
+          expenseByCategory: expenseByCategory.map(cat => ({
+            category: cat._id,
+            amount: cat.total,
+            count: cat.count
+          })),
+          incomeByCategory: incomeByCategory.map(cat => ({
+            category: cat._id,
+            amount: cat.total,
+            count: cat.count
+          }))
         },
         budgetVsActual,
         recentTransactions,
-        overdueInvoices
+        overdueInvoices,
+        invoiceStats: invoiceStats.map(stat => ({
+          status: stat._id,
+          count: stat.count,
+          total: stat.total
+        }))
       }
     });
   } catch (error) {
