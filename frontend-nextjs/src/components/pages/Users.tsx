@@ -243,20 +243,20 @@ const Users = () => {
 
   // Render user card
   const renderUserCard = (user: User) => (
-    <Card key={user._id} className="hover:shadow-lg transition-shadow">
-      <CardHeader>
+    <Card key={user._id} className="rounded-3xl bg-white/60 backdrop-blur-sm p-6 shadow-sm border-0 transition-all duration-200 hover:shadow-md hover:-translate-y-1 hover:bg-white/80">
+      <CardHeader className="p-0 pb-4">
         <div className="flex items-start justify-between">
-          <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center">
+          <div className="flex items-center space-x-4">
+            <div className="w-14 h-14 bg-gradient-to-br from-orange-400 to-red-500 rounded-2xl flex items-center justify-center shadow-sm">
               {user.avatar ? (
-                <img src={user.avatar} alt="" className="w-12 h-12 rounded-full" />
+                <img src={user.avatar} alt="" className="w-14 h-14 rounded-2xl object-cover" />
               ) : (
-                <UsersIcon className="h-6 w-6 text-gray-600" />
+                <UsersIcon className="h-7 w-7 text-white" />
               )}
             </div>
             <div>
-              <CardTitle className="text-lg">{user.firstName} {user.lastName}</CardTitle>
-              <CardDescription className="mt-1">
+              <CardTitle className="card-title text-gray-900">{user.firstName} {user.lastName}</CardTitle>
+              <CardDescription className="text-sm text-gray-500 font-medium tracking-tight mt-1">
                 {user.position || 'No position specified'}
               </CardDescription>
             </div>
@@ -268,65 +268,66 @@ const Users = () => {
           </div>
         </div>
       </CardHeader>
-      <CardContent>
-        <div className="space-y-3">
-          <div className="flex items-center justify-between">
+      <CardContent className="p-0">
+        <div className="space-y-4">
+          <div className="flex items-center justify-between p-3 rounded-xl bg-gray-50/50">
             <div className="flex items-center space-x-2">
-              <Mail className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm font-medium">Email</span>
+              <Mail className="h-4 w-4 text-gray-400" />
+              <span className="text-sm font-semibold text-gray-600 tracking-tight">Email</span>
             </div>
-            <span className="text-sm text-muted-foreground">{user.email}</span>
+            <span className="text-sm text-gray-900 font-medium">{user.email}</span>
           </div>
           
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between p-3 rounded-xl bg-gray-50/50">
             <div className="flex items-center space-x-2">
-              <Shield className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm font-medium">Role</span>
+              <Shield className="h-4 w-4 text-gray-400" />
+              <span className="text-sm font-semibold text-gray-600 tracking-tight">Role</span>
             </div>
             <Badge variant={getRoleColor(user.roles) as any}>
               {user.roles && user.roles.length > 0 ? user.roles[0].name : 'Employee'}
             </Badge>
           </div>
           
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between p-3 rounded-xl bg-gray-50/50">
             <div className="flex items-center space-x-2">
-              <UsersIcon className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm font-medium">Department</span>
+              <UsersIcon className="h-4 w-4 text-gray-400" />
+              <span className="text-sm font-semibold text-gray-600 tracking-tight">Department</span>
             </div>
-            <span className="text-sm text-muted-foreground">
+            <span className="text-sm text-gray-900 font-medium">
               {user.department.charAt(0).toUpperCase() + user.department.slice(1)}
             </span>
           </div>
           
           {user.phone && (
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between p-3 rounded-xl bg-gray-50/50">
               <div className="flex items-center space-x-2">
-                <Phone className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm font-medium">Phone</span>
+                <Phone className="h-4 w-4 text-gray-400" />
+                <span className="text-sm font-semibold text-gray-600 tracking-tight">Phone</span>
               </div>
-              <span className="text-sm text-muted-foreground">{user.phone}</span>
+              <span className="text-sm text-gray-900 font-medium">{user.phone}</span>
             </div>
           )}
           
           {user.hireDate && (
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between p-3 rounded-xl bg-gray-50/50">
               <div className="flex items-center space-x-2">
-                <Calendar className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm font-medium">Joined</span>
+                <Calendar className="h-4 w-4 text-gray-400" />
+                <span className="text-sm font-semibold text-gray-600 tracking-tight">Joined</span>
               </div>
-              <span className="text-sm text-muted-foreground">
+              <span className="text-sm text-gray-900 font-medium">
                 {new Date(user.hireDate).toLocaleDateString()}
               </span>
             </div>
           )}
         </div>
         
-        <div className="flex items-center justify-between mt-4 pt-4 border-t">
+        <div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-100">
           <div className="flex items-center space-x-2">
             <Button
               variant="outline"
               size="sm"
               onClick={() => handleViewUser(user)}
+              className="rounded-xl bg-white/60 backdrop-blur-sm text-gray-700 px-3 py-2 hover:bg-white/80 transition-all duration-200 ease-out border border-gray-200/50 shadow-sm font-medium tracking-tight"
             >
               <Eye className="h-4 w-4 mr-1" />
               View
@@ -336,6 +337,7 @@ const Users = () => {
                 variant="outline"
                 size="sm"
                 onClick={() => handleEditUser(user)}
+                className="rounded-xl bg-white/60 backdrop-blur-sm text-gray-700 px-3 py-2 hover:bg-white/80 transition-all duration-200 ease-out border border-gray-200/50 shadow-sm font-medium tracking-tight"
               >
                 <Edit className="h-4 w-4 mr-1" />
                 Edit
@@ -347,6 +349,7 @@ const Users = () => {
               variant="outline"
               size="sm"
               onClick={() => handleDeleteUser(user._id!)}
+              className="rounded-xl bg-white/60 backdrop-blur-sm text-red-600 p-2 hover:bg-red-50/80 transition-all duration-200 ease-out border border-red-200/50 shadow-sm"
             >
               <Trash2 className="h-4 w-4" />
             </Button>
@@ -369,15 +372,20 @@ const Users = () => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="p-6 space-y-8">
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Users</h1>
-          <p className="text-gray-600 mt-1">Manage your team members and their permissions</p>
+          <h1 className="page-title text-gray-900">User Management</h1>
+          <p className="text-gray-600 mt-1 font-medium tracking-tight">
+            Manage your team members with luxury precision
+          </p>
         </div>
         {hasAdminPrivileges() && (
-          <Button onClick={handleAddUser}>
+          <Button 
+            onClick={handleAddUser}
+            className="rounded-xl bg-gradient-to-r from-orange-400 to-red-500 text-white px-4 py-2 font-semibold tracking-tight shadow-sm hover:shadow-md transition-all duration-200 ease-out"
+          >
             <Plus className="mr-2 h-4 w-4" />
             Add User
           </Button>
@@ -402,8 +410,8 @@ const Users = () => {
       )}
 
       {/* Search and Filters */}
-      <Card>
-        <CardContent className="p-6">
+      <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0">
+        <CardContent className="p-0">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
             <div className="flex-1 max-w-md">
               <div className="relative">
@@ -421,6 +429,7 @@ const Users = () => {
               <Button
                 variant="outline"
                 onClick={() => setShowFilters(!showFilters)}
+                className="rounded-xl bg-white/60 backdrop-blur-sm text-gray-700 px-4 py-2 hover:bg-white/80 transition-all duration-200 ease-out border border-gray-200/50 shadow-sm font-medium tracking-tight"
               >
                 <Filter className="w-4 h-4 mr-2" />
                 Filters
@@ -428,10 +437,10 @@ const Users = () => {
               <div className="flex items-center space-x-2">
                 <button
                   onClick={() => setViewMode(viewMode === 'list' ? 'cards' : 'list')}
-                  className="flex items-center space-x-2 hover:bg-gray-100 p-2 rounded-md transition-colors"
+                  className="flex items-center space-x-2 hover:bg-orange-50 p-2 rounded-xl transition-all duration-200 bg-white/60 backdrop-blur-sm border border-gray-200/50 shadow-sm"
                 >
-                  {viewMode === 'list' ? <List className="h-4 w-4" /> : <Grid className="h-4 w-4" />}
-                  <span className="text-sm">
+                  {viewMode === 'list' ? <List className="h-4 w-4 text-gray-600" /> : <Grid className="h-4 w-4 text-gray-600" />}
+                  <span className="text-sm font-medium text-gray-700 tracking-tight">
                     {viewMode === 'list' ? 'List' : 'Cards'}
                   </span>
                 </button>
@@ -492,11 +501,11 @@ const Users = () => {
       </Card>
 
       {/* Users Content */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Team Members ({filteredUsers.length})</CardTitle>
+      <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0">
+        <CardHeader className="p-0 pb-4">
+          <CardTitle className="card-title text-gray-900">Team Members ({filteredUsers.length})</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-0">
           {loading ? (
             <div className="text-center py-8">
               <Loader2 className="h-8 w-8 animate-spin mx-auto" />

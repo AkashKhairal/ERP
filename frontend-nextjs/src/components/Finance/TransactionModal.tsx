@@ -199,12 +199,15 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
   const modalContent = (
     <div className="max-w-2xl w-full max-h-[90vh] overflow-y-auto">
       <DialogHeader>
-        <DialogTitle>
+        <DialogTitle className="text-xl font-bold text-gray-900 tracking-tight">
           {transaction ? 'Edit Transaction' : 'Add New Transaction'}
         </DialogTitle>
+        <p className="text-sm text-gray-600 font-medium tracking-tight mt-1">
+          {transaction ? 'Update transaction details with precision' : 'Create a new financial transaction with detailed information'}
+        </p>
       </DialogHeader>
 
-      <form onSubmit={handleSubmit} className="space-y-6 mt-6">
+      <form onSubmit={handleSubmit} className="space-y-6">
         {/* Transaction Type */}
         <div className="grid grid-cols-2 gap-4">
           <div>
@@ -216,7 +219,7 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
                 handleInputChange('type', e.target.value);
                 handleInputChange('category', ''); // Reset category when type changes
               }}
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="mt-1 block w-full rounded-xl border border-gray-200/50 bg-white/60 backdrop-blur-sm px-4 py-3 text-sm font-medium text-gray-900 tracking-tight focus:outline-none focus:bg-white/80 focus:border-orange-300 focus:ring-2 focus:ring-orange-200/50"
             >
               <option value="income">Income</option>
               <option value="expense">Expense</option>
@@ -229,8 +232,8 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
               id="category"
               value={formData.category}
               onChange={(e) => handleInputChange('category', e.target.value)}
-              className={`mt-1 block w-full rounded-md border px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 ${
-                errors.category ? 'border-red-500' : 'border-gray-300'
+              className={`mt-1 block w-full rounded-xl border bg-white/60 backdrop-blur-sm px-4 py-3 text-sm font-medium text-gray-900 tracking-tight focus:outline-none focus:bg-white/80 focus:border-orange-300 focus:ring-2 focus:ring-orange-200/50 ${
+                errors.category ? 'border-red-500 focus:border-red-500 focus:ring-red-200/50' : 'border-gray-200/50'
               }`}
             >
               <option value="">Select Category</option>
@@ -302,8 +305,8 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
               id="paymentMethod"
               value={formData.paymentMethod}
               onChange={(e) => handleInputChange('paymentMethod', e.target.value)}
-              className={`mt-1 block w-full rounded-md border px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 ${
-                errors.paymentMethod ? 'border-red-500' : 'border-gray-300'
+              className={`mt-1 block w-full rounded-xl border bg-white/60 backdrop-blur-sm px-4 py-3 text-sm font-medium text-gray-900 tracking-tight focus:outline-none focus:bg-white/80 focus:border-orange-300 focus:ring-2 focus:ring-orange-200/50 ${
+                errors.paymentMethod ? 'border-red-500 focus:border-red-500 focus:ring-red-200/50' : 'border-gray-200/50'
               }`}
             >
               {paymentMethods.map(method => (
@@ -319,7 +322,7 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
               id="status"
               value={formData.status}
               onChange={(e) => handleInputChange('status', e.target.value as 'completed' | 'pending' | 'cancelled' | 'failed')}
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="mt-1 block w-full rounded-xl border border-gray-200/50 bg-white/60 backdrop-blur-sm px-4 py-3 text-sm font-medium text-gray-900 tracking-tight focus:outline-none focus:bg-white/80 focus:border-orange-300 focus:ring-2 focus:ring-orange-200/50"
             >
               <option value="completed">Completed</option>
               <option value="pending">Pending</option>
@@ -339,7 +342,7 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
                 id="linkedProject"
                 value={formData.linkedProject}
                 onChange={(e) => handleInputChange('linkedProject', e.target.value)}
-                className="pl-10 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                className="pl-12 block w-full rounded-xl border border-gray-200/50 bg-white/60 backdrop-blur-sm px-4 py-3 text-sm font-medium text-gray-900 tracking-tight focus:outline-none focus:bg-white/80 focus:border-orange-300 focus:ring-2 focus:ring-orange-200/50"
               >
                 <option value="">Select Project</option>
                 {projects.map(project => (
@@ -357,7 +360,7 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
                 id="linkedEmployee"
                 value={formData.linkedEmployee}
                 onChange={(e) => handleInputChange('linkedEmployee', e.target.value)}
-                className="pl-10 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                className="pl-12 block w-full rounded-xl border border-gray-200/50 bg-white/60 backdrop-blur-sm px-4 py-3 text-sm font-medium text-gray-900 tracking-tight focus:outline-none focus:bg-white/80 focus:border-orange-300 focus:ring-2 focus:ring-orange-200/50"
               >
                 <option value="">Select Employee</option>
                 {employees.map(employee => (
@@ -413,7 +416,7 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
             <div className="flex items-center justify-center w-full">
               <label
                 htmlFor="receipt"
-                className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100"
+                className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-200/50 border-dashed rounded-2xl cursor-pointer bg-white/60 backdrop-blur-sm hover:bg-white/80 transition-all duration-200"
               >
                 <div className="flex flex-col items-center justify-center pt-5 pb-6">
                   <Upload className="w-8 h-8 mb-3 text-gray-400" />
@@ -460,27 +463,28 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
         )}
 
         {/* Action Buttons */}
-        <div className="flex justify-end space-x-3 pt-4 border-t">
+        <div className="flex justify-end space-x-3 pt-6 border-t border-gray-100/50">
           <Button
             type="button"
             variant="outline"
             onClick={onClose}
             disabled={loading}
+            className="rounded-xl bg-white/80 backdrop-blur-sm text-gray-700 px-6 py-2 hover:bg-white transition-all duration-200 ease-out border border-gray-200 shadow-sm font-medium tracking-tight"
           >
             Cancel
           </Button>
           <Button
             type="submit"
             disabled={loading}
-            className="min-w-[100px]"
+            className="min-w-[120px] rounded-xl bg-gradient-to-r from-orange-400 to-red-500 text-white px-6 py-2 font-semibold tracking-tight shadow-sm hover:shadow-md transition-all duration-200 ease-out"
           >
             {loading ? (
               <div className="flex items-center">
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                <div className="animate-spin rounded-full h-4 w-4 border-2 border-white/30 border-t-white mr-2"></div>
                 Saving...
               </div>
             ) : (
-              transaction ? 'Update' : 'Create'
+              transaction ? 'Update Transaction' : 'Create Transaction'
             )}
           </Button>
         </div>
@@ -494,7 +498,7 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
         <DialogTrigger asChild>
           {trigger}
         </DialogTrigger>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto rounded-3xl bg-white/95 backdrop-blur-xl p-8 shadow-2xl border-0 gap-6">
           {modalContent}
         </DialogContent>
       </Dialog>

@@ -392,7 +392,13 @@ Total items synced: ${itemsSynced}`
   })
 
   const getStatusColor = (status: string) => {
-    return integrationService.getStatusColor(status)
+    switch (status) {
+      case 'connected': return 'bg-green-50/80 text-green-700 border border-green-200/50'
+      case 'disconnected': return 'bg-red-50/80 text-red-700 border border-red-200/50'
+      case 'pending': return 'bg-yellow-50/80 text-yellow-700 border border-yellow-200/50'
+      case 'error': return 'bg-red-50/80 text-red-700 border border-red-200/50'
+      default: return 'bg-gray-50/80 text-gray-700 border border-gray-200/50'
+    }
   }
 
   const getStatusIcon = (status: string) => {
@@ -417,157 +423,194 @@ Total items synced: ${itemsSynced}`
   }
 
   return (
-    <div className="space-y-6">
+    <div className="p-6 space-y-8">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold">Integrations</h1>
-          <p className="text-muted-foreground">
-            Connect and manage third-party services for seamless workflow automation
+          <h1 className="page-title text-gray-900">Integration Hub</h1>
+          <p className="text-gray-600 mt-1 font-medium tracking-tight">
+            Professional third-party service connections and workflow automation platform
           </p>
         </div>
-        <div className="flex items-center space-x-2">
-          <Button variant="outline" onClick={() => loadIntegrations()}>
+        <div className="flex items-center space-x-3">
+          <Button 
+            variant="outline" 
+            className="rounded-xl bg-white/80 backdrop-blur-sm text-gray-700 px-4 py-2 hover:bg-white transition-all duration-200 ease-out border border-gray-200 shadow-sm font-medium tracking-tight"
+            onClick={() => loadIntegrations()}
+          >
             <RefreshCw className="h-4 w-4 mr-2" />
-            Refresh
+            Refresh Status
+          </Button>
+          <Button className="rounded-xl bg-gradient-to-r from-orange-400 to-red-500 text-white px-4 py-2 font-semibold tracking-tight shadow-sm hover:shadow-md transition-all duration-200 ease-out">
+            <Plus className="h-4 w-4 mr-2" />
+            Add Integration
           </Button>
         </div>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Integrations</CardTitle>
-            <Settings className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{integrationStats.totalIntegrations}</div>
-            <p className="text-xs text-muted-foreground">
-              Available integrations
-            </p>
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <Card 
+          className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0 transition-all duration-200 hover:shadow-md hover:-translate-y-1 animate-fade-in-up"
+          style={{ animationDelay: '0ms' }}
+        >
+          <CardContent className="p-0">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-semibold text-gray-600 tracking-tight">Total Integrations</p>
+                <p className="metric-number text-4xl text-gray-900 mt-2">{integrationStats.totalIntegrations}</p>
+                <p className="text-sm text-gray-500 font-medium mt-1">Available services</p>
+              </div>
+              <div className="p-3 rounded-full bg-blue-50 text-blue-500">
+                <Settings className="h-6 w-6" />
+              </div>
+            </div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Connected</CardTitle>
-            <CheckCircle className="h-4 w-4 text-green-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {integrationStats.connectedIntegrations}
+        <Card 
+          className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0 transition-all duration-200 hover:shadow-md hover:-translate-y-1 animate-fade-in-up"
+          style={{ animationDelay: '100ms' }}
+        >
+          <CardContent className="p-0">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-semibold text-gray-600 tracking-tight">Connected</p>
+                <p className="metric-number text-4xl text-gray-900 mt-2">{integrationStats.connectedIntegrations}</p>
+                <p className="text-sm text-gray-500 font-medium mt-1">Active connections</p>
+              </div>
+              <div className="p-3 rounded-full bg-green-50 text-green-500">
+                <CheckCircle className="h-6 w-6" />
+              </div>
             </div>
-            <p className="text-xs text-muted-foreground">
-              Active connections
-            </p>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Disconnected</CardTitle>
-            <XCircle className="h-4 w-4 text-red-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {integrationStats.disconnectedIntegrations}
+        <Card 
+          className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0 transition-all duration-200 hover:shadow-md hover:-translate-y-1 animate-fade-in-up"
+          style={{ animationDelay: '200ms' }}
+        >
+          <CardContent className="p-0">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-semibold text-gray-600 tracking-tight">Disconnected</p>
+                <p className="metric-number text-4xl text-gray-900 mt-2">{integrationStats.disconnectedIntegrations}</p>
+                <p className="text-sm text-gray-500 font-medium mt-1">Ready to connect</p>
+              </div>
+              <div className="p-3 rounded-full bg-red-50 text-red-500">
+                <XCircle className="h-6 w-6" />
+              </div>
             </div>
-            <p className="text-xs text-muted-foreground">
-              Available to connect
-            </p>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Sync Success Rate</CardTitle>
-            <BarChart3 className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {integrationStats.syncSuccessRate}%
+        <Card 
+          className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0 transition-all duration-200 hover:shadow-md hover:-translate-y-1 animate-fade-in-up"
+          style={{ animationDelay: '300ms' }}
+        >
+          <CardContent className="p-0">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-semibold text-gray-600 tracking-tight">Sync Success Rate</p>
+                <p className="metric-number text-4xl text-gray-900 mt-2">{integrationStats.syncSuccessRate}%</p>
+                <p className="text-sm text-gray-500 font-medium mt-1">Recent syncs</p>
+              </div>
+              <div className="p-3 rounded-full bg-purple-50 text-purple-500">
+                <BarChart3 className="h-6 w-6" />
+              </div>
             </div>
-            <p className="text-xs text-muted-foreground">
-              Recent syncs successful
-            </p>
           </CardContent>
         </Card>
       </div>
 
       {/* Search and Filters */}
-      <div className="flex flex-col sm:flex-row gap-4">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search integrations..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
-          />
+      <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0">
+        <div className="flex flex-col sm:flex-row gap-4">
+          <div className="relative flex-1">
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Input
+              placeholder="Search integrations by name or description..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-12 rounded-xl bg-white/60 backdrop-blur-sm border-gray-200/50 text-gray-900 font-medium tracking-tight"
+            />
+          </div>
+          <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+            <SelectTrigger className="w-[180px] rounded-xl bg-white/60 backdrop-blur-sm border-gray-200/50 text-gray-900 font-medium tracking-tight">
+              <SelectValue placeholder="Category" />
+            </SelectTrigger>
+            <SelectContent>
+              {categories.map(category => (
+                <SelectItem key={category} value={category}>
+                  {category}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Select value={statusFilter} onValueChange={setStatusFilter}>
+            <SelectTrigger className="w-[180px] rounded-xl bg-white/60 backdrop-blur-sm border-gray-200/50 text-gray-900 font-medium tracking-tight">
+              <SelectValue placeholder="Status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="All">All Status</SelectItem>
+              <SelectItem value="connected">✅ Connected</SelectItem>
+              <SelectItem value="disconnected">❌ Disconnected</SelectItem>
+              <SelectItem value="pending">⏳ Pending</SelectItem>
+              <SelectItem value="error">⚠️ Error</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
-        <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Category" />
-          </SelectTrigger>
-          <SelectContent>
-            {categories.map(category => (
-              <SelectItem key={category} value={category}>
-                {category}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="All">All Status</SelectItem>
-            <SelectItem value="connected">Connected</SelectItem>
-            <SelectItem value="disconnected">Disconnected</SelectItem>
-            <SelectItem value="pending">Pending</SelectItem>
-            <SelectItem value="error">Error</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+      </Card>
 
       {/* Integrations Grid */}
       {loading ? (
-        <div className="text-center py-8">
-          <Loader2 className="h-8 w-8 animate-spin mx-auto" />
-          <p className="mt-2 text-gray-600">Loading integrations...</p>
-        </div>
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-12 shadow-sm border-0">
+          <div className="text-center">
+            <div className="p-4 rounded-full bg-orange-50 text-orange-500 w-16 h-16 mx-auto mb-6 flex items-center justify-center">
+              <Loader2 className="h-8 w-8 animate-spin" />
+            </div>
+            <h3 className="text-xl font-bold text-gray-900 tracking-tight mb-2">Loading Integrations</h3>
+            <p className="text-gray-600 font-medium tracking-tight">
+              Setting up your integration hub...
+            </p>
+          </div>
+        </Card>
       ) : (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {filteredIntegrations.map((integration) => (
-            <Card key={integration._id} className="hover:shadow-lg transition-shadow">
-              <CardHeader>
+          {filteredIntegrations.map((integration, index) => (
+            <Card 
+              key={integration._id} 
+              className="rounded-3xl bg-white/60 backdrop-blur-sm p-6 shadow-sm border border-gray-200/50 hover:bg-white/80 hover:shadow-md hover:-translate-y-1 transition-all duration-200 ease-out animate-fade-in-up"
+              style={{ animationDelay: `${index * 100}ms` }}
+            >
+              <CardHeader className="p-0 pb-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <span className="text-2xl">{integration.icon}</span>
+                    <div className="text-3xl p-2 rounded-2xl bg-gray-50/80">
+                      {integration.icon}
+                    </div>
                     <div>
-                      <CardTitle className="text-lg">{integration.name}</CardTitle>
-                      <CardDescription className="flex items-center space-x-1">
+                      <CardTitle className="text-lg font-bold text-gray-900 tracking-tight">{integration.name}</CardTitle>
+                      <CardDescription className="flex items-center space-x-1 text-gray-600 font-medium tracking-tight">
                         <span>{getCategoryIcon(integration.category)}</span>
                         <span>{integration.category}</span>
                       </CardDescription>
                     </div>
                   </div>
-                  <Badge className={getStatusColor(integration.status)}>
-                    {getStatusIcon(integration.status)} {integration.status}
+                  <Badge className={`${getStatusColor(integration.status)} font-medium tracking-tight`}>
+                    {getStatusIcon(integration.status)} {integration.status.charAt(0).toUpperCase() + integration.status.slice(1)}
                   </Badge>
                 </div>
               </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground mb-4">
+              <CardContent className="p-0">
+                <p className="text-sm text-gray-600 font-medium tracking-tight mb-4 leading-relaxed">
                   {integration.description}
                 </p>
                 
                 {integration.lastSync && (
-                  <div className="flex items-center justify-between text-xs text-muted-foreground mb-4">
-                    <span>Last synced</span>
-                    <span>{formatLastSync(integration.lastSync)}</span>
+                  <div className="flex items-center justify-between text-xs p-3 rounded-xl bg-gray-50/50 mb-4">
+                    <span className="text-gray-600 font-medium">Last synced</span>
+                    <span className="text-gray-900 font-semibold">{formatLastSync(integration.lastSync)}</span>
                   </div>
                 )}
                 
@@ -578,7 +621,7 @@ Total items synced: ${itemsSynced}`
                         variant="outline"
                         size="sm"
                         onClick={() => handleSync(integration)}
-                        className="flex-1"
+                        className="flex-1 rounded-xl bg-white/60 backdrop-blur-sm border-gray-200/50 text-gray-700 hover:bg-white hover:text-gray-900 font-medium tracking-tight"
                       >
                         <RefreshCw className="h-4 w-4 mr-1" />
                         Sync
@@ -587,6 +630,7 @@ Total items synced: ${itemsSynced}`
                         variant="outline"
                         size="sm"
                         onClick={() => handleViewDetails(integration)}
+                        className="rounded-xl bg-blue-50/50 text-blue-600 border-blue-200/50 hover:bg-blue-100/80 font-medium tracking-tight"
                       >
                         <Info className="h-4 w-4" />
                       </Button>
@@ -594,6 +638,7 @@ Total items synced: ${itemsSynced}`
                         variant="outline"
                         size="sm"
                         onClick={() => handleDisconnect(integration)}
+                        className="rounded-xl bg-red-50/50 text-red-600 border-red-200/50 hover:bg-red-100/80 font-medium tracking-tight"
                       >
                         <XCircle className="h-4 w-4" />
                       </Button>
@@ -603,7 +648,7 @@ Total items synced: ${itemsSynced}`
                       <Button
                         size="sm"
                         onClick={() => handleConnect(integration)}
-                        className="flex-1"
+                        className="flex-1 rounded-xl bg-gradient-to-r from-orange-400 to-red-500 text-white font-semibold tracking-tight shadow-sm hover:shadow-md transition-all duration-200 ease-out"
                       >
                         <Plus className="h-4 w-4 mr-1" />
                         Connect
@@ -612,6 +657,7 @@ Total items synced: ${itemsSynced}`
                         variant="outline"
                         size="sm"
                         onClick={() => handleViewDetails(integration)}
+                        className="rounded-xl bg-blue-50/50 text-blue-600 border-blue-200/50 hover:bg-blue-100/80 font-medium tracking-tight"
                       >
                         <Info className="h-4 w-4" />
                       </Button>
@@ -625,13 +671,28 @@ Total items synced: ${itemsSynced}`
       )}
 
       {filteredIntegrations.length === 0 && !loading && (
-        <div className="text-center py-12">
-          <Globe className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-          <h3 className="text-lg font-medium">No integrations found</h3>
-          <p className="text-muted-foreground">
-            Try adjusting your search or filters to find what you're looking for.
-          </p>
-        </div>
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-12 shadow-sm border-0">
+          <div className="text-center">
+            <div className="p-4 rounded-full bg-gray-50 text-gray-400 w-16 h-16 mx-auto mb-6 flex items-center justify-center">
+              <Globe className="h-8 w-8" />
+            </div>
+            <h3 className="text-xl font-bold text-gray-900 tracking-tight mb-2">No integrations found</h3>
+            <p className="text-gray-600 font-medium tracking-tight mb-6">
+              Try adjusting your search or filters to find what you're looking for.
+            </p>
+            <Button 
+              className="rounded-xl bg-gradient-to-r from-orange-400 to-red-500 text-white px-6 py-2 font-semibold tracking-tight shadow-sm hover:shadow-md transition-all duration-200 ease-out"
+              onClick={() => {
+                setSearchTerm('')
+                setCategoryFilter('All')
+                setStatusFilter('All')
+              }}
+            >
+              <RefreshCw className="h-4 w-4 mr-2" />
+              Clear Filters
+            </Button>
+          </div>
+        </Card>
       )}
 
       {/* Connect Integration Dialog */}

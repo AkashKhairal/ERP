@@ -95,23 +95,23 @@ const Dashboard = () => {
   ]
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
+    <div className="p-6 space-y-6">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">
+          <h1 className="page-title text-gray-900">
             {getGreeting()}, {user?.firstName || 'User'}!
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-gray-600 mt-1 font-medium tracking-tight">
             Here's what's happening with your projects today.
           </p>
         </div>
-        <div className="flex items-center space-x-2">
-          <Button variant="outline" size="sm">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
+          <Button variant="outline" size="sm" className="rounded-xl bg-white/80 backdrop-blur-sm text-gray-700 px-4 py-2 hover:bg-white transition-all duration-200 ease-out border border-gray-200 shadow-sm font-medium tracking-tight">
             <Plus className="mr-2 h-4 w-4" />
             New Project
           </Button>
-          <Button size="sm">
+          <Button size="sm" className="rounded-xl bg-gradient-to-r from-orange-400 to-red-500 text-white px-4 py-2 font-semibold tracking-tight shadow-sm hover:shadow-md transition-all duration-200 ease-out">
             <ArrowUpRight className="mr-2 h-4 w-4" />
             View Reports
           </Button>
@@ -119,157 +119,185 @@ const Dashboard = () => {
       </div>
 
       {/* Key Metrics */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0 transition-all duration-200 hover:shadow-md hover:-translate-y-1 animate-fade-in-up" style={{ animationDelay: '100ms' }}>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-0">
+            <CardTitle className="text-sm font-semibold text-gray-600 tracking-tight">
               Total Revenue
             </CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
+            <div className="p-2 rounded-full bg-orange-50 text-orange-500">
+              <DollarSign className="h-5 w-5" />
+            </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">${stats.monthlyRevenue.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">
-              <span className="text-green-600">+20.1%</span> from last month
+          <CardContent className="p-0 pt-2">
+            <div className="metric-number text-4xl text-gray-900">${stats.monthlyRevenue.toLocaleString()}</div>
+            <p className="text-sm text-green-600 mt-1 font-medium tracking-tight">
+              +20.1% from last month
             </p>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0 transition-all duration-200 hover:shadow-md hover:-translate-y-1 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-0">
+            <CardTitle className="text-sm font-semibold text-gray-600 tracking-tight">
               Active Users
             </CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
+            <div className="p-2 rounded-full bg-blue-50 text-blue-500">
+              <Users className="h-5 w-5" />
+            </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">+{stats.totalUsers}</div>
-            <p className="text-xs text-muted-foreground">
-              <span className="text-green-600">+180.1%</span> from last month
+          <CardContent className="p-0 pt-2">
+            <div className="metric-number text-4xl text-gray-900">+{stats.totalUsers}</div>
+            <p className="text-sm text-green-600 mt-1 font-medium tracking-tight">
+              +180.1% from last month
             </p>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0 transition-all duration-200 hover:shadow-md hover:-translate-y-1 animate-fade-in-up" style={{ animationDelay: '300ms' }}>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-0">
+            <CardTitle className="text-sm font-semibold text-gray-600 tracking-tight">
               Active Projects
             </CardTitle>
-            <FolderOpen className="h-4 w-4 text-muted-foreground" />
+            <div className="p-2 rounded-full bg-green-50 text-green-500">
+              <FolderOpen className="h-5 w-5" />
+            </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">+{stats.activeProjects}</div>
-            <p className="text-xs text-muted-foreground">
-              <span className="text-green-600">+19%</span> from last month
+          <CardContent className="p-0 pt-2">
+            <div className="metric-number text-4xl text-gray-900">+{stats.activeProjects}</div>
+            <p className="text-sm text-green-600 mt-1 font-medium tracking-tight">
+              +19% from last month
             </p>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0 transition-all duration-200 hover:shadow-md hover:-translate-y-1 animate-fade-in-up" style={{ animationDelay: '400ms' }}>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-0">
+            <CardTitle className="text-sm font-semibold text-gray-600 tracking-tight">
               YouTube Views
             </CardTitle>
-            <Eye className="h-4 w-4 text-muted-foreground" />
+            <div className="p-2 rounded-full bg-purple-50 text-purple-500">
+              <Eye className="h-5 w-5" />
+            </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">+{(stats.youtubeViews / 1000000).toFixed(1)}M</div>
-            <p className="text-xs text-muted-foreground">
-              <span className="text-green-600">+12.5%</span> from last month
+          <CardContent className="p-0 pt-2">
+            <div className="metric-number text-4xl text-gray-900">+{(stats.youtubeViews / 1000000).toFixed(1)}M</div>
+            <p className="text-sm text-green-600 mt-1 font-medium tracking-tight">
+              +12.5% from last month
             </p>
           </CardContent>
         </Card>
       </div>
 
       {/* Charts */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
         <div className="col-span-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Revenue Overview</CardTitle>
-              <CardDescription>
+          <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0">
+            <CardHeader className="p-0 pb-4">
+              <CardTitle className="card-title text-gray-900">Revenue Overview</CardTitle>
+              <CardDescription className="text-sm text-gray-500 font-medium tracking-tight">
                 Monthly revenue trends
               </CardDescription>
             </CardHeader>
-            <CardContent>
-              <AreaChartComponent data={revenueData} height={300} />
+            <CardContent className="p-0">
+              <AreaChartComponent 
+                data={revenueData} 
+                height={300} 
+                color="#f97316"
+                dataKey="value"
+              />
             </CardContent>
           </Card>
         </div>
 
-        <Card className="col-span-3">
-          <CardHeader>
-            <CardTitle>Project Progress</CardTitle>
-            <CardDescription>
+        <Card className="col-span-3 rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0">
+          <CardHeader className="p-0 pb-4">
+            <CardTitle className="card-title text-gray-900">Project Progress</CardTitle>
+            <CardDescription className="text-sm text-gray-500">
               Current project status
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <PieChartComponent data={projectProgressData} height={300} />
-          </CardContent>
+                      <CardContent className="p-0">
+              <PieChartComponent 
+                data={projectProgressData} 
+                height={300}
+                dataKey="value"
+                nameKey="name"
+              />
+            </CardContent>
         </Card>
       </div>
 
       {/* Additional Charts */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
         <div className="col-span-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>User Growth</CardTitle>
-              <CardDescription>
+          <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0">
+            <CardHeader className="p-0 pb-4">
+              <CardTitle className="card-title text-gray-900">User Growth</CardTitle>
+              <CardDescription className="text-sm text-gray-500 font-medium tracking-tight">
                 Monthly user acquisition
               </CardDescription>
             </CardHeader>
-            <CardContent>
-              <LineChartComponent data={userGrowthData} height={300} />
+            <CardContent className="p-0">
+              <LineChartComponent 
+                data={userGrowthData} 
+                height={300} 
+                color="#10b981"
+                dataKey="value"
+              />
             </CardContent>
           </Card>
         </div>
 
         <div className="col-span-3">
-          <Card>
-            <CardHeader>
-              <CardTitle>Monthly Views</CardTitle>
-              <CardDescription>
+          <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0">
+            <CardHeader className="p-0 pb-4">
+              <CardTitle className="card-title text-gray-900">Monthly Views</CardTitle>
+              <CardDescription className="text-sm text-gray-500 font-medium tracking-tight">
                 YouTube view trends
               </CardDescription>
             </CardHeader>
-            <CardContent>
-              <BarChartComponent data={monthlyViewsData} height={300} />
+            <CardContent className="p-0">
+              <BarChartComponent 
+                data={monthlyViewsData} 
+                height={300} 
+                color="#3b82f6"
+                dataKey="value"
+              />
             </CardContent>
           </Card>
         </div>
       </div>
 
       {/* Recent Activity */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-        <Card className="col-span-4">
-          <CardHeader>
-            <CardTitle>Recent Activity</CardTitle>
-            <CardDescription>
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
+        <Card className="col-span-4 rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0">
+          <CardHeader className="p-0 pb-4">
+            <CardTitle className="card-title text-gray-900">Recent Activity</CardTitle>
+            <CardDescription className="text-sm text-gray-500">
               Latest updates and activities
             </CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-0">
             <div className="space-y-4">
               {recentActivities.length > 0 ? (
                 recentActivities.map((activity: any, index: number) => (
-                  <div key={index} className="flex items-center space-x-4">
+                  <div key={index} className="flex items-center space-x-4 p-3 rounded-xl hover:bg-gray-50 transition-all duration-200 ease-out">
                     <div className="flex-shrink-0">
-                      <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
-                        <Activity className="h-4 w-4 text-primary-foreground" />
+                      <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                        <Activity className="h-5 w-5 text-blue-600" />
                       </div>
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-foreground">
+                      <p className="text-sm font-medium text-gray-900">
                         {activity.action}
                       </p>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-sm text-gray-500">
                         {activity.details}
                       </p>
                     </div>
                     <div className="flex-shrink-0">
-                      <p className="text-xs text-muted-foreground">
+                      <p className="text-xs text-gray-400">
                         {new Date(activity.timestamp).toLocaleDateString()}
                       </p>
                     </div>
@@ -277,8 +305,8 @@ const Dashboard = () => {
                 ))
               ) : (
                 <div className="text-center py-8">
-                  <Activity className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
-                  <p className="text-sm text-muted-foreground">
+                  <Activity className="h-12 w-12 text-gray-300 mx-auto mb-3" />
+                  <p className="text-sm text-gray-500">
                     No recent activity
                   </p>
                 </div>
@@ -287,29 +315,29 @@ const Dashboard = () => {
           </CardContent>
         </Card>
 
-        <Card className="col-span-3">
-          <CardHeader>
-            <CardTitle>Quick Actions</CardTitle>
-            <CardDescription>
+        <Card className="col-span-3 rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0">
+          <CardHeader className="p-0 pb-4">
+            <CardTitle className="card-title text-gray-900">Quick Actions</CardTitle>
+            <CardDescription className="text-sm text-gray-500">
               Common tasks and shortcuts
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              <Button variant="outline" className="w-full justify-start">
-                <Plus className="mr-2 h-4 w-4" />
+          <CardContent className="p-0">
+            <div className="space-y-3">
+              <Button variant="outline" className="w-full justify-start rounded-xl bg-white/60 backdrop-blur-sm text-gray-700 px-5 py-2.5 hover:bg-white/80 transition-all duration-200 ease-out border border-gray-200/50 shadow-sm">
+                <Plus className="mr-3 h-4 w-4" />
                 New Project
               </Button>
-              <Button variant="outline" className="w-full justify-start">
-                <Users className="mr-2 h-4 w-4" />
+              <Button variant="outline" className="w-full justify-start rounded-xl bg-white/60 backdrop-blur-sm text-gray-700 px-5 py-2.5 hover:bg-white/80 transition-all duration-200 ease-out border border-gray-200/50 shadow-sm">
+                <Users className="mr-3 h-4 w-4" />
                 Add Team Member
               </Button>
-              <Button variant="outline" className="w-full justify-start">
-                <BarChart3 className="mr-2 h-4 w-4" />
+              <Button variant="outline" className="w-full justify-start rounded-xl bg-white/60 backdrop-blur-sm text-gray-700 px-5 py-2.5 hover:bg-white/80 transition-all duration-200 ease-out border border-gray-200/50 shadow-sm">
+                <BarChart3 className="mr-3 h-4 w-4" />
                 View Analytics
               </Button>
-              <Button variant="outline" className="w-full justify-start">
-                <Calendar className="mr-2 h-4 w-4" />
+              <Button variant="outline" className="w-full justify-start rounded-xl bg-white/60 backdrop-blur-sm text-gray-700 px-5 py-2.5 hover:bg-white/80 transition-all duration-200 ease-out border border-gray-200/50 shadow-sm">
+                <Calendar className="mr-3 h-4 w-4" />
                 Schedule Meeting
               </Button>
             </div>

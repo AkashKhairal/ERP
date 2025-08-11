@@ -317,79 +317,91 @@ const HRDashboard = () => {
   }
 
   const renderOverviewTab = () => (
-    <div className="space-y-6">
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Employees</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
+    <div className="space-y-8">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0 transition-all duration-200 hover:shadow-md hover:-translate-y-1 animate-fade-in-up" style={{ animationDelay: '0ms' }}>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 p-0">
+            <CardTitle className="text-sm font-semibold text-gray-600 tracking-tight">Total Employees</CardTitle>
+            <div className="p-2 rounded-full bg-blue-50 text-blue-500">
+              <Users className="h-5 w-5" />
+            </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats?.totalEmployees ?? '-'}</div>
-            <p className="text-xs text-muted-foreground">{stats ? `${Math.max(0, (stats.activeEmployees || 0) - (stats.totalEmployees || 0))} net change` : ''}</p>
+          <CardContent className="p-0">
+            <div className="metric-number text-4xl text-gray-900">{stats?.totalEmployees ?? '-'}</div>
+            <p className="text-sm text-blue-600 mt-1 font-medium tracking-tight">{stats ? `${Math.max(0, (stats.activeEmployees || 0) - (stats.totalEmployees || 0))} net change` : 'Team strength'}</p>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Employees</CardTitle>
-            <UserCheck className="h-4 w-4 text-muted-foreground" />
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0 transition-all duration-200 hover:shadow-md hover:-translate-y-1 animate-fade-in-up" style={{ animationDelay: '100ms' }}>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 p-0">
+            <CardTitle className="text-sm font-semibold text-gray-600 tracking-tight">Active Employees</CardTitle>
+            <div className="p-2 rounded-full bg-green-50 text-green-500">
+              <UserCheck className="h-5 w-5" />
+            </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats?.activeEmployees ?? '-'}</div>
-            <p className="text-xs text-muted-foreground">{stats && stats.totalEmployees ? `${((stats.activeEmployees / stats.totalEmployees) * 100).toFixed(1)}% active rate` : ''}</p>
+          <CardContent className="p-0">
+            <div className="metric-number text-4xl text-gray-900">{stats?.activeEmployees ?? '-'}</div>
+            <p className="text-sm text-green-600 mt-1 font-medium tracking-tight">{stats && stats.totalEmployees ? `${((stats.activeEmployees / stats.totalEmployees) * 100).toFixed(1)}% active rate` : 'Currently working'}</p>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pending Leaves</CardTitle>
-            <Clock className="h-4 w-4 text-muted-foreground" />
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0 transition-all duration-200 hover:shadow-md hover:-translate-y-1 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 p-0">
+            <CardTitle className="text-sm font-semibold text-gray-600 tracking-tight">Pending Leaves</CardTitle>
+            <div className="p-2 rounded-full bg-yellow-50 text-yellow-500">
+              <Clock className="h-5 w-5" />
+            </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats?.pendingLeaves ?? '-'}</div>
-            <p className="text-xs text-muted-foreground">Require approval</p>
+          <CardContent className="p-0">
+            <div className="metric-number text-4xl text-gray-900">{stats?.pendingLeaves ?? '-'}</div>
+            <p className="text-sm text-yellow-600 mt-1 font-medium tracking-tight">Require approval</p>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Salary</CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0 transition-all duration-200 hover:shadow-md hover:-translate-y-1 animate-fade-in-up" style={{ animationDelay: '300ms' }}>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 p-0">
+            <CardTitle className="text-sm font-semibold text-gray-600 tracking-tight">Total Salary</CardTitle>
+            <div className="p-2 rounded-full bg-orange-50 text-orange-500">
+              <DollarSign className="h-5 w-5" />
+            </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(stats.totalSalary || 0) : '-'}</div>
-            <p className="text-xs text-muted-foreground">Monthly payroll</p>
+          <CardContent className="p-0">
+            <div className="metric-number text-4xl text-gray-900">{stats ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(stats.totalSalary || 0) : '-'}</div>
+            <p className="text-sm text-orange-600 mt-1 font-medium tracking-tight">Monthly payroll</p>
           </CardContent>
         </Card>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
         <div className="col-span-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Attendance Overview</CardTitle>
-              <CardDescription>Weekly attendance trends</CardDescription>
+          <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0">
+            <CardHeader className="p-0 pb-4">
+              <CardTitle className="card-title text-gray-900">Attendance Overview</CardTitle>
+              <CardDescription className="text-sm text-gray-500 font-medium tracking-tight">
+                Weekly attendance trends and patterns
+              </CardDescription>
             </CardHeader>
-            <CardContent>
-              <BarChartComponent data={attendanceChartData} height={300} />
+            <CardContent className="p-0">
+              <BarChartComponent data={attendanceChartData} height={300} color="#10b981" />
             </CardContent>
           </Card>
         </div>
 
         <div className="col-span-3">
-          <Card>
-            <CardHeader>
-              <CardTitle>Department Distribution</CardTitle>
-              <CardDescription>Employees by department</CardDescription>
+          <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0">
+            <CardHeader className="p-0 pb-4">
+              <CardTitle className="card-title text-gray-900">Department Distribution</CardTitle>
+              <CardDescription className="text-sm text-gray-500 font-medium tracking-tight">
+                Team distribution across departments
+              </CardDescription>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
+            <CardContent className="p-0">
+              <div className="space-y-3">
                 {stats &&
                   Object.entries(stats.departmentBreakdown || {}).map(([dept, count]) => (
-                    <div key={dept} className="flex items-center justify-between">
-                      <span className="text-sm">{dept || 'Unassigned'}</span>
-                      <span className="text-sm font-medium">{count as any}</span>
+                    <div key={dept} className="flex items-center justify-between p-3 rounded-xl bg-gray-50/50">
+                      <span className="text-sm font-medium text-gray-700 tracking-tight">{dept || 'Unassigned'}</span>
+                      <span className="text-sm font-bold text-gray-900 bg-orange-100 text-orange-700 px-2 py-1 rounded-lg">{count as any}</span>
                 </div>
                   ))}
               </div>
@@ -401,7 +413,7 @@ const HRDashboard = () => {
   )
 
   const renderEmployeesTab = () => (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="flex-1">
           <Input placeholder="Search employees..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
@@ -433,7 +445,10 @@ const HRDashboard = () => {
             <SelectItem value="suspended">Suspended</SelectItem>
           </SelectContent>
         </Select>
-        <Button onClick={openCreateEmployee}>
+        <Button 
+          onClick={openCreateEmployee}
+          className="rounded-xl bg-gradient-to-r from-orange-400 to-red-500 text-white px-4 py-2 font-semibold tracking-tight shadow-sm hover:shadow-md transition-all duration-200 ease-out"
+        >
           <Plus className="h-4 w-4 mr-2" />
           Add Employee
         </Button>
@@ -453,15 +468,17 @@ const HRDashboard = () => {
         </div>
       )}
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Employees</CardTitle>
-          <CardDescription>Manage your team members</CardDescription>
+      <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0">
+        <CardHeader className="p-0 pb-4">
+          <CardTitle className="card-title text-gray-900">Team Members</CardTitle>
+          <CardDescription className="text-sm text-gray-500 font-medium tracking-tight">
+            Manage your talented team members
+          </CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="space-y-3">
+        <CardContent className="p-0">
+          <div className="space-y-4">
             {filteredEmployees.map((employee) => (
-              <div key={employee._id} className="flex items-center justify-between p-4 border rounded-lg">
+              <div key={employee._id} className="flex items-center justify-between p-4 rounded-2xl bg-gray-50/30 border border-gray-100/50 hover:bg-white/60 transition-all duration-200">
                 <div className="flex items-center space-x-4">
                   <img
                     src={
@@ -469,24 +486,34 @@ const HRDashboard = () => {
                       `https://ui-avatars.com/api/?name=${encodeURIComponent(`${employee.user?.firstName || ''} ${employee.user?.lastName || ''}`)}`
                     }
                     alt={`${employee.user?.firstName || ''} ${employee.user?.lastName || ''}`}
-                    className="h-10 w-10 rounded-full"
+                    className="h-12 w-12 rounded-full border-2 border-white shadow-sm"
                   />
                   <div>
-                    <h3 className="font-medium">
+                    <h3 className="font-semibold text-gray-900 tracking-tight">
                       {employee.user?.firstName} {employee.user?.lastName}
                     </h3>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-gray-600 font-medium">
                       {employee.user?.position || ''} • {employee.user?.email}
                     </p>
-                    <p className="text-xs text-muted-foreground">{employee.user?.department}</p>
+                    <p className="text-xs text-gray-500 font-medium">{employee.user?.department}</p>
                   </div>
                 </div>
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-3">
                   <Badge className={getStatusColor(employee.status)}>{employee.status}</Badge>
-                  <Button variant="outline" size="sm" onClick={() => onViewEmployee(employee)}>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => onViewEmployee(employee)}
+                    className="rounded-xl bg-white/60 backdrop-blur-sm text-gray-700 p-2 hover:bg-white/80 transition-all duration-200 ease-out border border-gray-200/50 shadow-sm"
+                  >
                     <Eye className="h-4 w-4" />
                   </Button>
-                  <Button variant="outline" size="sm" onClick={() => onEditEmployee(employee)}>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => onEditEmployee(employee)}
+                    className="rounded-xl bg-white/60 backdrop-blur-sm text-gray-700 p-2 hover:bg-white/80 transition-all duration-200 ease-out border border-gray-200/50 shadow-sm"
+                  >
                     <Edit className="h-4 w-4" />
                   </Button>
                 </div>
@@ -499,31 +526,44 @@ const HRDashboard = () => {
   )
 
   const renderAttendanceTab = () => (
-    <div className="space-y-4">
-      <Card>
-        <CardHeader className="flex items-center justify-between">
+    <div className="space-y-6">
+      <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0">
+        <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between p-0 pb-6 gap-4">
           <div>
-          <CardTitle>Attendance Tracking</CardTitle>
-          <CardDescription>Monitor daily attendance and time tracking</CardDescription>
+            <CardTitle className="card-title text-gray-900">Attendance Tracking</CardTitle>
+            <CardDescription className="text-sm text-gray-500 font-medium tracking-tight">
+              Monitor daily attendance and time tracking
+            </CardDescription>
           </div>
-          <div className="space-x-2">
-            <Button variant="outline" onClick={onCheckIn}>Check In</Button>
-            <Button onClick={onCheckOut}>Check Out</Button>
+          <div className="flex space-x-3">
+            <Button 
+              variant="outline" 
+              onClick={onCheckIn}
+              className="rounded-xl bg-white/60 backdrop-blur-sm text-gray-700 px-4 py-2 hover:bg-white/80 transition-all duration-200 ease-out border border-gray-200/50 shadow-sm font-medium tracking-tight"
+            >
+              Check In
+            </Button>
+            <Button 
+              onClick={onCheckOut}
+              className="rounded-xl bg-gradient-to-r from-orange-400 to-red-500 text-white px-4 py-2 font-semibold tracking-tight shadow-sm hover:shadow-md transition-all duration-200 ease-out"
+            >
+              Check Out
+            </Button>
           </div>
         </CardHeader>
-        <CardContent>
-            <div className="grid gap-4 md:grid-cols-3">
-              <div className="text-center">
-              <div className="text-2xl font-bold text-green-600">{todayAttendanceCount.present}</div>
-                <div className="text-sm text-muted-foreground">Present Today</div>
-              </div>
-              <div className="text-center">
-              <div className="text-2xl font-bold text-red-600">{todayAttendanceCount.absent}</div>
-                <div className="text-sm text-muted-foreground">Absent Today</div>
-              </div>
-              <div className="text-center">
-              <div className="text-2xl font-bold text-yellow-600">{todayAttendanceCount.late}</div>
-                <div className="text-sm text-muted-foreground">Late Today</div>
+        <CardContent className="p-0">
+          <div className="grid gap-6 md:grid-cols-3">
+            <div className="text-center p-6 rounded-2xl bg-green-50/50 border border-green-100/50">
+              <div className="metric-number text-4xl text-green-600">{todayAttendanceCount.present}</div>
+              <div className="text-sm text-green-700 font-semibold tracking-tight mt-2">Present Today</div>
+            </div>
+            <div className="text-center p-6 rounded-2xl bg-red-50/50 border border-red-100/50">
+              <div className="metric-number text-4xl text-red-600">{todayAttendanceCount.absent}</div>
+              <div className="text-sm text-red-700 font-semibold tracking-tight mt-2">Absent Today</div>
+            </div>
+            <div className="text-center p-6 rounded-2xl bg-yellow-50/50 border border-yellow-100/50">
+              <div className="metric-number text-4xl text-yellow-600">{todayAttendanceCount.late}</div>
+              <div className="text-sm text-yellow-700 font-semibold tracking-tight mt-2">Late Today</div>
             </div>
           </div>
         </CardContent>
@@ -648,14 +688,21 @@ const HRDashboard = () => {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="p-6 space-y-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold">HR Management</h1>
-          <p className="text-muted-foreground">Manage employees, attendance, leaves, and payroll</p>
+          <h1 className="page-title text-gray-900">Human Resources</h1>
+          <p className="text-gray-600 mt-1 font-medium tracking-tight">
+            Manage your team with luxury precision and care
+          </p>
         </div>
-        <div className="flex items-center space-x-2">
-          <Button variant="outline" onClick={onExport} disabled={loading}>
+        <div className="flex items-center space-x-3">
+          <Button 
+            variant="outline" 
+            onClick={onExport} 
+            disabled={loading}
+            className="rounded-xl bg-white/80 backdrop-blur-sm text-gray-700 px-4 py-2 hover:bg-white transition-all duration-200 ease-out border border-gray-200 shadow-sm font-medium tracking-tight"
+          >
             <Download className="h-4 w-4 mr-2" />
             Export
           </Button>

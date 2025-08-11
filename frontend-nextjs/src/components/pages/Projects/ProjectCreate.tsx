@@ -112,31 +112,37 @@ const ProjectCreate = () => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="p-6 space-y-8">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold">Create New Project</h1>
-          <p className="text-muted-foreground">
-            Set up a new project with all the necessary details
+          <h1 className="page-title text-gray-900">Create New Project</h1>
+          <p className="text-gray-600 mt-1 font-medium tracking-tight">
+            Set up a new project with luxury precision and attention to detail
           </p>
         </div>
-        <Button variant="outline" onClick={handleCancel}>
+        <Button 
+          variant="outline" 
+          onClick={handleCancel}
+          className="rounded-xl bg-white/80 backdrop-blur-sm text-gray-700 px-4 py-2 hover:bg-white transition-all duration-200 ease-out border border-gray-200 shadow-sm font-medium tracking-tight"
+        >
           <X className="h-4 w-4 mr-2" />
           Cancel
         </Button>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-8">
         {/* Basic Information */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <Building className="h-5 w-5 mr-2" />
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0">
+          <CardHeader className="p-0 pb-6">
+            <CardTitle className="flex items-center card-title text-gray-900">
+              <div className="p-2 rounded-full bg-blue-50 text-blue-500 mr-3">
+                <Building className="h-5 w-5" />
+              </div>
               Basic Information
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="p-0 space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="name">Project Name *</Label>
@@ -222,14 +228,16 @@ const ProjectCreate = () => {
         </Card>
 
         {/* Timeline */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <Calendar className="h-5 w-5 mr-2" />
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0">
+          <CardHeader className="p-0 pb-6">
+            <CardTitle className="flex items-center card-title text-gray-900">
+              <div className="p-2 rounded-full bg-green-50 text-green-500 mr-3">
+                <Calendar className="h-5 w-5" />
+              </div>
               Timeline
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="p-0 space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="startDate">Start Date *</Label>
@@ -256,14 +264,16 @@ const ProjectCreate = () => {
         </Card>
 
         {/* Budget */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <DollarSign className="h-5 w-5 mr-2" />
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0">
+          <CardHeader className="p-0 pb-6">
+            <CardTitle className="flex items-center card-title text-gray-900">
+              <div className="p-2 rounded-full bg-orange-50 text-orange-500 mr-3">
+                <DollarSign className="h-5 w-5" />
+              </div>
               Budget
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-0">
             <div>
               <Label htmlFor="budget">Project Budget</Label>
               <Input
@@ -278,39 +288,43 @@ const ProjectCreate = () => {
         </Card>
 
         {/* Team */}
-        <Card>
-          <CardHeader>
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0">
+          <CardHeader className="p-0 pb-6">
             <div className="flex items-center justify-between">
-              <CardTitle className="flex items-center">
-                <Users className="h-5 w-5 mr-2" />
+              <CardTitle className="flex items-center card-title text-gray-900">
+                <div className="p-2 rounded-full bg-purple-50 text-purple-500 mr-3">
+                  <Users className="h-5 w-5" />
+                </div>
                 Team Members
               </CardTitle>
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => setShowAddMemberDialog(true)}
+                className="rounded-xl bg-blue-50/80 backdrop-blur-sm text-blue-600 px-4 py-2 hover:bg-blue-100/80 transition-all duration-200 ease-out border border-blue-200/50 shadow-sm font-medium tracking-tight"
               >
                 <Plus className="h-4 w-4 mr-2" />
                 Add Member
               </Button>
             </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-0">
             {projectForm.team.length === 0 ? (
-              <p className="text-muted-foreground">No team members added yet.</p>
+              <p className="text-gray-500 font-medium tracking-tight">No team members added yet.</p>
             ) : (
-              <div className="space-y-2">
+              <div className="space-y-3">
                 {projectForm.team.map((member, index) => (
-                  <div key={index} className="flex items-center justify-between p-2 border rounded">
+                  <div key={index} className="flex items-center justify-between p-4 rounded-2xl bg-gray-50/50 border border-gray-100/50">
                     <div>
-                      <p className="font-medium">{member.user}</p>
-                      <p className="text-sm text-muted-foreground">{member.role}</p>
+                      <p className="font-semibold text-gray-900 tracking-tight">{member.user}</p>
+                      <p className="text-sm text-gray-500 font-medium">{member.role}</p>
                     </div>
                     <Button
                       type="button"
                       variant="outline"
                       size="sm"
                       onClick={() => handleRemoveMember(index)}
+                      className="rounded-xl bg-white/60 backdrop-blur-sm text-red-600 p-2 hover:bg-red-50/80 transition-all duration-200 ease-out border border-red-200/50 shadow-sm"
                     >
                       <X className="h-4 w-4" />
                     </Button>
@@ -322,11 +336,20 @@ const ProjectCreate = () => {
         </Card>
 
         {/* Submit */}
-        <div className="flex justify-end space-x-2">
-          <Button type="button" variant="outline" onClick={handleCancel}>
+        <div className="flex justify-end space-x-3 pt-4">
+          <Button 
+            type="button" 
+            variant="outline" 
+            onClick={handleCancel}
+            className="rounded-xl bg-white/80 backdrop-blur-sm text-gray-700 px-6 py-3 hover:bg-white transition-all duration-200 ease-out border border-gray-200 shadow-sm font-medium tracking-tight"
+          >
             Cancel
           </Button>
-          <Button type="submit" disabled={loading}>
+          <Button 
+            type="submit" 
+            disabled={loading}
+            className="rounded-xl bg-gradient-to-r from-orange-400 to-red-500 text-white px-6 py-3 font-semibold tracking-tight shadow-sm hover:shadow-md transition-all duration-200 ease-out"
+          >
             {loading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -344,27 +367,28 @@ const ProjectCreate = () => {
 
       {/* Add Member Dialog */}
       <Dialog open={showAddMemberDialog} onOpenChange={setShowAddMemberDialog}>
-        <DialogContent>
+        <DialogContent className="rounded-3xl bg-white/95 backdrop-blur-xl p-8 shadow-2xl border-0 gap-6">
           <DialogHeader>
-            <DialogTitle>Add Team Member</DialogTitle>
-            <DialogDescription>
-              Add a new member to the project team
+            <DialogTitle className="text-xl font-bold text-gray-900 tracking-tight">Add Team Member</DialogTitle>
+            <DialogDescription className="text-sm text-gray-600 font-medium tracking-tight">
+              Add a new member to the project team with precision
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-4">
+          <div className="space-y-6">
             <div>
-              <Label htmlFor="member-name">Member Name</Label>
+              <Label htmlFor="member-name" className="text-sm font-semibold text-gray-700 tracking-tight">Member Name</Label>
               <Input
                 id="member-name"
                 value={newMember.user}
                 onChange={(e) => setNewMember(prev => ({ ...prev, user: e.target.value }))}
                 placeholder="Enter member name"
+                className="mt-2"
               />
             </div>
             <div>
-              <Label htmlFor="member-role">Role</Label>
+              <Label htmlFor="member-role" className="text-sm font-semibold text-gray-700 tracking-tight">Role</Label>
               <Select value={newMember.role} onValueChange={(value) => setNewMember(prev => ({ ...prev, role: value }))}>
-                <SelectTrigger>
+                <SelectTrigger className="mt-2">
                   <SelectValue placeholder="Select role" />
                 </SelectTrigger>
                 <SelectContent>
@@ -377,11 +401,18 @@ const ProjectCreate = () => {
               </Select>
             </div>
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowAddMemberDialog(false)}>
+          <DialogFooter className="flex justify-end space-x-3 pt-4">
+            <Button 
+              variant="outline" 
+              onClick={() => setShowAddMemberDialog(false)}
+              className="rounded-xl bg-white/80 backdrop-blur-sm text-gray-700 px-6 py-2 hover:bg-white transition-all duration-200 ease-out border border-gray-200 shadow-sm font-medium tracking-tight"
+            >
               Cancel
             </Button>
-            <Button onClick={handleAddMember}>
+            <Button 
+              onClick={handleAddMember}
+              className="rounded-xl bg-gradient-to-r from-orange-400 to-red-500 text-white px-6 py-2 font-semibold tracking-tight shadow-sm hover:shadow-md transition-all duration-200 ease-out"
+            >
               Add Member
             </Button>
           </DialogFooter>

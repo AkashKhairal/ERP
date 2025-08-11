@@ -316,12 +316,12 @@ const TeamDashboard = () => {
   }
 
   const renderTeamCard = (team: Team) => (
-    <Card key={team._id} className="hover:shadow-lg transition-shadow">
-      <CardHeader>
+    <Card key={team._id} className="rounded-3xl bg-white/60 backdrop-blur-sm p-6 shadow-sm border-0 transition-all duration-200 hover:shadow-md hover:-translate-y-1 hover:bg-white/80">
+      <CardHeader className="p-0 pb-4">
         <div className="flex items-start justify-between">
           <div className="flex-1">
-            <CardTitle className="text-lg">{team.name}</CardTitle>
-            <CardDescription className="mt-1">
+            <CardTitle className="card-title text-gray-900">{team.name}</CardTitle>
+            <CardDescription className="text-sm text-gray-500 font-medium tracking-tight mt-1">
               {team.description}
             </CardDescription>
           </div>
@@ -332,53 +332,54 @@ const TeamDashboard = () => {
           </div>
         </div>
       </CardHeader>
-      <CardContent>
-        <div className="space-y-3">
-          <div className="flex items-center justify-between">
+      <CardContent className="p-0">
+        <div className="space-y-4">
+          <div className="flex items-center justify-between p-3 rounded-xl bg-gray-50/50">
             <div className="flex items-center space-x-2">
-              <Building className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm font-medium">Department</span>
+              <Building className="h-4 w-4 text-gray-400" />
+              <span className="text-sm font-semibold text-gray-600 tracking-tight">Department</span>
             </div>
             <Badge className={getDepartmentColor(team.department)}>
               {team.department.charAt(0).toUpperCase() + team.department.slice(1)}
             </Badge>
           </div>
           
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between p-3 rounded-xl bg-gray-50/50">
             <div className="flex items-center space-x-2">
-              <UserCheck className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm font-medium">Team Lead</span>
+              <UserCheck className="h-4 w-4 text-gray-400" />
+              <span className="text-sm font-semibold text-gray-600 tracking-tight">Team Lead</span>
             </div>
-            <span className="text-sm text-muted-foreground">{team.teamLead}</span>
+            <span className="text-sm text-gray-900 font-medium">{team.teamLead}</span>
           </div>
           
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between p-3 rounded-xl bg-gray-50/50">
             <div className="flex items-center space-x-2">
-              <Users className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm font-medium">Members</span>
+              <Users className="h-4 w-4 text-gray-400" />
+              <span className="text-sm font-semibold text-gray-600 tracking-tight">Members</span>
             </div>
-            <span className="text-sm text-muted-foreground">
+            <span className="text-sm text-gray-900 font-medium">
               {team.members.filter(m => m.isActive).length} members
             </span>
           </div>
           
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between p-3 rounded-xl bg-gray-50/50">
             <div className="flex items-center space-x-2">
-              <Calendar className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm font-medium">Created</span>
+              <Calendar className="h-4 w-4 text-gray-400" />
+              <span className="text-sm font-semibold text-gray-600 tracking-tight">Created</span>
             </div>
-            <span className="text-sm text-muted-foreground">
+            <span className="text-sm text-gray-900 font-medium">
               {team.createdAt ? new Date(team.createdAt).toLocaleDateString() : 'N/A'}
             </span>
           </div>
         </div>
         
-        <div className="flex items-center justify-between mt-4 pt-4 border-t">
+        <div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-100">
           <div className="flex items-center space-x-2">
             <Button
               variant="outline"
               size="sm"
               onClick={() => handleViewTeam(team)}
+              className="rounded-xl bg-white/60 backdrop-blur-sm text-gray-700 px-3 py-2 hover:bg-white/80 transition-all duration-200 ease-out border border-gray-200/50 shadow-sm font-medium tracking-tight"
             >
               <Eye className="h-4 w-4 mr-1" />
               View
@@ -387,6 +388,7 @@ const TeamDashboard = () => {
               variant="outline"
               size="sm"
               onClick={() => handleEditTeam(team)}
+              className="rounded-xl bg-white/60 backdrop-blur-sm text-gray-700 px-3 py-2 hover:bg-white/80 transition-all duration-200 ease-out border border-gray-200/50 shadow-sm font-medium tracking-tight"
             >
               <Edit className="h-4 w-4 mr-1" />
               Edit
@@ -397,14 +399,16 @@ const TeamDashboard = () => {
               variant="outline"
               size="sm"
               onClick={() => handleAddMember(team)}
+              className="rounded-xl bg-blue-50/80 backdrop-blur-sm text-blue-600 px-3 py-2 hover:bg-blue-100/80 transition-all duration-200 ease-out border border-blue-200/50 shadow-sm font-medium tracking-tight"
             >
               <UserPlus className="h-4 w-4 mr-1" />
-              Add Member
+              Add
             </Button>
             <Button
               variant="outline"
               size="sm"
               onClick={() => handleDeleteTeamClick(team)}
+              className="rounded-xl bg-white/60 backdrop-blur-sm text-red-600 p-2 hover:bg-red-50/80 transition-all duration-200 ease-out border border-red-200/50 shadow-sm"
             >
               <Trash2 className="h-4 w-4" />
             </Button>
@@ -415,22 +419,28 @@ const TeamDashboard = () => {
   )
 
   return (
-    <div className="space-y-6">
+    <div className="p-6 space-y-8">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold">Teams</h1>
-          <p className="text-muted-foreground">
-            Manage teams and team members
+          <h1 className="page-title text-gray-900">Team Management</h1>
+          <p className="text-gray-600 mt-1 font-medium tracking-tight">
+            Build and manage high-performing teams with luxury precision
           </p>
         </div>
-        <div className="flex items-center space-x-2">
-          <Button variant="outline">
+        <div className="flex items-center space-x-3">
+          <Button 
+            variant="outline"
+            className="rounded-xl bg-white/80 backdrop-blur-sm text-gray-700 px-4 py-2 hover:bg-white transition-all duration-200 ease-out border border-gray-200 shadow-sm font-medium tracking-tight"
+          >
             <Download className="h-4 w-4 mr-2" />
             Export
           </Button>
           <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
-            <Button onClick={() => setIsCreateDialogOpen(true)}>
+            <Button 
+              onClick={() => setIsCreateDialogOpen(true)}
+              className="rounded-xl bg-gradient-to-r from-orange-400 to-red-500 text-white px-4 py-2 font-semibold tracking-tight shadow-sm hover:shadow-md transition-all duration-200 ease-out"
+            >
               <Plus className="h-4 w-4 mr-2" />
               Create Team
             </Button>
@@ -521,109 +531,122 @@ const TeamDashboard = () => {
       </div>
 
       {/* Filters and Search */}
-      <div className="flex flex-col sm:flex-row gap-4">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search teams..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
-          />
-        </div>
-        <Select value={departmentFilter} onValueChange={setDepartmentFilter}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Department" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Departments</SelectItem>
-            {departments.map(dept => (
-              <SelectItem key={dept} value={dept}>
-                {dept.charAt(0).toUpperCase() + dept.slice(1)}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Status</SelectItem>
-            <SelectItem value="active">Active</SelectItem>
-            <SelectItem value="inactive">Inactive</SelectItem>
-            <SelectItem value="archived">Archived</SelectItem>
-          </SelectContent>
-        </Select>
-        <Button
-          variant="outline"
-          onClick={() => setShowFilters(!showFilters)}
-        >
-          <Filter className="h-4 w-4 mr-2" />
-          Filters
-        </Button>
-        <div className="flex items-center space-x-2">
-          <button
-            onClick={() => setViewMode(viewMode === 'list' ? 'cards' : 'list')}
-            className="flex items-center space-x-2 hover:bg-gray-100 p-2 rounded-md transition-colors"
-          >
-            {viewMode === 'list' ? <List className="h-4 w-4" /> : <Grid className="h-4 w-4" />}
-            <span className="text-sm">
-              {viewMode === 'list' ? 'List' : 'Cards'}
-            </span>
-          </button>
-        </div>
-      </div>
+      <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0">
+        <CardContent className="p-0">
+          <div className="flex flex-col sm:flex-row gap-4">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+              <Input
+                placeholder="Search teams..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10"
+              />
+            </div>
+            <Select value={departmentFilter} onValueChange={setDepartmentFilter}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Department" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Departments</SelectItem>
+                {departments.map(dept => (
+                  <SelectItem key={dept} value={dept}>
+                    {dept.charAt(0).toUpperCase() + dept.slice(1)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Status</SelectItem>
+                <SelectItem value="active">Active</SelectItem>
+                <SelectItem value="inactive">Inactive</SelectItem>
+                <SelectItem value="archived">Archived</SelectItem>
+              </SelectContent>
+            </Select>
+            <Button
+              variant="outline"
+              onClick={() => setShowFilters(!showFilters)}
+              className="rounded-xl bg-white/60 backdrop-blur-sm text-gray-700 px-4 py-2 hover:bg-white/80 transition-all duration-200 ease-out border border-gray-200/50 shadow-sm font-medium tracking-tight"
+            >
+              <Filter className="h-4 w-4 mr-2" />
+              Filters
+            </Button>
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={() => setViewMode(viewMode === 'list' ? 'cards' : 'list')}
+                className="flex items-center space-x-2 hover:bg-orange-50 p-2 rounded-xl transition-all duration-200 bg-white/60 backdrop-blur-sm border border-gray-200/50 shadow-sm"
+              >
+                {viewMode === 'list' ? <List className="h-4 w-4 text-gray-600" /> : <Grid className="h-4 w-4 text-gray-600" />}
+                <span className="text-sm font-medium text-gray-700 tracking-tight">
+                  {viewMode === 'list' ? 'List' : 'Cards'}
+                </span>
+              </button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Stats Cards */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Teams</CardTitle>
-            <Building className="h-4 w-4 text-muted-foreground" />
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0 transition-all duration-200 hover:shadow-md hover:-translate-y-1 animate-fade-in-up" style={{ animationDelay: '0ms' }}>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 p-0">
+            <CardTitle className="text-sm font-semibold text-gray-600 tracking-tight">Total Teams</CardTitle>
+            <div className="p-2 rounded-full bg-blue-50 text-blue-500">
+              <Building className="h-5 w-5" />
+            </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{teamStats.totalTeams}</div>
-            <p className="text-xs text-muted-foreground">
+          <CardContent className="p-0">
+            <div className="metric-number text-4xl text-gray-900">{teamStats.totalTeams}</div>
+            <p className="text-sm text-blue-600 mt-1 font-medium tracking-tight">
               Active teams in the organization
             </p>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Members</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0 transition-all duration-200 hover:shadow-md hover:-translate-y-1 animate-fade-in-up" style={{ animationDelay: '100ms' }}>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 p-0">
+            <CardTitle className="text-sm font-semibold text-gray-600 tracking-tight">Total Members</CardTitle>
+            <div className="p-2 rounded-full bg-green-50 text-green-500">
+              <Users className="h-5 w-5" />
+            </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{teamStats.totalMembers}</div>
-            <p className="text-xs text-muted-foreground">
+          <CardContent className="p-0">
+            <div className="metric-number text-4xl text-gray-900">{teamStats.totalMembers}</div>
+            <p className="text-sm text-green-600 mt-1 font-medium tracking-tight">
               Across all teams
             </p>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Teams</CardTitle>
-            <UserCheck className="h-4 w-4 text-muted-foreground" />
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0 transition-all duration-200 hover:shadow-md hover:-translate-y-1 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 p-0">
+            <CardTitle className="text-sm font-semibold text-gray-600 tracking-tight">Active Teams</CardTitle>
+            <div className="p-2 rounded-full bg-purple-50 text-purple-500">
+              <UserCheck className="h-5 w-5" />
+            </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{teamStats.activeTeams}</div>
-            <p className="text-xs text-muted-foreground">
+          <CardContent className="p-0">
+            <div className="metric-number text-4xl text-gray-900">{teamStats.activeTeams}</div>
+            <p className="text-sm text-purple-600 mt-1 font-medium tracking-tight">
               Currently active
             </p>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Avg Team Size</CardTitle>
-            <Target className="h-4 w-4 text-muted-foreground" />
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0 transition-all duration-200 hover:shadow-md hover:-translate-y-1 animate-fade-in-up" style={{ animationDelay: '300ms' }}>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 p-0">
+            <CardTitle className="text-sm font-semibold text-gray-600 tracking-tight">Avg Team Size</CardTitle>
+            <div className="p-2 rounded-full bg-orange-50 text-orange-500">
+              <Target className="h-5 w-5" />
+            </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{teamStats.averageTeamSize}</div>
-            <p className="text-xs text-muted-foreground">
+          <CardContent className="p-0">
+            <div className="metric-number text-4xl text-gray-900">{teamStats.averageTeamSize}</div>
+            <p className="text-sm text-orange-600 mt-1 font-medium tracking-tight">
               Members per team
             </p>
           </CardContent>
@@ -631,12 +654,14 @@ const TeamDashboard = () => {
       </div>
 
       {/* Teams Content */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Teams</CardTitle>
-          <CardDescription>Manage your organization's teams</CardDescription>
+      <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0">
+        <CardHeader className="p-0 pb-4">
+          <CardTitle className="card-title text-gray-900">Teams</CardTitle>
+          <CardDescription className="text-sm text-gray-500 font-medium tracking-tight">
+            Manage your organization's high-performing teams
+          </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-0">
           {loading ? (
             <div className="text-center py-8">
               <Loader2 className="h-8 w-8 animate-spin mx-auto" />

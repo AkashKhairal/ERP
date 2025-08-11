@@ -583,7 +583,7 @@ const Layout = ({ children }: LayoutProps) => {
         </header>
 
         {/* Page content */}
-        <main className="flex-1 overflow-y-auto bg-background">
+        <main className="flex-1 overflow-y-auto">
           <div className="page-container">
             {children}
           </div>

@@ -13,26 +13,26 @@ const Progress = React.forwardRef<HTMLDivElement, ProgressProps>(
     const getVariantClasses = () => {
       switch (variant) {
         case 'destructive':
-          return 'bg-red-500';
+          return 'bg-gradient-to-r from-red-400 to-red-500';
         case 'warning':
-          return 'bg-yellow-500';
+          return 'bg-gradient-to-r from-yellow-400 to-orange-500';
         case 'success':
-          return 'bg-green-500';
+          return 'bg-gradient-to-r from-green-400 to-green-500';
         default:
-          return 'bg-primary';
+          return 'bg-gradient-to-r from-yellow-400 to-orange-500';
       }
     };
 
     const getBackgroundClasses = () => {
       switch (variant) {
         case 'destructive':
-          return 'bg-red-100';
+          return 'bg-red-200';
         case 'warning':
-          return 'bg-yellow-100';
+          return 'bg-orange-200';
         case 'success':
-          return 'bg-green-100';
+          return 'bg-green-200';
         default:
-          return 'bg-secondary';
+          return 'bg-gray-200';
       }
     };
 
@@ -40,7 +40,7 @@ const Progress = React.forwardRef<HTMLDivElement, ProgressProps>(
       <div
         ref={ref}
         className={cn(
-          'relative h-4 w-full overflow-hidden rounded-full',
+          'relative h-2 w-full overflow-hidden rounded-full',
           getBackgroundClasses(),
           className
         )}
@@ -48,7 +48,7 @@ const Progress = React.forwardRef<HTMLDivElement, ProgressProps>(
       >
         <div
           className={cn(
-            'h-full w-full flex-1 transition-all duration-300 ease-in-out',
+            'h-2 rounded-full transition-all duration-300 ease-out',
             getVariantClasses()
           )}
           style={{

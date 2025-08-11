@@ -159,10 +159,10 @@ const KanbanBoard = () => {
   ]
 
   const columns = [
-    { id: 'todo', title: 'To Do', color: 'bg-gray-100', icon: Square },
-    { id: 'doing', title: 'In Progress', color: 'bg-blue-100', icon: Play },
-    { id: 'review', title: 'Review', color: 'bg-yellow-100', icon: Eye },
-    { id: 'done', title: 'Done', color: 'bg-green-100', icon: CheckCircle }
+    { id: 'todo', title: 'To Do', color: 'bg-gradient-to-br from-gray-50/80 to-gray-100/80', borderColor: 'border-gray-200/50', icon: Square, iconColor: 'text-gray-600' },
+    { id: 'doing', title: 'In Progress', color: 'bg-gradient-to-br from-blue-50/80 to-blue-100/80', borderColor: 'border-blue-200/50', icon: Play, iconColor: 'text-blue-600' },
+    { id: 'review', title: 'Review', color: 'bg-gradient-to-br from-yellow-50/80 to-yellow-100/80', borderColor: 'border-yellow-200/50', icon: Eye, iconColor: 'text-yellow-600' },
+    { id: 'done', title: 'Done', color: 'bg-gradient-to-br from-green-50/80 to-green-100/80', borderColor: 'border-green-200/50', icon: CheckCircle, iconColor: 'text-green-600' }
   ]
 
   // Load data
@@ -509,11 +509,11 @@ const KanbanBoard = () => {
   // Utility functions
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'urgent': return 'bg-red-100 text-red-800'
-      case 'high': return 'bg-orange-100 text-orange-800'
-      case 'medium': return 'bg-yellow-100 text-yellow-800'
-      case 'low': return 'bg-green-100 text-green-800'
-      default: return 'bg-gray-100 text-gray-800'
+      case 'urgent': return 'bg-red-50/80 text-red-700 border border-red-200/50'
+      case 'high': return 'bg-orange-50/80 text-orange-700 border border-orange-200/50'
+      case 'medium': return 'bg-yellow-50/80 text-yellow-700 border border-yellow-200/50'
+      case 'low': return 'bg-green-50/80 text-green-700 border border-green-200/50'
+      default: return 'bg-gray-50/80 text-gray-700 border border-gray-200/50'
     }
   }
 
@@ -569,21 +569,28 @@ const KanbanBoard = () => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="p-6 space-y-8">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold">Task Management</h1>
-          <p className="text-muted-foreground">
-            Manage tasks with Kanban board
+          <h1 className="page-title text-gray-900">Task Management</h1>
+          <p className="text-gray-600 mt-1 font-medium tracking-tight">
+            Orchestrate your workflow with premium Kanban precision
           </p>
         </div>
-        <div className="flex items-center space-x-2">
-          <Button variant="outline" onClick={() => window.print()}>
+        <div className="flex items-center space-x-3">
+          <Button 
+            variant="outline" 
+            onClick={() => window.print()}
+            className="rounded-xl bg-white/80 backdrop-blur-sm text-gray-700 px-4 py-2 hover:bg-white transition-all duration-200 ease-out border border-gray-200 shadow-sm font-medium tracking-tight"
+          >
             <Download className="h-4 w-4 mr-2" />
             Export
           </Button>
-          <Button onClick={() => handleAddTask('todo')}>
+          <Button 
+            onClick={() => handleAddTask('todo')}
+            className="rounded-xl bg-gradient-to-r from-orange-400 to-red-500 text-white px-4 py-2 font-semibold tracking-tight shadow-sm hover:shadow-md transition-all duration-200 ease-out"
+          >
             <Plus className="h-4 w-4 mr-2" />
             New Task
           </Button>
@@ -592,50 +599,62 @@ const KanbanBoard = () => {
 
       {/* Stats Cards */}
       {stats && (
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card>
-            <CardContent className="p-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0 transition-all duration-200 hover:shadow-md hover:-translate-y-1 animate-fade-in-up" style={{ animationDelay: '0ms' }}>
+            <CardContent className="p-0">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground">Total Tasks</p>
-                  <p className="text-2xl font-bold">{stats.totalTasks}</p>
+                  <p className="text-sm font-semibold text-gray-600 tracking-tight">Total Tasks</p>
+                  <p className="metric-number text-4xl text-gray-900 mt-1">{stats.totalTasks}</p>
+                  <p className="text-sm text-blue-600 mt-1 font-medium tracking-tight">Active workflow</p>
                 </div>
-                <BarChart3 className="h-8 w-8 text-blue-500" />
+                <div className="p-3 rounded-full bg-blue-50 text-blue-500">
+                  <BarChart3 className="h-6 w-6" />
+                </div>
               </div>
             </CardContent>
           </Card>
-          <Card>
-            <CardContent className="p-4">
+          <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0 transition-all duration-200 hover:shadow-md hover:-translate-y-1 animate-fade-in-up" style={{ animationDelay: '100ms' }}>
+            <CardContent className="p-0">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground">Completed</p>
-                  <p className="text-2xl font-bold text-green-600">{stats.completedTasks}</p>
+                  <p className="text-sm font-semibold text-gray-600 tracking-tight">Completed</p>
+                  <p className="metric-number text-4xl text-gray-900 mt-1">{stats.completedTasks}</p>
+                  <p className="text-sm text-green-600 mt-1 font-medium tracking-tight">Successfully done</p>
                 </div>
-                <CheckCircle className="h-8 w-8 text-green-500" />
+                <div className="p-3 rounded-full bg-green-50 text-green-500">
+                  <CheckCircle className="h-6 w-6" />
+                </div>
               </div>
             </CardContent>
           </Card>
-          <Card>
-            <CardContent className="p-4">
+          <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0 transition-all duration-200 hover:shadow-md hover:-translate-y-1 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
+            <CardContent className="p-0">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground">Overdue</p>
-                  <p className="text-2xl font-bold text-red-600">{stats.overdueTasks}</p>
+                  <p className="text-sm font-semibold text-gray-600 tracking-tight">Overdue</p>
+                  <p className="metric-number text-4xl text-gray-900 mt-1">{stats.overdueTasks}</p>
+                  <p className="text-sm text-red-600 mt-1 font-medium tracking-tight">Needs attention</p>
                 </div>
-                <AlertCircle className="h-8 w-8 text-red-500" />
+                <div className="p-3 rounded-full bg-red-50 text-red-500">
+                  <AlertCircle className="h-6 w-6" />
+                </div>
               </div>
             </CardContent>
           </Card>
-          <Card>
-            <CardContent className="p-4">
+          <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0 transition-all duration-200 hover:shadow-md hover:-translate-y-1 animate-fade-in-up" style={{ animationDelay: '300ms' }}>
+            <CardContent className="p-0">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground">Progress</p>
-                  <p className="text-2xl font-bold">
+                  <p className="text-sm font-semibold text-gray-600 tracking-tight">Progress</p>
+                  <p className="metric-number text-4xl text-gray-900 mt-1">
                     {stats.totalTasks > 0 ? Math.round((stats.completedTasks / stats.totalTasks) * 100) : 0}%
                   </p>
+                  <p className="text-sm text-purple-600 mt-1 font-medium tracking-tight">Overall completion</p>
                 </div>
-                <TrendingUp className="h-8 w-8 text-purple-500" />
+                <div className="p-3 rounded-full bg-purple-50 text-purple-500">
+                  <TrendingUp className="h-6 w-6" />
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -643,80 +662,89 @@ const KanbanBoard = () => {
       )}
 
       {/* Filters and Search */}
-      <div className="flex flex-col sm:flex-row gap-4">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search tasks..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
-          />
+      <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0">
+        <div className="flex flex-col sm:flex-row gap-4">
+          <div className="relative flex-1">
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Input
+              placeholder="Search tasks with precision..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-12 rounded-xl bg-white/60 backdrop-blur-sm border-gray-200/50 text-gray-900 font-medium tracking-tight"
+            />
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <Select value={priorityFilter} onValueChange={setPriorityFilter}>
+              <SelectTrigger className="w-[140px] rounded-xl bg-white/60 backdrop-blur-sm border-gray-200/50 text-gray-900 font-medium tracking-tight">
+                <SelectValue placeholder="Priority" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Priorities</SelectItem>
+                <SelectItem value="urgent">🔴 Urgent</SelectItem>
+                <SelectItem value="high">🟠 High</SelectItem>
+                <SelectItem value="medium">🟡 Medium</SelectItem>
+                <SelectItem value="low">🟢 Low</SelectItem>
+              </SelectContent>
+            </Select>
+            <Select value={typeFilter} onValueChange={setTypeFilter}>
+              <SelectTrigger className="w-[140px] rounded-xl bg-white/60 backdrop-blur-sm border-gray-200/50 text-gray-900 font-medium tracking-tight">
+                <SelectValue placeholder="Type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Types</SelectItem>
+                {taskService.getAvailableTypes().map(type => (
+                  <SelectItem key={type} value={type}>{getTypeIcon(type)} {type.charAt(0).toUpperCase() + type.slice(1)}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select value={projectFilter} onValueChange={setProjectFilter}>
+              <SelectTrigger className="w-[140px] rounded-xl bg-white/60 backdrop-blur-sm border-gray-200/50 text-gray-900 font-medium tracking-tight">
+                <SelectValue placeholder="Project" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Projects</SelectItem>
+                {projects.map(project => (
+                  <SelectItem key={project._id} value={project._id!}>{project.name}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select value={assignedToFilter} onValueChange={setAssignedToFilter}>
+              <SelectTrigger className="w-[140px] rounded-xl bg-white/60 backdrop-blur-sm border-gray-200/50 text-gray-900 font-medium tracking-tight">
+                <SelectValue placeholder="Assigned" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Users</SelectItem>
+                {users.map(user => (
+                  <SelectItem key={user._id} value={user._id!}>{user.firstName} {user.lastName}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
-        <Select value={priorityFilter} onValueChange={setPriorityFilter}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Priority" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Priorities</SelectItem>
-            <SelectItem value="urgent">Urgent</SelectItem>
-            <SelectItem value="high">High</SelectItem>
-            <SelectItem value="medium">Medium</SelectItem>
-            <SelectItem value="low">Low</SelectItem>
-          </SelectContent>
-        </Select>
-        <Select value={typeFilter} onValueChange={setTypeFilter}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Type" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Types</SelectItem>
-            {taskService.getAvailableTypes().map(type => (
-              <SelectItem key={type} value={type}>{type.charAt(0).toUpperCase() + type.slice(1)}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <Select value={projectFilter} onValueChange={setProjectFilter}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Project" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Projects</SelectItem>
-            {projects.map(project => (
-              <SelectItem key={project._id} value={project._id!}>{project.name}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <Select value={assignedToFilter} onValueChange={setAssignedToFilter}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Assigned To" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Users</SelectItem>
-            {users.map(user => (
-              <SelectItem key={user._id} value={user._id!}>{user.firstName} {user.lastName}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+      </Card>
 
       {/* Kanban Board */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {columns.map((column) => (
           <div key={column.id} className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <column.icon className="h-5 w-5" />
-                <h3 className="font-semibold text-lg">{column.title}</h3>
+            <div className="flex items-center justify-between px-2">
+              <div className="flex items-center space-x-3">
+                <div className={`p-2 rounded-full bg-white/80 backdrop-blur-sm ${column.iconColor} shadow-sm`}>
+                  <column.icon className="h-4 w-4" />
+                </div>
+                <h3 className="card-title text-gray-900 text-base">{column.title}</h3>
               </div>
-              <Badge variant="secondary">
+              <Badge 
+                variant="secondary" 
+                className={`rounded-full px-3 py-1 text-xs font-semibold tracking-tight ${column.iconColor} bg-white/80 backdrop-blur-sm border-0`}
+              >
                 {filteredTasks[column.id as keyof typeof filteredTasks]?.length || 0}
               </Badge>
             </div>
             
             <div 
-              className={`p-4 rounded-lg ${column.color} min-h-[500px] transition-all duration-200 ${
-                dragOverColumn === column.id ? 'ring-2 ring-blue-500 bg-blue-50' : ''
+              className={`p-4 rounded-2xl backdrop-blur-sm border ${column.borderColor} ${column.color} min-h-[600px] transition-all duration-300 ease-out ${
+                dragOverColumn === column.id ? 'ring-2 ring-orange-300 bg-orange-50/50 scale-105' : ''
               }`}
               onDragOver={(e) => handleDragOver(e, column.id)}
               onDragLeave={handleDragLeave}
@@ -726,21 +754,25 @@ const KanbanBoard = () => {
                 {filteredTasks[column.id as keyof typeof filteredTasks]?.map((task) => (
                   <Card 
                     key={task._id} 
-                    className={`cursor-pointer hover:shadow-md transition-all duration-200 ${
-                      isDragging && draggedItem?.id === task._id ? 'opacity-50 scale-95' : ''
+                    className={`cursor-pointer rounded-2xl bg-white/90 backdrop-blur-sm border-0 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-200 ease-out ${
+                      isDragging && draggedItem?.id === task._id ? 'opacity-50 scale-95 rotate-3' : ''
                     } ${animatingTasks.has(task._id!) ? 'animate-pulse' : ''}`}
                     draggable
                     onDragStart={(e) => handleDragStart(e, task._id!, column.id)}
                   >
-                    <CardContent className="p-4">
-                      <div className="space-y-2">
+                    <CardContent className="p-5">
+                      <div className="space-y-3">
                         <div className="flex items-start justify-between">
-                          <div className="flex items-center space-x-2">
-                            <span className="text-lg">{getTypeIcon(task.type)}</span>
-                            <h4 className="font-medium text-sm">{task.title}</h4>
+                          <div className="flex items-start space-x-3 flex-1">
+                            <div className="p-1.5 rounded-lg bg-gray-50/80 text-gray-600 mt-0.5">
+                              <span className="text-base">{getTypeIcon(task.type)}</span>
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <h4 className="font-semibold text-sm text-gray-900 tracking-tight leading-tight line-clamp-2">{task.title}</h4>
+                            </div>
                           </div>
-                          <div className="flex items-center space-x-1">
-                            <Badge className={getPriorityColor(task.priority)}>
+                          <div className="flex items-center space-x-1 ml-2">
+                            <Badge className={`text-xs font-semibold tracking-tight rounded-lg px-2 py-1 ${getPriorityColor(task.priority)}`}>
                               {task.priority}
                             </Badge>
                             <Button 
@@ -750,63 +782,69 @@ const KanbanBoard = () => {
                                 e.stopPropagation()
                                 setSelectedTask(task)
                               }}
+                              className="h-7 w-7 p-0 rounded-lg hover:bg-gray-100/80"
                             >
-                              <MoreVertical className="h-4 w-4" />
+                              <MoreVertical className="h-3.5 w-3.5 text-gray-400" />
                             </Button>
                           </div>
                         </div>
                         
                         {task.description && (
-                          <p className="text-xs text-muted-foreground">
+                          <p className="text-xs text-gray-500 font-medium leading-relaxed line-clamp-2">
                             {task.description}
                           </p>
                         )}
                         
                         {/* Progress bar */}
                         {task.subtasks && task.subtasks.length > 0 && (
-                          <div className="space-y-1">
+                          <div className="space-y-2">
                             <div className="flex items-center justify-between text-xs">
-                              <span>Progress</span>
-                              <span>{Math.round(getProgressPercentage(task))}%</span>
+                              <span className="font-medium text-gray-600">Progress</span>
+                              <span className="font-semibold text-gray-900">{Math.round(getProgressPercentage(task))}%</span>
                             </div>
-                            <Progress value={getProgressPercentage(task)} className="h-2" />
+                            <Progress value={getProgressPercentage(task)} className="h-1.5" />
                           </div>
                         )}
                         
-                        <div className="flex items-center justify-between text-xs text-muted-foreground">
-                          <div className="flex items-center space-x-1">
-                            <User className="h-3 w-3" />
-                            <span>
+                        <div className="grid grid-cols-2 gap-2 text-xs">
+                          <div className="flex items-center space-x-1.5 text-gray-500">
+                            <div className="p-1 rounded bg-gray-100/80">
+                              <User className="h-2.5 w-2.5" />
+                            </div>
+                            <span className="font-medium truncate">
                               {users.find(u => u._id === task.assignedTo)?.firstName || 'Unassigned'}
                             </span>
                           </div>
-                          <div className="flex items-center space-x-1">
-                            <Calendar className="h-3 w-3" />
-                            <span className={isOverdue(task.dueDate) ? 'text-red-600 font-medium' : ''}>
-                              {new Date(task.dueDate).toLocaleDateString()}
+                          <div className="flex items-center space-x-1.5 text-gray-500">
+                            <div className={`p-1 rounded ${isOverdue(task.dueDate) ? 'bg-red-100/80' : 'bg-gray-100/80'}`}>
+                              <Calendar className="h-2.5 w-2.5" />
+                            </div>
+                            <span className={`font-medium ${isOverdue(task.dueDate) ? 'text-red-600' : ''}`}>
+                              {new Date(task.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                             </span>
                           </div>
                         </div>
                         
-                        <div className="flex items-center justify-between text-xs">
-                          <div className="flex items-center space-x-1">
-                            <Clock className="h-3 w-3" />
-                            <span>{task.actualHours || 0}h / {task.estimatedHours || 0}h</span>
+                        <div className="flex items-center justify-between pt-1">
+                          <div className="flex items-center space-x-3 text-xs text-gray-500">
+                            <div className="flex items-center space-x-1">
+                              <Clock className="h-3 w-3" />
+                              <span className="font-medium">{task.actualHours || 0}h/{task.estimatedHours || 0}h</span>
+                            </div>
+                            {task.comments && task.comments.length > 0 && (
+                              <div className="flex items-center space-x-1">
+                                <MessageCircle className="h-3 w-3" />
+                                <span className="font-medium">{task.comments.length}</span>
+                              </div>
+                            )}
                           </div>
-                          <div className="flex items-center space-x-1">
-                            <Flag className="h-3 w-3" />
-                            <span>{task.progress || 0}%</span>
+                          <div className="flex items-center space-x-1 text-xs">
+                            <Flag className="h-3 w-3 text-gray-400" />
+                            <span className="font-semibold text-gray-600">{task.progress || 0}%</span>
                           </div>
                         </div>
                         
-                        {task.comments && task.comments.length > 0 && (
-                          <div className="flex items-center space-x-1 text-xs text-muted-foreground">
-                            <MessageCircle className="h-3 w-3" />
-                            <span>{task.comments.length} comments</span>
-                          </div>
-                        )}
-                        
-                        <div className="flex items-center space-x-2 pt-2">
+                        <div className="flex items-center space-x-2 pt-3 border-t border-gray-100/50">
                           <Button
                             variant="outline"
                             size="sm"
@@ -814,7 +852,7 @@ const KanbanBoard = () => {
                               e.stopPropagation()
                               handleEditTask(task)
                             }}
-                            className="flex-1"
+                            className="flex-1 rounded-lg bg-blue-50/50 text-blue-600 border-blue-200/50 hover:bg-blue-100/80 text-xs font-medium tracking-tight h-7"
                           >
                             <Edit className="h-3 w-3 mr-1" />
                             Edit
@@ -826,6 +864,7 @@ const KanbanBoard = () => {
                               e.stopPropagation()
                               handleDeleteTask(task)
                             }}
+                            className="rounded-lg bg-red-50/50 text-red-600 border-red-200/50 hover:bg-red-100/80 h-7 w-7 p-0"
                           >
                             <Trash2 className="h-3 w-3" />
                           </Button>
@@ -837,7 +876,7 @@ const KanbanBoard = () => {
                 
                 <Button
                   variant="outline"
-                  className="w-full"
+                  className="w-full rounded-xl bg-white/80 backdrop-blur-sm border-gray-200/50 text-gray-600 hover:text-gray-900 hover:bg-white/90 transition-all duration-200 ease-out shadow-sm font-medium tracking-tight h-10"
                   onClick={() => handleAddTask(column.id)}
                 >
                   <Plus className="h-4 w-4 mr-2" />
@@ -851,11 +890,13 @@ const KanbanBoard = () => {
 
       {/* Task Dialog */}
       <Dialog open={isTaskDialogOpen} onOpenChange={setIsTaskDialogOpen}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto rounded-3xl bg-white/95 backdrop-blur-xl p-8 shadow-2xl border-0 gap-6">
           <DialogHeader>
-            <DialogTitle>{selectedTask ? 'Edit Task' : 'Create New Task'}</DialogTitle>
-            <DialogDescription>
-              {selectedTask ? 'Update task details below.' : 'Fill in the task details below.'}
+            <DialogTitle className="text-xl font-bold text-gray-900 tracking-tight">
+              {selectedTask ? 'Edit Task' : 'Create New Task'}
+            </DialogTitle>
+            <DialogDescription className="text-sm text-gray-600 font-medium tracking-tight">
+              {selectedTask ? 'Update task details with precision and clarity.' : 'Define your task with luxury attention to detail.'}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
@@ -960,11 +1001,18 @@ const KanbanBoard = () => {
               </div>
             </div>
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsTaskDialogOpen(false)}>
+          <DialogFooter className="flex justify-end space-x-3 pt-6">
+            <Button 
+              variant="outline" 
+              onClick={() => setIsTaskDialogOpen(false)}
+              className="rounded-xl bg-white/80 backdrop-blur-sm text-gray-700 px-6 py-2 hover:bg-white transition-all duration-200 ease-out border border-gray-200 shadow-sm font-medium tracking-tight"
+            >
               Cancel
             </Button>
-            <Button onClick={handleSaveTask}>
+            <Button 
+              onClick={handleSaveTask}
+              className="rounded-xl bg-gradient-to-r from-orange-400 to-red-500 text-white px-6 py-2 font-semibold tracking-tight shadow-sm hover:shadow-md transition-all duration-200 ease-out"
+            >
               <Save className="h-4 w-4 mr-2" />
               {selectedTask ? 'Update Task' : 'Create Task'}
             </Button>
@@ -974,18 +1022,26 @@ const KanbanBoard = () => {
 
       {/* Delete Confirmation Dialog */}
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <DialogContent>
+        <DialogContent className="rounded-3xl bg-white/95 backdrop-blur-xl p-8 shadow-2xl border-0 gap-6">
           <DialogHeader>
-            <DialogTitle>Delete Task</DialogTitle>
-            <DialogDescription>
-              Are you sure you want to delete "{selectedTask?.title}"? This action cannot be undone.
+            <DialogTitle className="text-xl font-bold text-gray-900 tracking-tight">Delete Task</DialogTitle>
+            <DialogDescription className="text-sm text-gray-600 font-medium tracking-tight">
+              Are you sure you want to delete "<span className="font-semibold text-red-600">{selectedTask?.title}</span>"? This action cannot be undone and will permanently remove all task data.
             </DialogDescription>
           </DialogHeader>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsDeleteDialogOpen(false)}>
+          <DialogFooter className="flex justify-end space-x-3 pt-4">
+            <Button 
+              variant="outline" 
+              onClick={() => setIsDeleteDialogOpen(false)}
+              className="rounded-xl bg-white/80 backdrop-blur-sm text-gray-700 px-6 py-2 hover:bg-white transition-all duration-200 ease-out border border-gray-200 shadow-sm font-medium tracking-tight"
+            >
               Cancel
             </Button>
-            <Button variant="destructive" onClick={handleConfirmDelete}>
+            <Button 
+              variant="destructive" 
+              onClick={handleConfirmDelete}
+              className="rounded-xl bg-gradient-to-r from-red-500 to-red-600 text-white px-6 py-2 font-semibold tracking-tight shadow-sm hover:shadow-md transition-all duration-200 ease-out"
+            >
               <Trash2 className="h-4 w-4 mr-2" />
               Delete Task
             </Button>
@@ -995,26 +1051,34 @@ const KanbanBoard = () => {
 
       {/* Comment Dialog */}
       <Dialog open={isCommentDialogOpen} onOpenChange={setIsCommentDialogOpen}>
-        <DialogContent>
+        <DialogContent className="rounded-3xl bg-white/95 backdrop-blur-xl p-8 shadow-2xl border-0 gap-6">
           <DialogHeader>
-            <DialogTitle>Add Comment</DialogTitle>
-            <DialogDescription>
-              Add a comment to "{selectedTask?.title}"
+            <DialogTitle className="text-xl font-bold text-gray-900 tracking-tight">Add Comment</DialogTitle>
+            <DialogDescription className="text-sm text-gray-600 font-medium tracking-tight">
+              Add a thoughtful comment to "<span className="font-semibold text-gray-900">{selectedTask?.title}</span>"
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <Textarea
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
-              placeholder="Enter your comment..."
-              rows={3}
+              placeholder="Enter your insightful comment..."
+              rows={4}
+              className="rounded-xl bg-white/60 backdrop-blur-sm border-gray-200/50"
             />
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsCommentDialogOpen(false)}>
+          <DialogFooter className="flex justify-end space-x-3 pt-4">
+            <Button 
+              variant="outline" 
+              onClick={() => setIsCommentDialogOpen(false)}
+              className="rounded-xl bg-white/80 backdrop-blur-sm text-gray-700 px-6 py-2 hover:bg-white transition-all duration-200 ease-out border border-gray-200 shadow-sm font-medium tracking-tight"
+            >
               Cancel
             </Button>
-            <Button onClick={handleAddComment}>
+            <Button 
+              onClick={handleAddComment}
+              className="rounded-xl bg-gradient-to-r from-orange-400 to-red-500 text-white px-6 py-2 font-semibold tracking-tight shadow-sm hover:shadow-md transition-all duration-200 ease-out"
+            >
               <MessageCircle className="h-4 w-4 mr-2" />
               Add Comment
             </Button>
@@ -1024,27 +1088,28 @@ const KanbanBoard = () => {
 
       {/* Time Tracking Dialog */}
       <Dialog open={isTimeTrackingDialogOpen} onOpenChange={setIsTimeTrackingDialogOpen}>
-        <DialogContent>
+        <DialogContent className="rounded-3xl bg-white/95 backdrop-blur-xl p-8 shadow-2xl border-0 gap-6">
           <DialogHeader>
-            <DialogTitle>Time Tracking</DialogTitle>
-            <DialogDescription>
-              Track time spent on "{selectedTask?.title}"
+            <DialogTitle className="text-xl font-bold text-gray-900 tracking-tight">Time Tracking</DialogTitle>
+            <DialogDescription className="text-sm text-gray-600 font-medium tracking-tight">
+              Track time spent on "<span className="font-semibold text-gray-900">{selectedTask?.title}</span>" with precision
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-4">
+          <div className="space-y-6">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="hours">Hours</Label>
+                <Label htmlFor="hours" className="text-sm font-semibold text-gray-700 tracking-tight">Hours</Label>
                 <Input
                   id="hours"
                   type="number"
                   value={timeTracking.hours}
                   onChange={(e) => setTimeTracking(prev => ({ ...prev, hours: parseInt(e.target.value) || 0 }))}
                   min="0"
+                  className="mt-2 rounded-xl bg-white/60 backdrop-blur-sm border-gray-200/50"
                 />
               </div>
               <div>
-                <Label htmlFor="minutes">Minutes</Label>
+                <Label htmlFor="minutes" className="text-sm font-semibold text-gray-700 tracking-tight">Minutes</Label>
                 <Input
                   id="minutes"
                   type="number"
@@ -1052,34 +1117,48 @@ const KanbanBoard = () => {
                   onChange={(e) => setTimeTracking(prev => ({ ...prev, minutes: parseInt(e.target.value) || 0 }))}
                   min="0"
                   max="59"
+                  className="mt-2 rounded-xl bg-white/60 backdrop-blur-sm border-gray-200/50"
                 />
               </div>
             </div>
             {isTimeTrackingActive && (
-              <div className="text-center">
-                <p className="text-sm text-muted-foreground">Time tracking active</p>
-                <p className="text-lg font-mono">
+              <div className="text-center p-4 rounded-2xl bg-blue-50/80 backdrop-blur-sm border border-blue-200/50">
+                <p className="text-sm font-semibold text-blue-700 tracking-tight">Time tracking active</p>
+                <p className="text-2xl font-mono font-bold text-blue-900 mt-1">
                   {timeTrackingStart ? Math.floor((Date.now() - timeTrackingStart.getTime()) / 1000 / 60) : 0} minutes
                 </p>
               </div>
             )}
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsTimeTrackingDialogOpen(false)}>
+          <DialogFooter className="flex justify-end space-x-3 pt-4">
+            <Button 
+              variant="outline" 
+              onClick={() => setIsTimeTrackingDialogOpen(false)}
+              className="rounded-xl bg-white/80 backdrop-blur-sm text-gray-700 px-6 py-2 hover:bg-white transition-all duration-200 ease-out border border-gray-200 shadow-sm font-medium tracking-tight"
+            >
               Cancel
             </Button>
             {!isTimeTrackingActive ? (
-              <Button onClick={handleStartTimeTracking}>
+              <Button 
+                onClick={handleStartTimeTracking}
+                className="rounded-xl bg-gradient-to-r from-green-400 to-green-500 text-white px-6 py-2 font-semibold tracking-tight shadow-sm hover:shadow-md transition-all duration-200 ease-out"
+              >
                 <Play className="h-4 w-4 mr-2" />
                 Start Tracking
               </Button>
             ) : (
-              <Button onClick={handleStopTimeTracking}>
+              <Button 
+                onClick={handleStopTimeTracking}
+                className="rounded-xl bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-6 py-2 font-semibold tracking-tight shadow-sm hover:shadow-md transition-all duration-200 ease-out"
+              >
                 <Pause className="h-4 w-4 mr-2" />
                 Stop Tracking
               </Button>
             )}
-            <Button onClick={handleSaveTimeTracking}>
+            <Button 
+              onClick={handleSaveTimeTracking}
+              className="rounded-xl bg-gradient-to-r from-orange-400 to-red-500 text-white px-6 py-2 font-semibold tracking-tight shadow-sm hover:shadow-md transition-all duration-200 ease-out"
+            >
               <Save className="h-4 w-4 mr-2" />
               Save Time
             </Button>

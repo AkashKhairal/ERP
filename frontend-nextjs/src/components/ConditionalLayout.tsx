@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
-import Layout from '@/components/Layout/Layout'
+import LuxuryLayout from '@/components/Layout/LuxuryLayout'
 import ProtectedRoute from '@/components/Auth/ProtectedRoute'
 
 interface ConditionalLayoutProps {
@@ -38,9 +38,9 @@ const ConditionalLayout = ({ children }: ConditionalLayoutProps) => {
   // For protected routes, apply ProtectedRoute and Layout
   return (
     <ProtectedRoute>
-      <Layout>
+      <LuxuryLayout>
         {children}
-      </Layout>
+      </LuxuryLayout>
     </ProtectedRoute>
   )
 }

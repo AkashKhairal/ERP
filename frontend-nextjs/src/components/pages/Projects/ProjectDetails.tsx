@@ -257,25 +257,37 @@ const ProjectDetails = ({ projectId }: ProjectDetailsProps) => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="p-6 space-y-8">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div className="flex items-center space-x-4">
-          <Button variant="outline" onClick={() => router.push('/projects')}>
+          <Button 
+            variant="outline" 
+            onClick={() => router.push('/projects')}
+            className="rounded-xl bg-white/80 backdrop-blur-sm text-gray-700 px-4 py-2 hover:bg-white transition-all duration-200 ease-out border border-gray-200 shadow-sm font-medium tracking-tight"
+          >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back
           </Button>
           <div>
-            <h1 className="text-3xl font-bold">{project.name}</h1>
-            <p className="text-muted-foreground">{project.client}</p>
+            <h1 className="page-title text-gray-900">{project.name}</h1>
+            <p className="text-gray-600 mt-1 font-medium tracking-tight">{project.client}</p>
           </div>
         </div>
-        <div className="flex items-center space-x-2">
-          <Button variant="outline" onClick={() => setIsEditDialogOpen(true)}>
+        <div className="flex items-center space-x-3">
+          <Button 
+            variant="outline" 
+            onClick={() => setIsEditDialogOpen(true)}
+            className="rounded-xl bg-white/80 backdrop-blur-sm text-gray-700 px-4 py-2 hover:bg-white transition-all duration-200 ease-out border border-gray-200 shadow-sm font-medium tracking-tight"
+          >
             <Edit className="h-4 w-4 mr-2" />
             Edit
           </Button>
-          <Button variant="outline" onClick={() => setIsDeleteDialogOpen(true)}>
+          <Button 
+            variant="outline" 
+            onClick={() => setIsDeleteDialogOpen(true)}
+            className="rounded-xl bg-white/60 backdrop-blur-sm text-red-600 px-4 py-2 hover:bg-red-50/80 transition-all duration-200 ease-out border border-red-200/50 shadow-sm font-medium tracking-tight"
+          >
             <Trash2 className="h-4 w-4 mr-2" />
             Delete
           </Button>
@@ -284,59 +296,68 @@ const ProjectDetails = ({ projectId }: ProjectDetailsProps) => {
 
       {/* Project Overview */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Status</CardTitle>
-            <Target className="h-4 w-4 text-muted-foreground" />
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0 transition-all duration-200 hover:shadow-md hover:-translate-y-1 animate-fade-in-up" style={{ animationDelay: '0ms' }}>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 p-0">
+            <CardTitle className="text-sm font-semibold text-gray-600 tracking-tight">Status</CardTitle>
+            <div className="p-2 rounded-full bg-blue-50 text-blue-500">
+              <Target className="h-5 w-5" />
+            </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-0">
             <Badge className={getStatusColor(project.status)}>
               {project.status.replace('_', ' ')}
             </Badge>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Priority</CardTitle>
-            <AlertCircle className="h-4 w-4 text-muted-foreground" />
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0 transition-all duration-200 hover:shadow-md hover:-translate-y-1 animate-fade-in-up" style={{ animationDelay: '100ms' }}>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 p-0">
+            <CardTitle className="text-sm font-semibold text-gray-600 tracking-tight">Priority</CardTitle>
+            <div className="p-2 rounded-full bg-orange-50 text-orange-500">
+              <AlertCircle className="h-5 w-5" />
+            </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-0">
             <Badge className={getPriorityColor(project.priority)}>
               {project.priority}
             </Badge>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Progress</CardTitle>
-            <CheckCircle className="h-4 w-4 text-muted-foreground" />
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0 transition-all duration-200 hover:shadow-md hover:-translate-y-1 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 p-0">
+            <CardTitle className="text-sm font-semibold text-gray-600 tracking-tight">Progress</CardTitle>
+            <div className="p-2 rounded-full bg-green-50 text-green-500">
+              <CheckCircle className="h-5 w-5" />
+            </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{project.progress}%</div>
-            <Progress value={project.progress} className="mt-2" />
+          <CardContent className="p-0">
+            <div className="metric-number text-4xl text-gray-900">{project.progress}%</div>
+            <Progress value={project.progress} className="mt-3" />
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Budget</CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0 transition-all duration-200 hover:shadow-md hover:-translate-y-1 animate-fade-in-up" style={{ animationDelay: '300ms' }}>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 p-0">
+            <CardTitle className="text-sm font-semibold text-gray-600 tracking-tight">Budget</CardTitle>
+            <div className="p-2 rounded-full bg-purple-50 text-purple-500">
+              <DollarSign className="h-5 w-5" />
+            </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{formatCurrency(project.budget)}</div>
+          <CardContent className="p-0">
+            <div className="metric-number text-4xl text-gray-900">{formatCurrency(project.budget)}</div>
+            <p className="text-sm text-purple-600 mt-1 font-medium tracking-tight">Project investment</p>
           </CardContent>
         </Card>
       </div>
 
       {/* Project Details */}
       <div className="grid gap-6 md:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>Project Information</CardTitle>
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0">
+          <CardHeader className="p-0 pb-4">
+            <CardTitle className="card-title text-gray-900">Project Information</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="p-0 space-y-4">
             <div>
               <Label>Description</Label>
               <p className="text-sm text-muted-foreground mt-1">{project.description}</p>
@@ -371,35 +392,41 @@ const ProjectDetails = ({ projectId }: ProjectDetailsProps) => {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0">
+          <CardHeader className="p-0 pb-4">
             <div className="flex items-center justify-between">
-              <CardTitle>Team Members ({(project.teamMembers || project.team || []).length})</CardTitle>
-              <Button variant="outline" size="sm" onClick={() => setIsAddMemberDialogOpen(true)}>
+              <CardTitle className="card-title text-gray-900">Team Members ({(project.teamMembers || project.team || []).length})</CardTitle>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => setIsAddMemberDialogOpen(true)}
+                className="rounded-xl bg-blue-50/80 backdrop-blur-sm text-blue-600 px-4 py-2 hover:bg-blue-100/80 transition-all duration-200 ease-out border border-blue-200/50 shadow-sm font-medium tracking-tight"
+              >
                 <Plus className="h-4 w-4 mr-2" />
                 Add Member
               </Button>
             </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-0">
             {(project.teamMembers || project.team || []).length === 0 ? (
-              <p className="text-sm text-muted-foreground">No team members assigned</p>
+              <p className="text-sm text-gray-500 font-medium tracking-tight">No team members assigned</p>
             ) : (
-              <div className="space-y-2">
+              <div className="space-y-3">
                 {(project.teamMembers || project.team || []).map((member, index) => (
-                  <div key={index} className="flex items-center justify-between p-2 border rounded">
+                  <div key={index} className="flex items-center justify-between p-4 rounded-2xl bg-gray-50/50 border border-gray-100/50">
                     <div>
-                      <p className="font-medium">{member.user}</p>
-                      <p className="text-sm text-muted-foreground">{member.role}</p>
+                      <p className="font-semibold text-gray-900 tracking-tight">{member.user}</p>
+                      <p className="text-sm text-gray-500 font-medium">{member.role}</p>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <Badge variant="outline">
+                      <Badge variant="outline" className="text-xs">
                         Joined {new Date(member.joinedDate).toLocaleDateString()}
                       </Badge>
                       <Button
                         variant="outline"
                         size="sm"
                         onClick={() => handleRemoveMember(index)}
+                        className="rounded-xl bg-white/60 backdrop-blur-sm text-red-600 p-2 hover:bg-red-50/80 transition-all duration-200 ease-out border border-red-200/50 shadow-sm"
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>
@@ -414,11 +441,11 @@ const ProjectDetails = ({ projectId }: ProjectDetailsProps) => {
 
       {/* Edit Project Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-4xl rounded-3xl bg-white/95 backdrop-blur-xl p-8 shadow-2xl border-0 gap-6 max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Edit Project: {project.name}</DialogTitle>
-            <DialogDescription>
-              Update project information and settings
+            <DialogTitle className="text-xl font-bold text-gray-900 tracking-tight">Edit Project: {project.name}</DialogTitle>
+            <DialogDescription className="text-sm text-gray-600 font-medium tracking-tight">
+              Update project information and settings with precision
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
@@ -547,11 +574,19 @@ const ProjectDetails = ({ projectId }: ProjectDetailsProps) => {
               />
             </div>
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+          <DialogFooter className="flex justify-end space-x-3 pt-6">
+            <Button 
+              variant="outline" 
+              onClick={() => setIsEditDialogOpen(false)}
+              className="rounded-xl bg-white/80 backdrop-blur-sm text-gray-700 px-6 py-2 hover:bg-white transition-all duration-200 ease-out border border-gray-200 shadow-sm font-medium tracking-tight"
+            >
               Cancel
             </Button>
-            <Button onClick={handleUpdateProject} disabled={loading}>
+            <Button 
+              onClick={handleUpdateProject} 
+              disabled={loading}
+              className="rounded-xl bg-gradient-to-r from-orange-400 to-red-500 text-white px-6 py-2 font-semibold tracking-tight shadow-sm hover:shadow-md transition-all duration-200 ease-out"
+            >
               {loading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -567,18 +602,27 @@ const ProjectDetails = ({ projectId }: ProjectDetailsProps) => {
 
       {/* Delete Project Dialog */}
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <DialogContent>
+        <DialogContent className="rounded-3xl bg-white/95 backdrop-blur-xl p-8 shadow-2xl border-0 gap-6">
           <DialogHeader>
-            <DialogTitle>Delete Project</DialogTitle>
-            <DialogDescription>
-              Are you sure you want to delete "{project.name}"? This action cannot be undone.
+            <DialogTitle className="text-xl font-bold text-gray-900 tracking-tight">Delete Project</DialogTitle>
+            <DialogDescription className="text-sm text-gray-600 font-medium tracking-tight">
+              Are you sure you want to delete "<span className="font-semibold text-red-600">{project.name}</span>"? This action cannot be undone and will permanently remove all project data.
             </DialogDescription>
           </DialogHeader>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsDeleteDialogOpen(false)}>
+          <DialogFooter className="flex justify-end space-x-3 pt-4">
+            <Button 
+              variant="outline" 
+              onClick={() => setIsDeleteDialogOpen(false)}
+              className="rounded-xl bg-white/80 backdrop-blur-sm text-gray-700 px-6 py-2 hover:bg-white transition-all duration-200 ease-out border border-gray-200 shadow-sm font-medium tracking-tight"
+            >
               Cancel
             </Button>
-            <Button variant="destructive" onClick={handleDeleteProject} disabled={loading}>
+            <Button 
+              variant="destructive" 
+              onClick={handleDeleteProject} 
+              disabled={loading}
+              className="rounded-xl bg-gradient-to-r from-red-500 to-red-600 text-white px-6 py-2 font-semibold tracking-tight shadow-sm hover:shadow-md transition-all duration-200 ease-out"
+            >
               {loading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -594,27 +638,28 @@ const ProjectDetails = ({ projectId }: ProjectDetailsProps) => {
 
       {/* Add Member Dialog */}
       <Dialog open={isAddMemberDialogOpen} onOpenChange={setIsAddMemberDialogOpen}>
-        <DialogContent>
+        <DialogContent className="rounded-3xl bg-white/95 backdrop-blur-xl p-8 shadow-2xl border-0 gap-6">
           <DialogHeader>
-            <DialogTitle>Add Team Member</DialogTitle>
-            <DialogDescription>
-              Add a new member to the project team
+            <DialogTitle className="text-xl font-bold text-gray-900 tracking-tight">Add Team Member</DialogTitle>
+            <DialogDescription className="text-sm text-gray-600 font-medium tracking-tight">
+              Add a new member to the project team with precision
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-4">
+          <div className="space-y-6">
             <div>
-              <Label htmlFor="member-user">User Name</Label>
+              <Label htmlFor="member-user" className="text-sm font-semibold text-gray-700 tracking-tight">User Name</Label>
               <Input
                 id="member-user"
                 value={newMember.user}
                 onChange={(e) => setNewMember(prev => ({ ...prev, user: e.target.value }))}
                 placeholder="Enter user name"
+                className="mt-2"
               />
             </div>
             <div>
-              <Label htmlFor="member-role">Role</Label>
+              <Label htmlFor="member-role" className="text-sm font-semibold text-gray-700 tracking-tight">Role</Label>
               <Select value={newMember.role} onValueChange={(value) => setNewMember(prev => ({ ...prev, role: value }))}>
-                <SelectTrigger>
+                <SelectTrigger className="mt-2">
                   <SelectValue placeholder="Select role" />
                 </SelectTrigger>
                 <SelectContent>
@@ -627,11 +672,18 @@ const ProjectDetails = ({ projectId }: ProjectDetailsProps) => {
               </Select>
             </div>
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsAddMemberDialogOpen(false)}>
+          <DialogFooter className="flex justify-end space-x-3 pt-4">
+            <Button 
+              variant="outline" 
+              onClick={() => setIsAddMemberDialogOpen(false)}
+              className="rounded-xl bg-white/80 backdrop-blur-sm text-gray-700 px-6 py-2 hover:bg-white transition-all duration-200 ease-out border border-gray-200 shadow-sm font-medium tracking-tight"
+            >
               Cancel
             </Button>
-            <Button onClick={handleAddMember}>
+            <Button 
+              onClick={handleAddMember}
+              className="rounded-xl bg-gradient-to-r from-orange-400 to-red-500 text-white px-6 py-2 font-semibold tracking-tight shadow-sm hover:shadow-md transition-all duration-200 ease-out"
+            >
               Add Member
             </Button>
           </DialogFooter>

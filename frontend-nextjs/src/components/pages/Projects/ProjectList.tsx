@@ -353,22 +353,29 @@ const ProjectList = () => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="p-6 space-y-8">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold">Projects</h1>
-          <p className="text-muted-foreground">
-            Manage and track your projects
+          <h1 className="page-title text-gray-900">Project Management</h1>
+          <p className="text-gray-600 mt-1 font-medium tracking-tight">
+            Manage and track your projects with luxury precision
           </p>
         </div>
-        <div className="flex items-center space-x-2">
-          <Button variant="outline" onClick={() => setShowFilters(!showFilters)}>
+        <div className="flex items-center space-x-3">
+          <Button 
+            variant="outline" 
+            onClick={() => setShowFilters(!showFilters)}
+            className="rounded-xl bg-white/80 backdrop-blur-sm text-gray-700 px-4 py-2 hover:bg-white transition-all duration-200 ease-out border border-gray-200 shadow-sm font-medium tracking-tight"
+          >
             <Filter className="h-4 w-4 mr-2" />
             Filters
           </Button>
           <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
-            <Button onClick={() => setIsCreateDialogOpen(true)}>
+            <Button 
+              onClick={() => setIsCreateDialogOpen(true)}
+              className="rounded-xl bg-gradient-to-r from-orange-400 to-red-500 text-white px-4 py-2 font-semibold tracking-tight shadow-sm hover:shadow-md transition-all duration-200 ease-out"
+            >
               <Plus className="h-4 w-4 mr-2" />
               New Project
             </Button>
@@ -581,60 +588,68 @@ const ProjectList = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Projects</CardTitle>
-            <FolderOpen className="h-4 w-4 text-muted-foreground" />
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0 transition-all duration-200 hover:shadow-md hover:-translate-y-1 animate-fade-in-up" style={{ animationDelay: '0ms' }}>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 p-0">
+            <CardTitle className="text-sm font-semibold text-gray-600 tracking-tight">Total Projects</CardTitle>
+            <div className="p-2 rounded-full bg-blue-50 text-blue-500">
+              <FolderOpen className="h-5 w-5" />
+            </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{Array.isArray(projects) ? projects.length : 0}</div>
-            <p className="text-xs text-muted-foreground">
+          <CardContent className="p-0">
+            <div className="metric-number text-4xl text-gray-900">{Array.isArray(projects) ? projects.length : 0}</div>
+            <p className="text-sm text-gray-500 mt-1 font-medium tracking-tight">
               All projects
             </p>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Projects</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0 transition-all duration-200 hover:shadow-md hover:-translate-y-1 animate-fade-in-up" style={{ animationDelay: '100ms' }}>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 p-0">
+            <CardTitle className="text-sm font-semibold text-gray-600 tracking-tight">Active Projects</CardTitle>
+            <div className="p-2 rounded-full bg-green-50 text-green-500">
+              <Users className="h-5 w-5" />
+            </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
+          <CardContent className="p-0">
+            <div className="metric-number text-4xl text-gray-900">
               {Array.isArray(projects) ? projects.filter(project => project.status === 'active').length : 0}
             </div>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-sm text-green-600 mt-1 font-medium tracking-tight">
               Currently running
             </p>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Completed</CardTitle>
-            <Calendar className="h-4 w-4 text-muted-foreground" />
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0 transition-all duration-200 hover:shadow-md hover:-translate-y-1 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 p-0">
+            <CardTitle className="text-sm font-semibold text-gray-600 tracking-tight">Completed</CardTitle>
+            <div className="p-2 rounded-full bg-purple-50 text-purple-500">
+              <Calendar className="h-5 w-5" />
+            </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
+          <CardContent className="p-0">
+            <div className="metric-number text-4xl text-gray-900">
               {Array.isArray(projects) ? projects.filter(project => project.status === 'completed').length : 0}
             </div>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-sm text-purple-600 mt-1 font-medium tracking-tight">
               Successfully delivered
             </p>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Budget</CardTitle>
-            <FolderOpen className="h-4 w-4 text-muted-foreground" />
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0 transition-all duration-200 hover:shadow-md hover:-translate-y-1 animate-fade-in-up" style={{ animationDelay: '300ms' }}>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4 p-0">
+            <CardTitle className="text-sm font-semibold text-gray-600 tracking-tight">Total Budget</CardTitle>
+            <div className="p-2 rounded-full bg-orange-50 text-orange-500">
+              <DollarSign className="h-5 w-5" />
+            </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
+          <CardContent className="p-0">
+            <div className="metric-number text-4xl text-gray-900">
               {formatCurrency(Array.isArray(projects) ? projects.reduce((sum, project) => sum + project.budget, 0) : 0)}
             </div>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-sm text-orange-600 mt-1 font-medium tracking-tight">
               Across all projects
             </p>
           </CardContent>
@@ -650,14 +665,16 @@ const ProjectList = () => {
       ) : (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {filteredProjects.map((project) => (
-            <Card key={project._id} className="hover:shadow-lg transition-shadow">
-              <CardHeader>
+            <Card key={project._id} className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0 transition-all duration-200 hover:shadow-md hover:-translate-y-1">
+              <CardHeader className="p-0 pb-4">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <span className="text-2xl">{getTypeIcon(project.type)}</span>
+                  <div className="flex items-center space-x-3">
+                    <div className="p-2 rounded-xl bg-gray-50 text-2xl">
+                      {getTypeIcon(project.type)}
+                    </div>
                     <div>
-                      <CardTitle className="text-lg">{project.name}</CardTitle>
-                      <p className="text-sm text-muted-foreground">{project.client}</p>
+                      <CardTitle className="card-title text-gray-900">{project.name}</CardTitle>
+                      <p className="text-sm text-gray-500 font-medium tracking-tight">{project.client}</p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-2">
@@ -670,48 +687,48 @@ const ProjectList = () => {
                   </div>
                 </div>
               </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground mb-4">
+              <CardContent className="p-0">
+                <p className="text-sm text-gray-600 mb-6 font-medium tracking-tight">
                   {project.description}
                 </p>
                 
                 <div className="space-y-3">
                   <div className="flex items-center justify-between text-sm">
-                    <span>Progress</span>
-                    <span className="font-medium">{project.progress}%</span>
+                    <span className="text-gray-600 font-medium">Progress</span>
+                    <span className="font-bold text-gray-900">{project.progress}%</span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2">
                     <div 
-                      className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                      className="bg-gradient-to-r from-orange-400 to-red-500 h-2 rounded-full transition-all duration-300"
                       style={{ width: `${project.progress}%` }}
                     ></div>
                   </div>
 
                   <div className="flex items-center justify-between text-sm">
-                    <span>Budget</span>
-                    <span className="font-medium">{formatCurrency(project.budget)}</span>
+                    <span className="text-gray-600 font-medium">Budget</span>
+                    <span className="font-bold text-gray-900">{formatCurrency(project.budget)}</span>
                   </div>
 
                   <div className="flex items-center justify-between text-sm">
-                    <span>Team Size</span>
-                    <span className="font-medium">
+                    <span className="text-gray-600 font-medium">Team Size</span>
+                    <span className="font-bold text-gray-900">
                       {(project.teamMembers || project.team || []).length} members
                     </span>
                   </div>
 
                   <div className="flex items-center justify-between text-sm">
-                    <span>End Date</span>
-                    <span className={`font-medium ${isOverdue(project.endDate) ? 'text-red-600' : ''}`}>
+                    <span className="text-gray-600 font-medium">End Date</span>
+                    <span className={`font-bold ${isOverdue(project.endDate) ? 'text-red-600' : 'text-gray-900'}`}>
                       {new Date(project.endDate).toLocaleDateString()}
                     </span>
                   </div>
 
-                  <div className="flex items-center space-x-2 pt-2">
+                  <div className="flex items-center space-x-2 pt-4">
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={() => handleViewProject(project)}
-                      className="flex-1"
+                      className="flex-1 rounded-xl bg-white/60 backdrop-blur-sm text-gray-700 px-3 py-2 hover:bg-white/80 transition-all duration-200 ease-out border border-gray-200/50 shadow-sm font-medium tracking-tight"
                     >
                       <Eye className="h-4 w-4 mr-1" />
                       View
@@ -720,6 +737,7 @@ const ProjectList = () => {
                       variant="outline"
                       size="sm"
                       onClick={() => handleEditProject(project)}
+                      className="rounded-xl bg-white/60 backdrop-blur-sm text-gray-700 p-2 hover:bg-white/80 transition-all duration-200 ease-out border border-gray-200/50 shadow-sm"
                     >
                       <Edit className="h-4 w-4" />
                     </Button>
@@ -730,6 +748,7 @@ const ProjectList = () => {
                         setSelectedProject(project)
                         setIsDeleteDialogOpen(true)
                       }}
+                      className="rounded-xl bg-white/60 backdrop-blur-sm text-red-600 p-2 hover:bg-red-50/80 transition-all duration-200 ease-out border border-red-200/50 shadow-sm"
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>

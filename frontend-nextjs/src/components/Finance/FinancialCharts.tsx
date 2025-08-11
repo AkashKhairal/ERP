@@ -23,10 +23,10 @@ import {
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
-        <p className="font-medium text-gray-900">{label}</p>
+      <div className="bg-white/95 backdrop-blur-xl p-4 border-0 rounded-2xl shadow-2xl">
+        <p className="font-bold text-gray-900 tracking-tight mb-2">{label}</p>
         {payload.map((entry: any, index: number) => (
-          <p key={index} style={{ color: entry.color }} className="text-sm">
+          <p key={index} style={{ color: entry.color }} className="text-sm font-semibold tracking-tight">
             {entry.name}: ₹{entry.value?.toLocaleString()}
           </p>
         ))}

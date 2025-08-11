@@ -116,139 +116,167 @@ const Analytics = () => {
   }, [])
 
   const renderOverviewTab = () => (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Key Metrics */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Total Revenue
-            </CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">$45,231.89</div>
-            <p className="text-xs text-muted-foreground">
-              <span className="text-green-600">+20.1%</span> from last month
-            </p>
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <Card 
+          className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0 transition-all duration-200 hover:shadow-md hover:-translate-y-1 animate-fade-in-up"
+          style={{ animationDelay: '0ms' }}
+        >
+          <CardContent className="p-0">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-semibold text-gray-600 tracking-tight">Total Revenue</p>
+                <p className="metric-number text-4xl text-gray-900 mt-2">$45,231</p>
+                <div className="flex items-center mt-2">
+                  <TrendingUp className="h-4 w-4 text-green-500 mr-1" />
+                  <span className="text-sm font-medium text-green-600">+20.1%</span>
+                  <span className="text-sm text-gray-500 ml-1">vs last month</span>
+                </div>
+              </div>
+              <div className="p-3 rounded-full bg-green-50 text-green-500">
+                <DollarSign className="h-6 w-6" />
+              </div>
+            </div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Subscriptions
-            </CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">+2350</div>
-            <p className="text-xs text-muted-foreground">
-              <span className="text-green-600">+180.1%</span> from last month
-            </p>
+        <Card 
+          className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0 transition-all duration-200 hover:shadow-md hover:-translate-y-1 animate-fade-in-up"
+          style={{ animationDelay: '100ms' }}
+        >
+          <CardContent className="p-0">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-semibold text-gray-600 tracking-tight">Active Users</p>
+                <p className="metric-number text-4xl text-gray-900 mt-2">2,350</p>
+                <div className="flex items-center mt-2">
+                  <TrendingUp className="h-4 w-4 text-blue-500 mr-1" />
+                  <span className="text-sm font-medium text-blue-600">+180.1%</span>
+                  <span className="text-sm text-gray-500 ml-1">vs last month</span>
+                </div>
+              </div>
+              <div className="p-3 rounded-full bg-blue-50 text-blue-500">
+                <Users className="h-6 w-6" />
+              </div>
+            </div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Active Projects
-            </CardTitle>
-            <FolderOpen className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">+12</div>
-            <p className="text-xs text-muted-foreground">
-              <span className="text-green-600">+19%</span> from last month
-            </p>
+        <Card 
+          className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0 transition-all duration-200 hover:shadow-md hover:-translate-y-1 animate-fade-in-up"
+          style={{ animationDelay: '200ms' }}
+        >
+          <CardContent className="p-0">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-semibold text-gray-600 tracking-tight">Active Projects</p>
+                <p className="metric-number text-4xl text-gray-900 mt-2">12</p>
+                <div className="flex items-center mt-2">
+                  <TrendingUp className="h-4 w-4 text-purple-500 mr-1" />
+                  <span className="text-sm font-medium text-purple-600">+19%</span>
+                  <span className="text-sm text-gray-500 ml-1">vs last month</span>
+                </div>
+              </div>
+              <div className="p-3 rounded-full bg-purple-50 text-purple-500">
+                <FolderOpen className="h-6 w-6" />
+              </div>
+            </div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              YouTube Views
-            </CardTitle>
-            <Eye className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">+2.3M</div>
-            <p className="text-xs text-muted-foreground">
-              <span className="text-green-600">+12.5%</span> from last month
-            </p>
+        <Card 
+          className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0 transition-all duration-200 hover:shadow-md hover:-translate-y-1 animate-fade-in-up"
+          style={{ animationDelay: '300ms' }}
+        >
+          <CardContent className="p-0">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-semibold text-gray-600 tracking-tight">Page Views</p>
+                <p className="metric-number text-4xl text-gray-900 mt-2">2.3M</p>
+                <div className="flex items-center mt-2">
+                  <TrendingUp className="h-4 w-4 text-orange-500 mr-1" />
+                  <span className="text-sm font-medium text-orange-600">+12.5%</span>
+                  <span className="text-sm text-gray-500 ml-1">vs last month</span>
+                </div>
+              </div>
+              <div className="p-3 rounded-full bg-orange-50 text-orange-500">
+                <Eye className="h-6 w-6" />
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>
 
       {/* Charts */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
         <div className="col-span-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Revenue Overview</CardTitle>
-              <CardDescription>
-                Monthly revenue trends
+          <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0">
+            <CardHeader className="p-0 pb-6">
+              <CardTitle className="card-title text-gray-900">Revenue Analytics</CardTitle>
+              <CardDescription className="text-gray-600 font-medium tracking-tight mt-1">
+                Comprehensive monthly revenue trends and performance metrics
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-0">
               <AreaChartComponent data={revenueData} height={300} />
             </CardContent>
           </Card>
         </div>
 
-        <Card className="col-span-3">
-          <CardHeader>
-            <CardTitle>Top Performing Content</CardTitle>
-            <CardDescription>
-              Best performing videos this month
+        <Card className="col-span-3 rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0">
+          <CardHeader className="p-0 pb-6">
+            <CardTitle className="card-title text-gray-900">Top Performing Content</CardTitle>
+            <CardDescription className="text-gray-600 font-medium tracking-tight mt-1">
+              Best performing content and engagement metrics
             </CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-0">
             <div className="space-y-4">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between p-4 rounded-2xl bg-gray-50/50 hover:bg-gray-50/80 transition-all duration-200 ease-out">
                 <div className="space-y-1">
-                  <p className="text-sm font-medium leading-none">
+                  <p className="text-sm font-semibold text-gray-900 tracking-tight leading-none">
                     React Tutorial for Beginners
                   </p>
-                  <p className="text-sm text-muted-foreground">
-                    125K views
+                  <p className="text-sm text-gray-600 font-medium">
+                    125K views • 4.8 rating
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm font-medium">+12.5%</p>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-sm font-bold text-green-600">+12.5%</p>
+                  <p className="text-xs text-gray-500 font-medium">
                     vs last month
                   </p>
                 </div>
               </div>
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between p-4 rounded-2xl bg-gray-50/50 hover:bg-gray-50/80 transition-all duration-200 ease-out">
                 <div className="space-y-1">
-                  <p className="text-sm font-medium leading-none">
+                  <p className="text-sm font-semibold text-gray-900 tracking-tight leading-none">
                     Node.js API Development
                   </p>
-                  <p className="text-sm text-muted-foreground">
-                    98K views
+                  <p className="text-sm text-gray-600 font-medium">
+                    98K views • 4.6 rating
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm font-medium">+8.2%</p>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-sm font-bold text-blue-600">+8.2%</p>
+                  <p className="text-xs text-gray-500 font-medium">
                     vs last month
                   </p>
                 </div>
               </div>
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between p-4 rounded-2xl bg-gray-50/50 hover:bg-gray-50/80 transition-all duration-200 ease-out">
                 <div className="space-y-1">
-                  <p className="text-sm font-medium leading-none">
+                  <p className="text-sm font-semibold text-gray-900 tracking-tight leading-none">
                     TypeScript Best Practices
                   </p>
-                  <p className="text-sm text-muted-foreground">
-                    87K views
+                  <p className="text-sm text-gray-600 font-medium">
+                    87K views • 4.9 rating
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm font-medium">+15.3%</p>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-sm font-bold text-purple-600">+15.3%</p>
+                  <p className="text-xs text-gray-500 font-medium">
                     vs last month
                   </p>
                 </div>
@@ -259,22 +287,22 @@ const Analytics = () => {
       </div>
 
       {/* Additional Charts */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
         <div className="col-span-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Revenue vs Expenses</CardTitle>
-              <CardDescription>
-                Monthly comparison
+          <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0">
+            <CardHeader className="p-0 pb-6">
+              <CardTitle className="card-title text-gray-900">Financial Performance</CardTitle>
+              <CardDescription className="text-gray-600 font-medium tracking-tight mt-1">
+                Revenue vs expenses analysis with profit margins
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-0">
               <MultiLineChartComponent 
                 data={multiLineData} 
                 lines={[
-                  { dataKey: 'revenue', name: 'Revenue', color: 'hsl(var(--primary))' },
-                  { dataKey: 'expenses', name: 'Expenses', color: 'hsl(var(--destructive))' },
-                  { dataKey: 'profit', name: 'Profit', color: 'hsl(var(--secondary))' }
+                  { dataKey: 'revenue', name: 'Revenue', color: '#10b981' },
+                  { dataKey: 'expenses', name: 'Expenses', color: '#ef4444' },
+                  { dataKey: 'profit', name: 'Profit', color: '#f97316' }
                 ]}
                 height={300}
               />
@@ -283,14 +311,14 @@ const Analytics = () => {
         </div>
 
         <div className="col-span-3">
-          <Card>
-            <CardHeader>
-              <CardTitle>Revenue by Source</CardTitle>
-              <CardDescription>
-                Breakdown by platform
+          <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0">
+            <CardHeader className="p-0 pb-6">
+              <CardTitle className="card-title text-gray-900">Revenue Sources</CardTitle>
+              <CardDescription className="text-gray-600 font-medium tracking-tight mt-1">
+                Multi-channel revenue breakdown and distribution
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-0">
               <StackedBarChartComponent 
                 data={stackedBarData}
                 bars={[
@@ -308,95 +336,123 @@ const Analytics = () => {
   )
 
   const renderYouTubeTab = () => (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* YouTube Metrics */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Total Views
-            </CardTitle>
-            <Eye className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">2.3M</div>
-            <p className="text-xs text-muted-foreground">
-              <span className="text-green-600">+12.5%</span> from last month
-            </p>
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <Card 
+          className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0 transition-all duration-200 hover:shadow-md hover:-translate-y-1 animate-fade-in-up"
+          style={{ animationDelay: '0ms' }}
+        >
+          <CardContent className="p-0">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-semibold text-gray-600 tracking-tight">Total Views</p>
+                <p className="metric-number text-4xl text-gray-900 mt-2">2.3M</p>
+                <div className="flex items-center mt-2">
+                  <TrendingUp className="h-4 w-4 text-red-500 mr-1" />
+                  <span className="text-sm font-medium text-red-600">+12.5%</span>
+                  <span className="text-sm text-gray-500 ml-1">vs last month</span>
+                </div>
+              </div>
+              <div className="p-3 rounded-full bg-red-50 text-red-500">
+                <Eye className="h-6 w-6" />
+              </div>
+            </div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Subscribers
-            </CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">+1,250</div>
-            <p className="text-xs text-muted-foreground">
-              <span className="text-green-600">+8.2%</span> from last month
-            </p>
+        <Card 
+          className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0 transition-all duration-200 hover:shadow-md hover:-translate-y-1 animate-fade-in-up"
+          style={{ animationDelay: '100ms' }}
+        >
+          <CardContent className="p-0">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-semibold text-gray-600 tracking-tight">Subscribers</p>
+                <p className="metric-number text-4xl text-gray-900 mt-2">1,250</p>
+                <div className="flex items-center mt-2">
+                  <TrendingUp className="h-4 w-4 text-blue-500 mr-1" />
+                  <span className="text-sm font-medium text-blue-600">+8.2%</span>
+                  <span className="text-sm text-gray-500 ml-1">vs last month</span>
+                </div>
+              </div>
+              <div className="p-3 rounded-full bg-blue-50 text-blue-500">
+                <Users className="h-6 w-6" />
+              </div>
+            </div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Watch Time
-            </CardTitle>
-            <Clock className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">125K hrs</div>
-            <p className="text-xs text-muted-foreground">
-              <span className="text-green-600">+12.5%</span> from last month
-            </p>
+        <Card 
+          className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0 transition-all duration-200 hover:shadow-md hover:-translate-y-1 animate-fade-in-up"
+          style={{ animationDelay: '200ms' }}
+        >
+          <CardContent className="p-0">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-semibold text-gray-600 tracking-tight">Watch Time</p>
+                <p className="metric-number text-4xl text-gray-900 mt-2">125K</p>
+                <div className="flex items-center mt-2">
+                  <TrendingUp className="h-4 w-4 text-purple-500 mr-1" />
+                  <span className="text-sm font-medium text-purple-600">+12.5%</span>
+                  <span className="text-sm text-gray-500 ml-1">hours</span>
+                </div>
+              </div>
+              <div className="p-3 rounded-full bg-purple-50 text-purple-500">
+                <Clock className="h-6 w-6" />
+              </div>
+            </div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Revenue
-            </CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">$8,450</div>
-            <p className="text-xs text-muted-foreground">
-              <span className="text-green-600">+20.1%</span> from last month
-            </p>
+        <Card 
+          className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0 transition-all duration-200 hover:shadow-md hover:-translate-y-1 animate-fade-in-up"
+          style={{ animationDelay: '300ms' }}
+        >
+          <CardContent className="p-0">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-semibold text-gray-600 tracking-tight">Ad Revenue</p>
+                <p className="metric-number text-4xl text-gray-900 mt-2">$8,450</p>
+                <div className="flex items-center mt-2">
+                  <TrendingUp className="h-4 w-4 text-green-500 mr-1" />
+                  <span className="text-sm font-medium text-green-600">+20.1%</span>
+                  <span className="text-sm text-gray-500 ml-1">vs last month</span>
+                </div>
+              </div>
+              <div className="p-3 rounded-full bg-green-50 text-green-500">
+                <DollarSign className="h-6 w-6" />
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>
 
       {/* YouTube Charts */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
         <div className="col-span-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Views Over Time</CardTitle>
-              <CardDescription>
-                Daily view trends
+          <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0">
+            <CardHeader className="p-0 pb-6">
+              <CardTitle className="card-title text-gray-900">Audience Growth</CardTitle>
+              <CardDescription className="text-gray-600 font-medium tracking-tight mt-1">
+                Daily view trends and audience engagement patterns
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-0">
               <AreaChartComponent data={visitorData} height={300} />
             </CardContent>
           </Card>
         </div>
 
         <div className="col-span-3">
-          <Card>
-            <CardHeader>
-              <CardTitle>Traffic Sources</CardTitle>
-              <CardDescription>
-                Where viewers come from
+          <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0">
+            <CardHeader className="p-0 pb-6">
+              <CardTitle className="card-title text-gray-900">Traffic Sources</CardTitle>
+              <CardDescription className="text-gray-600 font-medium tracking-tight mt-1">
+                Channel discovery and viewer acquisition channels
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-0">
               <PieChartComponent data={pieData} height={300} />
             </CardContent>
           </Card>
@@ -406,30 +462,37 @@ const Analytics = () => {
   )
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="p-6 space-y-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Analytics</h1>
-          <p className="text-muted-foreground">
-            Track your performance and insights
+          <h1 className="page-title text-gray-900">Analytics Dashboard</h1>
+          <p className="text-gray-600 mt-1 font-medium tracking-tight">
+            Advanced insights and performance metrics for data-driven decisions
           </p>
         </div>
-        <div className="flex items-center space-x-2">
-          <Button variant="outline" size="sm">
+        <div className="flex items-center space-x-3">
+          <Button 
+            variant="outline" 
+            className="rounded-xl bg-white/80 backdrop-blur-sm text-gray-700 px-4 py-2 hover:bg-white transition-all duration-200 ease-out border border-gray-200 shadow-sm font-medium tracking-tight"
+          >
             <Download className="mr-2 h-4 w-4" />
-            Export
+            Export Data
           </Button>
-          <Button size="sm">
+          <Button className="rounded-xl bg-gradient-to-r from-orange-400 to-red-500 text-white px-4 py-2 font-semibold tracking-tight shadow-sm hover:shadow-md transition-all duration-200 ease-out">
             <Plus className="mr-2 h-4 w-4" />
-            New Report
+            Create Report
           </Button>
         </div>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-        <TabsList>
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+        <TabsList className="rounded-2xl bg-white/80 backdrop-blur-sm p-2 shadow-sm border-0 gap-1">
           {tabs.map((tab) => (
-            <TabsTrigger key={tab.id} value={tab.id} className="flex items-center space-x-2">
+            <TabsTrigger 
+              key={tab.id} 
+              value={tab.id} 
+              className="flex items-center space-x-2 rounded-xl data-[state=active]:bg-gradient-to-r data-[state=active]:from-orange-400 data-[state=active]:to-red-500 data-[state=active]:text-white font-medium tracking-tight px-4 py-2"
+            >
               <tab.icon className="h-4 w-4" />
               <span>{tab.label}</span>
             </TabsTrigger>
@@ -444,76 +507,76 @@ const Analytics = () => {
           {renderYouTubeTab()}
         </TabsContent>
 
-        <TabsContent value="team" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Team Productivity</CardTitle>
-              <CardDescription>
-                Track team performance and productivity metrics
+        <TabsContent value="team" className="space-y-6">
+          <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0">
+            <CardHeader className="p-0 pb-6">
+              <CardTitle className="card-title text-gray-900">Team Performance Analytics</CardTitle>
+              <CardDescription className="text-gray-600 font-medium tracking-tight mt-1">
+                Comprehensive team productivity metrics and performance insights
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-0">
               <BarChartComponent data={salesData} height={300} />
             </CardContent>
           </Card>
         </TabsContent>
 
-        <TabsContent value="projects" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Project Progress</CardTitle>
-              <CardDescription>
-                Monitor project completion and milestones
+        <TabsContent value="projects" className="space-y-6">
+          <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0">
+            <CardHeader className="p-0 pb-6">
+              <CardTitle className="card-title text-gray-900">Project Progress Tracking</CardTitle>
+              <CardDescription className="text-gray-600 font-medium tracking-tight mt-1">
+                Real-time project completion rates and milestone achievements
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-0">
               <LineChartComponent data={revenueData} height={300} />
             </CardContent>
           </Card>
         </TabsContent>
 
-        <TabsContent value="courses" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Course Sales</CardTitle>
-              <CardDescription>
-                Track course enrollment and revenue
+        <TabsContent value="courses" className="space-y-6">
+          <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0">
+            <CardHeader className="p-0 pb-6">
+              <CardTitle className="card-title text-gray-900">Course Performance</CardTitle>
+              <CardDescription className="text-gray-600 font-medium tracking-tight mt-1">
+                Enrollment trends, completion rates, and revenue analytics
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-0">
               <AreaChartComponent data={visitorData} height={300} />
             </CardContent>
           </Card>
         </TabsContent>
 
-        <TabsContent value="reports" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Custom Reports</CardTitle>
-              <CardDescription>
-                Generate and view custom analytics reports
+        <TabsContent value="reports" className="space-y-6">
+          <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0">
+            <CardHeader className="p-0 pb-6">
+              <CardTitle className="card-title text-gray-900">Custom Analytics Reports</CardTitle>
+              <CardDescription className="text-gray-600 font-medium tracking-tight mt-1">
+                Tailored business intelligence and data visualization reports
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-0">
               <PieChartComponent data={pieData} height={300} />
             </CardContent>
           </Card>
         </TabsContent>
 
-        <TabsContent value="kpis" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Key Performance Indicators</CardTitle>
-              <CardDescription>
-                Monitor critical business metrics
+        <TabsContent value="kpis" className="space-y-6">
+          <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0">
+            <CardHeader className="p-0 pb-6">
+              <CardTitle className="card-title text-gray-900">Key Performance Indicators</CardTitle>
+              <CardDescription className="text-gray-600 font-medium tracking-tight mt-1">
+                Critical business metrics and strategic performance indicators
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-0">
               <MultiLineChartComponent 
                 data={multiLineData} 
                 lines={[
-                  { dataKey: 'revenue', name: 'Revenue', color: 'hsl(var(--primary))' },
-                  { dataKey: 'expenses', name: 'Expenses', color: 'hsl(var(--destructive))' }
+                  { dataKey: 'revenue', name: 'Revenue', color: '#10b981' },
+                  { dataKey: 'expenses', name: 'Expenses', color: '#ef4444' }
                 ]}
                 height={300}
               />

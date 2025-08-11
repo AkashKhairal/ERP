@@ -76,11 +76,11 @@ const Content = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'published': return 'bg-green-100 text-green-800'
-      case 'draft': return 'bg-yellow-100 text-yellow-800'
-      case 'scheduled': return 'bg-blue-100 text-blue-800'
-      case 'archived': return 'bg-gray-100 text-gray-800'
-      default: return 'bg-gray-100 text-gray-800'
+      case 'published': return 'bg-green-50/80 text-green-700 border border-green-200/50'
+      case 'draft': return 'bg-yellow-50/80 text-yellow-700 border border-yellow-200/50'
+      case 'scheduled': return 'bg-blue-50/80 text-blue-700 border border-blue-200/50'
+      case 'archived': return 'bg-gray-50/80 text-gray-700 border border-gray-200/50'
+      default: return 'bg-gray-50/80 text-gray-700 border border-gray-200/50'
     }
   }
 
@@ -135,58 +135,86 @@ const Content = () => {
     ]
 
     return (
-      <div className="space-y-6">
+      <div className="space-y-8">
         {/* Stats Cards */}
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {stats.map((stat) => (
-            <Card key={stat.name}>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">{stat.name}</CardTitle>
-                <stat.icon className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{stat.value}</div>
-                <p className="text-xs text-green-600">
-                  {stat.change} from last month
-                </p>
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          {stats.map((stat, index) => (
+            <Card 
+              key={stat.name}
+              className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0 transition-all duration-200 hover:shadow-md hover:-translate-y-1 animate-fade-in-up"
+              style={{ animationDelay: `${index * 100}ms` }}
+            >
+              <CardContent className="p-0">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-semibold text-gray-600 tracking-tight">{stat.name}</p>
+                    <p className="metric-number text-4xl text-gray-900 mt-2">{stat.value}</p>
+                    <div className="flex items-center mt-2">
+                      <div className="h-4 w-4 text-green-500 mr-1">↗</div>
+                      <span className="text-sm font-medium text-green-600">{stat.change}</span>
+                      <span className="text-sm text-gray-500 ml-1">vs last month</span>
+                    </div>
+                  </div>
+                  <div className={`p-3 rounded-full ${
+                    stat.name === 'Total Content' ? 'bg-blue-50 text-blue-500' :
+                    stat.name === 'Published' ? 'bg-green-50 text-green-500' :
+                    stat.name === 'Total Views' ? 'bg-purple-50 text-purple-500' :
+                    'bg-orange-50 text-orange-500'
+                  }`}>
+                    <stat.icon className="h-6 w-6" />
+                  </div>
+                </div>
               </CardContent>
             </Card>
           ))}
         </div>
 
         {/* Charts */}
-        <div className="grid gap-4 md:grid-cols-2">
-          <Card>
-            <CardHeader>
-              <CardTitle>Content Views</CardTitle>
-              <CardDescription>Monthly view trends</CardDescription>
+        <div className="grid gap-6 md:grid-cols-2">
+          <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0">
+            <CardHeader className="p-0 pb-6">
+              <CardTitle className="card-title text-gray-900">Content Performance</CardTitle>
+              <CardDescription className="text-gray-600 font-medium tracking-tight mt-1">
+                Monthly content views and engagement trends
+              </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-0">
               <LineChartComponent data={viewsData} height={300} />
             </CardContent>
           </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle>Content by Type</CardTitle>
-              <CardDescription>Distribution of content types</CardDescription>
+          <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0">
+            <CardHeader className="p-0 pb-6">
+              <CardTitle className="card-title text-gray-900">Content Distribution</CardTitle>
+              <CardDescription className="text-gray-600 font-medium tracking-tight mt-1">
+                Content types and category breakdown
+              </CardDescription>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">Videos</span>
-                  <span className="text-sm font-medium">
+            <CardContent className="p-0">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between p-3 rounded-2xl bg-red-50/50 border border-red-200/50">
+                  <div className="flex items-center gap-3">
+                    <div className="text-lg">🎥</div>
+                    <span className="text-sm font-semibold text-gray-900 tracking-tight">Videos</span>
+                  </div>
+                  <span className="text-sm font-bold text-red-600">
                     {content.filter(item => item.type === 'video').length}
                   </span>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">Articles</span>
-                  <span className="text-sm font-medium">
+                <div className="flex items-center justify-between p-3 rounded-2xl bg-blue-50/50 border border-blue-200/50">
+                  <div className="flex items-center gap-3">
+                    <div className="text-lg">📝</div>
+                    <span className="text-sm font-semibold text-gray-900 tracking-tight">Articles</span>
+                  </div>
+                  <span className="text-sm font-bold text-blue-600">
                     {content.filter(item => item.type === 'article').length}
                   </span>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">Images</span>
-                  <span className="text-sm font-medium">
+                <div className="flex items-center justify-between p-3 rounded-2xl bg-green-50/50 border border-green-200/50">
+                  <div className="flex items-center gap-3">
+                    <div className="text-lg">🖼️</div>
+                    <span className="text-sm font-semibold text-gray-900 tracking-tight">Images</span>
+                  </div>
+                  <span className="text-sm font-bold text-green-600">
                     {content.filter(item => item.type === 'image').length}
                   </span>
                 </div>
@@ -199,56 +227,88 @@ const Content = () => {
   }
 
   const renderContentTab = () => (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h3 className="text-lg font-medium">Content Library</h3>
-        <Button>
-          <Plus className="h-4 w-4 mr-2" />
-          Create Content
-        </Button>
+    <div className="space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h3 className="card-title text-gray-900">Content Library</h3>
+          <p className="text-gray-600 font-medium tracking-tight mt-1">Manage and organize your content assets</p>
+        </div>
+        <div className="flex items-center space-x-3">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Input 
+              placeholder="Search content..." 
+              className="pl-10 rounded-xl bg-white/60 backdrop-blur-sm border-gray-200/50 text-gray-900 font-medium tracking-tight w-64"
+            />
+          </div>
+          <Button className="rounded-xl bg-gradient-to-r from-orange-400 to-red-500 text-white px-4 py-2 font-semibold tracking-tight shadow-sm hover:shadow-md transition-all duration-200 ease-out">
+            <Plus className="h-4 w-4 mr-2" />
+            New Content
+          </Button>
+        </div>
       </div>
       
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {content.map((item) => (
-          <Card key={item.id} className="hover:shadow-lg transition-shadow">
-            <CardHeader>
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {content.map((item, index) => (
+          <Card 
+            key={item.id} 
+            className="rounded-3xl bg-white/60 backdrop-blur-sm p-6 shadow-sm border border-gray-200/50 hover:bg-white/80 hover:shadow-md hover:-translate-y-1 transition-all duration-200 ease-out animate-fade-in-up"
+            style={{ animationDelay: `${index * 100}ms` }}
+          >
+            <CardHeader className="p-0 pb-4">
               <div className="flex items-center justify-between">
-                <span className="text-2xl">{getTypeIcon(item.type)}</span>
-                <Badge className={getStatusColor(item.status)}>
-                  {item.status}
+                <div className="text-3xl p-2 rounded-2xl bg-gray-50/80">
+                  {getTypeIcon(item.type)}
+                </div>
+                <Badge className={`${getStatusColor(item.status)} font-medium tracking-tight`}>
+                  {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
                 </Badge>
               </div>
-              <CardTitle className="text-lg">{item.title}</CardTitle>
-              <CardDescription>{item.category}</CardDescription>
+              <CardTitle className="text-lg font-bold text-gray-900 tracking-tight mt-3">{item.title}</CardTitle>
+              <CardDescription className="text-gray-600 font-medium tracking-tight">{item.category}</CardDescription>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                <div className="flex items-center justify-between text-sm">
-                  <span>Author</span>
-                  <span className="font-medium">{item.author}</span>
+            <CardContent className="p-0">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between text-sm p-2 rounded-xl bg-gray-50/50">
+                  <span className="text-gray-600 font-medium">Author</span>
+                  <span className="font-semibold text-gray-900">{item.author}</span>
                 </div>
-                <div className="flex items-center justify-between text-sm">
-                  <span>Publish Date</span>
-                  <span className="font-medium">{item.publishDate}</span>
+                <div className="flex items-center justify-between text-sm p-2 rounded-xl bg-gray-50/50">
+                  <span className="text-gray-600 font-medium">Published</span>
+                  <span className="font-semibold text-gray-900">{item.publishDate}</span>
                 </div>
-                <div className="flex items-center justify-between text-sm">
-                  <span>Views</span>
-                  <span className="font-medium">{item.views.toLocaleString()}</span>
-                </div>
-                <div className="flex items-center justify-between text-sm">
-                  <span>Likes</span>
-                  <span className="font-medium">{item.likes.toLocaleString()}</span>
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="text-center p-2 rounded-xl bg-purple-50/50 border border-purple-200/50">
+                    <div className="font-bold text-purple-600">{item.views.toLocaleString()}</div>
+                    <div className="text-xs text-purple-600 font-medium">Views</div>
+                  </div>
+                  <div className="text-center p-2 rounded-xl bg-pink-50/50 border border-pink-200/50">
+                    <div className="font-bold text-pink-600">{item.likes.toLocaleString()}</div>
+                    <div className="text-xs text-pink-600 font-medium">Likes</div>
+                  </div>
                 </div>
                 
                 <div className="flex items-center space-x-2 pt-2">
-                  <Button variant="outline" size="sm" className="flex-1">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="flex-1 rounded-xl bg-white/60 backdrop-blur-sm border-gray-200/50 text-gray-700 hover:bg-white hover:text-gray-900 font-medium tracking-tight"
+                  >
                     <Eye className="h-4 w-4 mr-1" />
                     View
                   </Button>
-                  <Button variant="outline" size="sm">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="rounded-xl bg-blue-50/50 text-blue-600 border-blue-200/50 hover:bg-blue-100/80 font-medium tracking-tight"
+                  >
                     <Edit className="h-4 w-4" />
                   </Button>
-                  <Button variant="outline" size="sm">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="rounded-xl bg-red-50/50 text-red-600 border-red-200/50 hover:bg-red-100/80 font-medium tracking-tight"
+                  >
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
@@ -261,13 +321,25 @@ const Content = () => {
   )
 
   const renderCalendarTab = () => (
-    <div className="space-y-4">
-      <h3 className="text-lg font-medium">Content Calendar</h3>
-      <Card>
-        <CardContent className="p-6">
-          <div className="text-center text-muted-foreground">
-            <Calendar className="h-12 w-12 mx-auto mb-4" />
-            <p>Content calendar coming soon...</p>
+    <div className="space-y-6">
+      <div>
+        <h3 className="card-title text-gray-900">Content Calendar</h3>
+        <p className="text-gray-600 font-medium tracking-tight mt-1">Plan and schedule your content publishing timeline</p>
+      </div>
+      <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-8 shadow-sm border-0">
+        <CardContent className="p-0">
+          <div className="text-center">
+            <div className="p-4 rounded-full bg-orange-50 text-orange-500 w-16 h-16 mx-auto mb-6 flex items-center justify-center">
+              <Calendar className="h-8 w-8" />
+            </div>
+            <h4 className="text-xl font-bold text-gray-900 tracking-tight mb-2">Content Calendar</h4>
+            <p className="text-gray-600 font-medium tracking-tight mb-6">
+              Advanced content scheduling and editorial calendar coming soon
+            </p>
+            <Button className="rounded-xl bg-gradient-to-r from-orange-400 to-red-500 text-white px-6 py-2 font-semibold tracking-tight shadow-sm hover:shadow-md transition-all duration-200 ease-out">
+              <Plus className="h-4 w-4 mr-2" />
+              Set Up Calendar
+            </Button>
           </div>
         </CardContent>
       </Card>
@@ -275,32 +347,50 @@ const Content = () => {
   )
 
   const renderAnalyticsTab = () => (
-    <div className="space-y-4">
-      <h3 className="text-lg font-medium">Content Analytics</h3>
-      <div className="grid gap-4 md:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>Top Performing Content</CardTitle>
+    <div className="space-y-6">
+      <div>
+        <h3 className="card-title text-gray-900">Content Analytics</h3>
+        <p className="text-gray-600 font-medium tracking-tight mt-1">Detailed performance insights and engagement metrics</p>
+      </div>
+      <div className="grid gap-6 md:grid-cols-2">
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0">
+          <CardHeader className="p-0 pb-6">
+            <CardTitle className="card-title text-gray-900">Top Performing Content</CardTitle>
+            <CardDescription className="text-gray-600 font-medium tracking-tight mt-1">
+              Highest engagement and view metrics
+            </CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
+          <CardContent className="p-0">
+            <div className="space-y-4">
               {content
                 .sort((a, b) => b.views - a.views)
                 .slice(0, 5)
-                .map((item) => (
-                  <div key={item.id} className="flex items-center justify-between">
-                    <span className="text-sm">{item.title}</span>
-                    <span className="text-sm font-medium">{item.views.toLocaleString()} views</span>
+                .map((item, index) => (
+                  <div key={item.id} className="flex items-center justify-between p-4 rounded-2xl bg-gray-50/50 hover:bg-gray-50/80 transition-all duration-200 ease-out">
+                    <div className="flex items-center gap-3">
+                      <div className="text-lg">{getTypeIcon(item.type)}</div>
+                      <div>
+                        <p className="font-semibold text-gray-900 tracking-tight text-sm">{item.title}</p>
+                        <p className="text-xs text-gray-600 font-medium">{item.category}</p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-bold text-purple-600">{item.views.toLocaleString()}</p>
+                      <p className="text-xs text-gray-500 font-medium">views</p>
+                    </div>
                   </div>
                 ))}
             </div>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Content Performance</CardTitle>
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-sm p-6 shadow-sm border-0">
+          <CardHeader className="p-0 pb-6">
+            <CardTitle className="card-title text-gray-900">Performance Overview</CardTitle>
+            <CardDescription className="text-gray-600 font-medium tracking-tight mt-1">
+              Content views comparison and trends
+            </CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-0">
             <BarChartComponent data={content.map(item => ({
               name: item.title.slice(0, 10) + '...',
               value: item.views
@@ -327,27 +417,38 @@ const Content = () => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="p-6 space-y-8">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold">Content Management</h1>
-          <p className="text-muted-foreground">
-            Manage your content library and publishing schedule
+          <h1 className="page-title text-gray-900">Content Management System</h1>
+          <p className="text-gray-600 mt-1 font-medium tracking-tight">
+            Professional content creation, publishing, and performance analytics platform
           </p>
         </div>
-        <div className="flex items-center space-x-2">
-          <Button variant="outline">
+        <div className="flex items-center space-x-3">
+          <Button 
+            variant="outline" 
+            className="rounded-xl bg-white/80 backdrop-blur-sm text-gray-700 px-4 py-2 hover:bg-white transition-all duration-200 ease-out border border-gray-200 shadow-sm font-medium tracking-tight"
+          >
             <Download className="h-4 w-4 mr-2" />
-            Export
+            Export Content
+          </Button>
+          <Button className="rounded-xl bg-gradient-to-r from-orange-400 to-red-500 text-white px-4 py-2 font-semibold tracking-tight shadow-sm hover:shadow-md transition-all duration-200 ease-out">
+            <Plus className="h-4 w-4 mr-2" />
+            Create Content
           </Button>
         </div>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-        <TabsList>
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+        <TabsList className="rounded-2xl bg-white/80 backdrop-blur-sm p-2 shadow-sm border-0 gap-1">
           {tabs.map((tab) => (
-            <TabsTrigger key={tab.id} value={tab.id} className="flex items-center space-x-2">
+            <TabsTrigger 
+              key={tab.id} 
+              value={tab.id} 
+              className="flex items-center space-x-2 rounded-xl data-[state=active]:bg-gradient-to-r data-[state=active]:from-orange-400 data-[state=active]:to-red-500 data-[state=active]:text-white font-medium tracking-tight px-4 py-2"
+            >
               <tab.icon className="h-4 w-4" />
               <span>{tab.label}</span>
             </TabsTrigger>
