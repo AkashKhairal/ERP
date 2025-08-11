@@ -38,13 +38,14 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     return () => mediaQuery.removeEventListener('change', handleChange)
   }, [])
 
-  // Initialize theme from localStorage or system preference
+  // Initialize theme from localStorage or default to light
   useEffect(() => {
     const storedTheme = localStorage.getItem('theme') as Theme | null
     if (storedTheme) {
       setTheme(storedTheme)
-    } else if (systemTheme) {
-      setTheme(systemTheme)
+    } else {
+      // Default to light mode instead of system preference
+      setTheme('light')
     }
     setMounted(true)
   }, [systemTheme])

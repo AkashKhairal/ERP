@@ -29,7 +29,7 @@ interface SettingsContextType {
 }
 
 const defaultSettings = {
-  theme: 'system' as const,
+  theme: 'light' as const,
   compactMode: false,
   showAnimations: true,
   fontSize: 'medium' as const,
@@ -99,7 +99,7 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       
       setSettings(prev => ({
         ...prev,
-        theme: (userPrefs.appearance?.theme || prev.theme) as 'light' | 'dark' | 'system',
+        theme: (userPrefs.theme || prev.theme) as 'light' | 'dark' | 'system',
         compactMode: userPrefs.appearance?.compactMode ?? prev.compactMode,
         showAnimations: userPrefs.appearance?.showAnimations ?? prev.showAnimations,
         fontSize: userPrefs.appearance?.fontSize || prev.fontSize,
