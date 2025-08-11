@@ -401,8 +401,11 @@ invoiceSchema.pre('save', async function(next) {
   next();
 });
 
-// Add pagination plugin to Transaction schema
+// Add pagination plugin to schemas
 transactionSchema.plugin(mongoosePaginate);
+budgetSchema.plugin(mongoosePaginate);
+invoiceSchema.plugin(mongoosePaginate);
+taxRecordSchema.plugin(mongoosePaginate);
 
 // Export models
 const Transaction = mongoose.model('Transaction', transactionSchema);

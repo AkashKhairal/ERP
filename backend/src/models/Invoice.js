@@ -455,6 +455,12 @@ invoiceSchema.statics.findDueForRecurring = function() {
   });
 };
 
-const Invoice = mongoose.model('Invoice', invoiceSchema);
+// Prevent model recompilation error in development
+let Invoice;
+try {
+  Invoice = mongoose.model('Invoice');
+} catch (error) {
+  Invoice = mongoose.model('Invoice', invoiceSchema);
+}
 
 module.exports = Invoice;
