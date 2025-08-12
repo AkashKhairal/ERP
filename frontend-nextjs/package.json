@@ -4,8 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:local": "dotenv -e env.development -- next dev",
     "build": "next build",
+    "build:staging": "dotenv -e env.staging -- next build",
+    "build:prod": "dotenv -e env.production -- next build",
     "start": "next start",
+    "start:staging": "dotenv -e env.staging -- next start",
+    "start:prod": "dotenv -e env.production -- next start",
     "lint": "next lint"
   },
   "dependencies": {
@@ -46,6 +51,7 @@
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
     "autoprefixer": "^10.4.14",
+    "dotenv-cli": "^7.3.0",
     "eslint": "^8.0.0",
     "eslint-config-next": "14.0.0",
     "postcss": "^8.4.24",
