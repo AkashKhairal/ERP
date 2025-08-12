@@ -1,6 +1,7 @@
 import axios from 'axios'
+import config from '../config/config'
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://creatorbase-backend.onrender.com/api'
+const API_URL = config.getApiConfig().baseURL
 
 const api = axios.create({
   baseURL: `${API_URL}/notifications`,

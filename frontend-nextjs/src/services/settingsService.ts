@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from 'axios'
+import config from '../config/config'
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://creatorbase-backend.onrender.com/api'
+const API_URL = config.getApiConfig().baseURL
 
 // Create axios instance with better configuration
 const api = axios.create({

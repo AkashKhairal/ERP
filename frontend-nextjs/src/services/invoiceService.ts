@@ -1,6 +1,7 @@
 import axios from 'axios';
+import config from '../config/config';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+const API_BASE_URL = config.getApiConfig().baseURL;
 
 export interface InvoiceItem {
   description: string;

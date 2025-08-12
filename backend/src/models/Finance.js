@@ -129,106 +129,7 @@ const budgetSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Invoice Schema
-const invoiceSchema = new mongoose.Schema({
-  invoiceNumber: {
-    type: String,
-    required: true,
-    unique: true
-  },
-  clientName: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  clientEmail: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  clientAddress: {
-    type: String,
-    trim: true
-  },
-  items: [{
-    description: {
-      type: String,
-      required: true,
-      trim: true
-    },
-    quantity: {
-      type: Number,
-      required: true,
-      min: 1
-    },
-    unitPrice: {
-      type: Number,
-      required: true,
-      min: 0
-    },
-    amount: {
-      type: Number,
-      required: true,
-      min: 0
-    }
-  }],
-  subtotal: {
-    type: Number,
-    required: true,
-    min: 0
-  },
-  taxRate: {
-    type: Number,
-    default: 0,
-    min: 0,
-    max: 100
-  },
-  taxAmount: {
-    type: Number,
-    default: 0,
-    min: 0
-  },
-  total: {
-    type: Number,
-    required: true,
-    min: 0
-  },
-  issueDate: {
-    type: Date,
-    required: true,
-    default: Date.now
-  },
-  dueDate: {
-    type: Date,
-    required: true
-  },
-  status: {
-    type: String,
-    enum: ['draft', 'sent', 'paid', 'overdue', 'cancelled'],
-    default: 'draft'
-  },
-  paymentDate: {
-    type: Date,
-    default: null
-  },
-  notes: {
-    type: String,
-    trim: true,
-    maxlength: [1000, 'Notes cannot exceed 1000 characters']
-  },
-  linkedProject: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Project',
-    default: null
-  },
-  createdBy: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  }
-}, {
-  timestamps: true
-});
+
 
 // Tax Record Schema
 const taxRecordSchema = new mongoose.Schema({
@@ -295,10 +196,7 @@ budgetSchema.index({ category: 1, period: 1 });
 budgetSchema.index({ startDate: 1, endDate: 1 });
 budgetSchema.index({ isActive: 1 });
 
-invoiceSchema.index({ invoiceNumber: 1 });
-invoiceSchema.index({ status: 1 });
-invoiceSchema.index({ dueDate: 1 });
-invoiceSchema.index({ clientName: 1 });
+
 
 taxRecordSchema.index({ type: 1, period: 1 });
 taxRecordSchema.index({ status: 1 });
@@ -318,10 +216,7 @@ budgetSchema.virtual('remainingAmount').get(function() {
   return this.amount;
 });
 
-// Virtual for invoice status
-invoiceSchema.virtual('isOverdue').get(function() {
-  return this.status === 'sent' && new Date() > this.dueDate;
-});
+
 
 // Static methods for Transaction
 transactionSchema.statics.getMonthlyStats = async function(year, month) {
@@ -378,28 +273,7 @@ budgetSchema.statics.getBudgetVsActual = async function(category, startDate, end
   };
 };
 
-// Static methods for Invoice
-invoiceSchema.statics.generateInvoiceNumber = async function() {
-  const lastInvoice = await this.findOne().sort({ invoiceNumber: -1 });
-  const lastNumber = lastInvoice ? parseInt(lastInvoice.invoiceNumber.slice(-4)) : 0;
-  const newNumber = (lastNumber + 1).toString().padStart(4, '0');
-  const year = new Date().getFullYear();
-  return `INV-${year}-${newNumber}`;
-};
 
-// Pre-save middleware for Invoice
-invoiceSchema.pre('save', async function(next) {
-  if (this.isNew && !this.invoiceNumber) {
-    this.invoiceNumber = await this.constructor.generateInvoiceNumber();
-  }
-  
-  // Calculate totals
-  this.subtotal = this.items.reduce((sum, item) => sum + item.amount, 0);
-  this.taxAmount = (this.subtotal * this.taxRate) / 100;
-  this.total = this.subtotal + this.taxAmount;
-  
-  next();
-});
 
 // Add pagination plugin to Transaction schema
 transactionSchema.plugin(mongoosePaginate);
@@ -407,12 +281,10 @@ transactionSchema.plugin(mongoosePaginate);
 // Export models
 const Transaction = mongoose.model('Transaction', transactionSchema);
 const Budget = mongoose.model('Budget', budgetSchema);
-const Invoice = mongoose.model('Invoice', invoiceSchema);
 const TaxRecord = mongoose.model('TaxRecord', taxRecordSchema);
 
 module.exports = {
   Transaction,
   Budget,
-  Invoice,
   TaxRecord
 }; 

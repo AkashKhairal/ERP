@@ -1,0 +1,23 @@
+{
+  "name": "CreatorBase - Complete Management Platform",
+  "short_name": "CreatorBase",
+  "description": "Complete management platform for content creators and SaaS development teams",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["productivity", "business", "utilities"],
+  "lang": "en",
+  "dir": "ltr"
+}
+
+

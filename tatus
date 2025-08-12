@@ -1,0 +1,10 @@
+[33mcf04aa1[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m fix: Add mongoose-paginate-v2 plugin to Finance and Invoice models
+[33mdf1de1b[m feat: Complete luxury UI/UX transformation across entire ERP application
+[33m67f73ef[m feat: Change default theme to light mode for new users
+[33m7a18793[m feat: Complete subscription & billing system implementation
+[33mf4369b2[m fix: TypeScript errors in InvoiceForm component
+[33m1855a4c[m fix: TypeScript error in InvoiceDetail component
+[33m6cdf325[m feat: Complete Invoice Management System
+[33m25bd049[m Sync local project state: Remove unused .vscode settings and update project structure
+[33mdfaa534[m  FIX: LinkedProject/LinkedEmployee TypeScript compatibility
+[33mb5fc129[m  FIX: Receipt field TypeScript compatibility
