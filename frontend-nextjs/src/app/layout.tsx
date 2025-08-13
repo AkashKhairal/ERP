@@ -12,6 +12,7 @@ import type { Metadata } from 'next'
 import ConditionalLayout from '@/components/ConditionalLayout'
 import { GoogleOAuthProvider } from '@react-oauth/google'
 import { Poppins } from 'next/font/google'
+import EnvBanner from '@/components/EnvBanner'
 
 const poppins = Poppins({ 
   subsets: ['latin'], 
@@ -47,6 +48,7 @@ export default function AppLayout({
         }} />
       </head>
       <body className={poppins.className} style={{ fontFamily: 'Poppins, system-ui, sans-serif' }}>
+        <EnvBanner />
         <GoogleOAuthProvider clientId={googleClientId}>
           <ThemeProvider>
             <AuthProvider>
