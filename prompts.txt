@@ -666,5 +666,16 @@ UPGRADE PLAN (apply to this repo)
 BEFORE ANY PUSH
 - Print: changed files, new scripts, added env keys, and EXACT commands to test locally, staging, and prod.
 - Then wait.
--------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
 
+Follow these command for ci cd:
+
+push to preview:
+  1. Identify the current local branch name.
+  2. Do NOT push the current branch directly to GitHub.
+  3. Switch to the `dev` branch: `git checkout dev`.
+  4. Pull the latest updates from remote `dev`: `git pull origin dev`.
+  5. Merge the previously active branch into `dev` (no fast-forward, keep history).
+  6. Push `dev` to GitHub: `git push origin dev`.
+  7. Switch back to the original branch.
+  8. Confirm that Vercel will trigger a deployment for the staging domain linked to `dev`.
